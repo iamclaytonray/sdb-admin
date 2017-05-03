@@ -1,0 +1,224 @@
+
+
+/**************************************
+===== announcement action types
+**************************************/
+
+// fetch announcement
+export const FETCH_ANNOUNCEMENT_REQUEST = 'FETCH_ANNOUNCEMENT_REQUEST';
+export const FETCH_ANNOUNCEMENT_SUCCESS = 'FETCH_ANNOUNCEMENT_SUCCESS';
+export const FETCH_ANNOUNCEMENT_FAILURE = 'FETCH_ANNOUNCEMENT_FAILURE';
+
+// fetch announcements
+export const FETCH_ANNOUNCEMENTS_REQUEST = 'FETCH_ANNOUNCEMENTS_REQUEST';
+export const FETCH_ANNOUNCEMENTS_SUCCESS = 'FETCH_ANNOUNCEMENTS_SUCCESS';
+export const FETCH_ANNOUNCEMENTS_FAILURE = 'FETCH_ANNOUNCEMENTS_FAILURE';
+
+// create announcement
+export const CREATE_ANNOUNCEMENT_REQUEST = 'CREATE_ANNOUNCEMENT_REQUEST';
+export const CREATE_ANNOUNCEMENT_SUCCESS = 'CREATE_ANNOUNCEMENT_SUCCESS';
+export const CREATE_ANNOUNCEMENT_FAILURE = 'CREATE_ANNOUNCEMENT_FAILURE';
+
+// update announcement
+export const UPDATE_ANNOUNCEMENT_REQUEST = 'UPDATE_ANNOUNCEMENT_REQUEST';
+export const UPDATE_ANNOUNCEMENT_SUCCESS = 'UPDATE_ANNOUNCEMENT_SUCCESS';
+export const UPDATE_ANNOUNCEMENT_FAILURE = 'UPDATE_ANNOUNCEMENT_FAILURE';
+
+// delete announcement
+export const DELETE_ANNOUNCEMENT_REQUEST = 'DELETE_ANNOUNCEMENT_REQUEST';
+export const DELETE_ANNOUNCEMENT_SUCCESS = 'DELETE_ANNOUNCEMENT_SUCCESS';
+export const DELETE_ANNOUNCEMENT_FAILURE = 'DELETE_ANNOUNCEMENT_FAILURE';
+
+
+
+
+/**************************************
+===== category action types
+**************************************/
+
+// fetch category
+export const FETCH_CATEGORY_REQUEST = 'FETCH_CATEGORY_REQUEST';
+export const FETCH_CATEGORY_SUCCESS = 'FETCH_CATEGORY_SUCCESS';
+export const FETCH_CATEGORY_FAILURE = 'FETCH_CATEGORY_FAILURE';
+
+// fetch categories
+export const FETCH_CATEGORIES_REQUEST = 'FETCH_CATEGORIES_REQUEST';
+export const FETCH_CATEGORIES_SUCCESS = 'FETCH_CATEGORIES_SUCCESS';
+export const FETCH_CATEGORIES_FAILURE = 'FETCH_CATEGORIES_FAILURE';
+
+// create category
+export const CREATE_CATEGORY_REQUEST = 'CREATE_CATEGORY_REQUEST';
+export const CREATE_CATEGORY_SUCCESS = 'CREATE_CATEGORY_SUCCESS';
+export const CREATE_CATEGORY_FAILURE = 'CREATE_CATEGORY_FAILURE';
+
+// update category
+export const UPDATE_CATEGORY_REQUEST = 'UPDATE_CATEGORY_REQUEST';
+export const UPDATE_CATEGORY_SUCCESS = 'UPDATE_CATEGORY_SUCCESS';
+export const UPDATE_CATEGORY_FAILURE = 'UPDATE_CATEGORY_FAILURE';
+
+// delete category
+export const DELETE_CATEGORY_REQUEST = 'DELETE_CATEGORY_REQUEST';
+export const DELETE_CATEGORY_SUCCESS = 'DELETE_CATEGORY_SUCCESS';
+export const DELETE_CATEGORY_FAILURE = 'DELETE_CATEGORY_FAILURE';
+
+
+
+
+/**************************************
+===== media action types
+**************************************/
+
+// // fetch post
+// export const FETCH_MEDIA_REQUEST = 'FETCH_MEDIA_REQUEST';
+// export const FETCH_MEDIA_SUCCESS = 'FETCH_MEDIA_SUCCESS';
+// export const FETCH_MEDIA_FAILURE = 'FETCH_MEDIA_FAILURE';
+
+// // fetch posts
+// export const FETCH_POSTS_REQUEST = 'FETCH_POSTS_REQUEST';
+// export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
+// export const FETCH_POSTS_FAILURE = 'FETCH_POSTS_FAILURE';
+
+// // create post
+// export const CREATE_MEDIA_REQUEST = 'CREATE_MEDIA_REQUEST';
+// export const CREATE_MEDIA_SUCCESS = 'CREATE_MEDIA_SUCCESS';
+// export const CREATE_MEDIA_FAILURE = 'CREATE_MEDIA_FAILURE';
+
+// // update post
+// export const UPDATE_MEDIA_REQUEST = 'UPDATE_MEDIA_REQUEST';
+// export const UPDATE_MEDIA_SUCCESS = 'UPDATE_MEDIA_SUCCESS';
+// export const UPDATE_MEDIA_FAILURE = 'UPDATE_MEDIA_FAILURE';
+
+// // delete post
+// export const DELETE_MEDIA_REQUEST = 'DELETE_MEDIA_REQUEST';
+// export const DELETE_MEDIA_SUCCESS = 'DELETE_MEDIA_SUCCESS';
+// export const DELETE_MEDIA_FAILURE = 'DELETE_MEDIA_FAILURE';
+
+
+
+
+/**************************************
+===== post action types
+**************************************/
+
+// fetch post
+export const FETCH_POST_REQUEST = 'FETCH_POST_REQUEST';
+export const FETCH_POST_SUCCESS = 'FETCH_POST_SUCCESS';
+export const FETCH_POST_FAILURE = 'FETCH_POST_FAILURE';
+
+// fetch posts
+export const FETCH_POSTS_REQUEST = 'FETCH_POSTS_REQUEST';
+export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
+export const FETCH_POSTS_FAILURE = 'FETCH_POSTS_FAILURE';
+
+// create post
+export const CREATE_POST_REQUEST = 'CREATE_POST_REQUEST';
+export const CREATE_POST_SUCCESS = 'CREATE_POST_SUCCESS';
+export const CREATE_POST_FAILURE = 'CREATE_POST_FAILURE';
+
+// update post
+export const UPDATE_POST_REQUEST = 'UPDATE_POST_REQUEST';
+export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
+export const UPDATE_POST_FAILURE = 'UPDATE_POST_FAILURE';
+
+// delete post
+export const DELETE_POST_REQUEST = 'DELETE_POST_REQUEST';
+export const DELETE_POST_SUCCESS = 'DELETE_POST_SUCCESS';
+export const DELETE_POST_FAILURE = 'DELETE_POST_FAILURE';
+
+
+
+
+/**************************************
+===== service action types
+**************************************/
+
+// fetch service
+export const FETCH_SERVICE_REQUEST = 'FETCH_SERVICE_REQUEST';
+export const FETCH_SERVICE_SUCCESS = 'FETCH_SERVICE_SUCCESS';
+export const FETCH_SERVICE_FAILURE = 'FETCH_SERVICE_FAILURE';
+
+// fetch services
+export const FETCH_SERVICES_REQUEST = 'FETCH_SERVICES_REQUEST';
+export const FETCH_SERVICES_SUCCESS = 'FETCH_SERVICES_SUCCESS';
+export const FETCH_SERVICES_FAILURE = 'FETCH_SERVICES_FAILURE';
+
+// create service
+export const CREATE_SERVICE_REQUEST = 'CREATE_SERVICE_REQUEST';
+export const CREATE_SERVICE_SUCCESS = 'CREATE_SERVICE_SUCCESS';
+export const CREATE_SERVICE_FAILURE = 'CREATE_SERVICE_FAILURE';
+
+// update service
+export const UPDATE_SERVICE_REQUEST = 'UPDATE_SERVICE_REQUEST';
+export const UPDATE_SERVICE_SUCCESS = 'UPDATE_SERVICE_SUCCESS';
+export const UPDATE_SERVICE_FAILURE = 'UPDATE_SERVICE_FAILURE';
+
+// delete service
+export const DELETE_SERVICE_REQUEST = 'DELETE_SERVICE_REQUEST';
+export const DELETE_SERVICE_SUCCESS = 'DELETE_SERVICE_SUCCESS';
+export const DELETE_SERVICE_FAILURE = 'DELETE_SERVICE_FAILURE';
+
+
+
+
+/**************************************
+===== settings action types
+**************************************/
+
+// fetch setting
+export const FETCH_SETTING_REQUEST = 'FETCH_SETTING_REQUEST';
+export const FETCH_SETTING_SUCCESS = 'FETCH_SETTING_SUCCESS';
+export const FETCH_SETTING_FAILURE = 'FETCH_SETTING_FAILURE';
+
+// fetch settings
+export const FETCH_SETTINGS_REQUEST = 'FETCH_SETTINGS_REQUEST';
+export const FETCH_SETTINGS_SUCCESS = 'FETCH_SETTINGS_SUCCESS';
+export const FETCH_SETTINGS_FAILURE = 'FETCH_SETTINGS_FAILURE';
+
+// create setting
+export const CREATE_SETTING_REQUEST = 'CREATE_SETTING_REQUEST';
+export const CREATE_SETTING_SUCCESS = 'CREATE_SETTING_SUCCESS';
+export const CREATE_SETTING_FAILURE = 'CREATE_SETTING_FAILURE';
+
+// update setting
+export const UPDATE_SETTING_REQUEST = 'UPDATE_SETTING_REQUEST';
+export const UPDATE_SETTING_SUCCESS = 'UPDATE_SETTING_SUCCESS';
+export const UPDATE_SETTING_FAILURE = 'UPDATE_SETTING_FAILURE';
+
+// delete setting
+export const DELETE_SETTING_REQUEST = 'DELETE_SETTING_REQUEST';
+export const DELETE_SETTING_SUCCESS = 'DELETE_SETTING_SUCCESS';
+export const DELETE_SETTING_FAILURE = 'DELETE_SETTING_FAILURE';
+
+
+
+
+
+
+/**************************************
+===== user action types
+**************************************/
+
+// fetch user
+export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST';
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
+export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
+
+// fetch users
+export const FETCH_USERS_REQUEST = 'FETCH_USERS_REQUEST';
+export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
+export const FETCH_USERS_FAILURE = 'FETCH_USERS_FAILURE';
+
+// create user
+export const CREATE_USER_REQUEST = 'CREATE_USER_REQUEST';
+export const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS';
+export const CREATE_USER_FAILURE = 'CREATE_USER_FAILURE';
+
+// update user
+export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST';
+export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
+export const UPDATE_USER_FAILURE = 'UPDATE_USER_FAILURE';
+
+// delete user
+export const DELETE_USER_REQUEST = 'DELETE_USER_REQUEST';
+export const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS';
+export const DELETE_USER_FAILURE = 'DELETE_USER_FAILURE';
