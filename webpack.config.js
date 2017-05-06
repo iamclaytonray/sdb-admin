@@ -59,7 +59,7 @@ const config = {
 
   // entry
   entry: {
-    client: './client/src/index.js'
+    client: './src/client/index.js'
   },
 
   // output
@@ -78,7 +78,7 @@ const config = {
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin('application.scss'),
     new HtmlWebpackPlugin({
-      template: 'client/index.html',
+      template: 'src/client/index.html',
       minify: {
         collapseWhitespace: true,
         removeComments: true,

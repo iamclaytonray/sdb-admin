@@ -1,58 +1,48 @@
 
-// admin store
-import AdminStore from './AdminStore';
+// store
+import Store from './Store';
 
 // coupons
-import AdminCoupon from './coupons/components/AdminCoupon';
-import AdminCouponList from './coupons/components/AdminCouponList';
-import AdminNewCoupon from './coupons/components/AdminNewCoupon';
-import AdminEditCoupon from './coupons/components/AdminEditCoupon';
-import AdminDeleteCoupon from './coupons/components/AdminDeleteCoupon';
+import Coupon from './coupons/components/Coupon';
+import CouponList from './coupons/components/CouponList';
+import NewCoupon from './coupons/components/NewCoupon';
+import EditCoupon from './coupons/components/EditCoupon';
 
 
 // orders
-import AdminOrder from './orders/components/AdminOrder';
-import AdminOrderList from './orders/components/AdminOrderList';
-import AdminNewOrder from './orders/components/AdminNewOrder';
-import AdminEditOrder from './orders/components/AdminEditOrder';
-import AdminDeleteOrder from './orders/components/AdminDeleteOrder';
+import Order from './orders/components/Order';
+import OrderList from './orders/components/OrderList';
+import NewOrder from './orders/components/NewOrder';
+import EditOrder from './orders/components/EditOrder';
 
 
 // products
-import AdminProduct from './products/components/AdminProduct';
-import AdminProductList from './products/components/AdminProductList';
-import AdminNewProduct from './products/components/AdminNewProduct';
-import AdminEditProduct from './products/components/AdminEditProduct';
-import AdminDeleteProduct from './products/components/AdminDeleteProduct';
+import Product from './products/components/Product';
+import ProductList from './products/components/ProductList';
+import NewProduct from './products/components/NewProduct';
+import EditProduct from './products/components/EditProduct';
 
 
 export {
   
-  // admin store
-  AdminStore,
+  // store
+  Store,
 
   // coupons
-  AdminCoupon,
-  AdminCouponList,
-  AdminNewCoupon,
-  AdminEditCoupon,
-  AdminDeleteCoupon,
+  Coupon,
+  CouponList,
+  NewCoupon,
+  EditCoupon,
 
   // orders
-  AdminOrder,
-  AdminOrderList,
-  AdminNewOrder,
-  AdminEditOrder,
-  AdminDeleteOrder,
+  Order,
+  OrderList,
+  NewOrder,
+  EditOrder,
 
   // products
-  AdminProduct,
-  AdminProductList,
-  AdminNewProduct,
-  AdminEditProduct,
-  AdminDeleteProduct,
-
-
-
-
+  Product,
+  ProductList,
+  NewProduct,
+  EditProduct
 }
