@@ -4,7 +4,7 @@ class NewCoupon extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header" style={{textAlign: 'center'}}>New Coupon</h1>
+        <h1>New Coupon</h1>
       </div>
     );
   }

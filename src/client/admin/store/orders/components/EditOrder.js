@@ -4,7 +4,7 @@ class EditOrder extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header" style={{textAlign: 'center'}}>Admin Edit Order</h1>
+        <h1>Edit Order</h1>
       </div>
     );
   }

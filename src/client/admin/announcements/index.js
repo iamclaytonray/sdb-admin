@@ -1,10 +1,10 @@
-import Announcement from './components/Announcement';
+import SingleAnnouncement from './components/SingleAnnouncement';
 import AnnouncementList from './components/AnnouncementList';
 import NewAnnouncement from './components/NewAnnouncement';
 import EditAnnouncement from './components/EditAnnouncement';
 
 export {
-  Announcement,
+  SingleAnnouncement,
   AnnouncementList,
   NewAnnouncement,
   EditAnnouncement

@@ -4,7 +4,7 @@ class NewProduct extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header" style={{textAlign: 'center'}}>Admin New Product</h1>
+        <h1>New Product</h1>
       </div>
     );
   }

@@ -4,7 +4,7 @@ class ServiceList extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header" style={{textAlign: 'center'}}>Admin Service List</h1>
+        <h1>Service List</h1>
       </div>
     );
   }

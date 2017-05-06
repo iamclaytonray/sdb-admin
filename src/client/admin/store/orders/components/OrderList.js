@@ -4,7 +4,7 @@ class OrderList extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header" style={{textAlign: 'center'}}>Admin Order List</h1>
+        <h1>Admin Order List</h1>
       </div>
     );
   }

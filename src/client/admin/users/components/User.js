@@ -4,7 +4,7 @@ class User extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header" style={{textAlign: 'center'}}>Admin User</h1>
+        <h1>Admin User</h1>
       </div>
     );
   }

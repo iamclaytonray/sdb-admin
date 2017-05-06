@@ -31,10 +31,9 @@ import {
 
 // announcements
 import {
-  Announcement,
+  SingleAnnouncement,
   AnnouncementList,
   NewAnnouncement,
-  EditAnnouncement
 } from './admin/announcements/index';
 
 
@@ -43,8 +42,13 @@ import {
   Category,
   CategoryList,
   NewCategory,
-  EditCategory
 } from './admin/categories/index';
+
+
+// email
+import {
+  Email,
+} from './admin/email/index';
 
 
 // media
@@ -52,7 +56,6 @@ import {
   Media,
   MediaList,
   NewMedia,
-  EditMedia
 } from './admin/media/index';
 
 
@@ -61,7 +64,6 @@ import {
   Post,
   PostList,
   NewPost,
-  EditPost
 } from './admin/posts/index';
 
 
@@ -70,7 +72,6 @@ import {
   Service,
   ServiceList,
   NewService,
-  EditService
 } from './admin/services/index';
 
 
@@ -88,22 +89,19 @@ import {
   Coupon,
   CouponList,
   NewCoupon,
-  EditCoupon,
   // orders
   Order,
   OrderList,
   NewOrder,
-  EditOrder,
   // products
   Product,
   ProductList,
   NewProduct,
-  EditProduct,
 } from './admin/store/index';
 
 
 
-// admin/users
+// users
 import {
   User,
   UserList,
@@ -132,9 +130,8 @@ export default (
       {/***  admin/announcements  ***/}
       <Route path="announcements">
         <IndexRoute component={AnnouncementList} />
-        <Route path=":slug" component={Announcement} />
+        <Route path=":slug" component={SingleAnnouncement} />
         <Route path="new" component={NewAnnouncement} />
-        <Route path=":slug/edit" component={EditAnnouncement} />
       </Route>
 
       {/***  admin/categories  ***/}
@@ -142,8 +139,13 @@ export default (
         <IndexRoute component={CategoryList} />
         <Route path=":slug" component={Category} />
         <Route path="new" component={NewCategory} />
-        <Route path=":slug/edit" component={EditCategory} />
       </Route>
+
+      {/***  admin/email  ***/}
+      <Route path="email">
+        <IndexRoute component={Email} />
+      </Route>
+
 
 
       {/***  admin/media  ***/}
@@ -151,7 +153,6 @@ export default (
         <IndexRoute component={MediaList} />
         <Route path=":slug" component={Media} />
         <Route path="new" component={NewMedia} />
-        <Route path=":slug/edit" component={EditMedia} />
       </Route>
 
 
@@ -160,7 +161,6 @@ export default (
         <IndexRoute component={PostList} />
         <Route path=":slug" component={Post} />
         <Route path="new" component={NewPost} />
-        <Route path=":slug/edit" component={EditPost} />
       </Route>
 
 
@@ -169,7 +169,6 @@ export default (
         <IndexRoute component={ServiceList} />
         <Route path=":slug" component={Service} />
         <Route path="new" component={NewService} />
-        <Route path=":slug/edit" component={EditService} />
       </Route>
 
 
@@ -178,7 +177,6 @@ export default (
         <IndexRoute component={UserList} />
         <Route path=":slug" component={User} />
         <Route path="new" component={NewUser} />
-        <Route path=":slug/edit" component={EditUser} />
       </Route>
 
 
@@ -196,21 +194,18 @@ export default (
           <IndexRoute component={CouponList} />
           <Route path=":slug" component={Coupon} />
           <Route path="new" component={NewCoupon} />
-          <Route path=":slug/edit" component={EditCoupon} />
         </Route>
 
         <Route path="orders">
           <IndexRoute component={OrderList} />
           <Route path=":slug" component={Order} />
           <Route path="new" component={NewOrder} />
-          <Route path=":slug/edit" component={EditOrder} />
         </Route>
 
         <Route path="products">
           <IndexRoute component={ProductList} />
           <Route path=":slug" component={Product} />
           <Route path="new" component={NewProduct} />
-          <Route path=":slug/edit" component={EditProduct} />
         </Route>
 
 

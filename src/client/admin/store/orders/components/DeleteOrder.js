@@ -4,7 +4,7 @@ class DeleteOrder extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header" style={{textAlign: 'center'}}>Delete Order</h1>
+        <h1>Delete Order</h1>
       </div>
     );
   }
