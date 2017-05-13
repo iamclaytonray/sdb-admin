@@ -8,7 +8,7 @@ class AppIndex extends Component {
         
         <Sidebar />
 
-        <div className="main-container">
+        <div className="main-container padding-container">
           {this.props.children}
         </div>
 
