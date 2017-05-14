@@ -26,88 +26,68 @@ import {
 
 // dashboard
 import {
-  Dashboard
-} from './admin/dashboard/index';
 
-// announcements
-import {
+  // dashboard index
+  Dashboard,
+
+  // announcements
   SingleAnnouncement,
   AnnouncementList,
   NewAnnouncement,
-} from './admin/announcements/index';
 
-
-// categories
-import {
+  // categories
   Category,
   CategoryList,
   NewCategory,
-} from './admin/categories/index';
 
-
-// email
-import {
+  // email
   Email,
-} from './admin/email/index';
 
-
-// media
-import {
+  // media
   Media,
   MediaList,
   NewMedia,
-} from './admin/media/index';
 
-
-// posts
-import {
+  // posts
   Post,
   PostList,
   NewPost,
-} from './admin/posts/index';
 
-
-// services
-import {
+  // services
   Service,
   ServiceList,
   NewService,
-} from './admin/services/index';
+
+  // settings
+  Settings,
 
 
-// settings
-import {
-  Settings
-} from './admin/settings/index';
-
-
-// store
-import {
   // store index
   Store,
-  // coupons
+  
+  // store/coupons
   Coupon,
   CouponList,
   NewCoupon,
-  // orders
+  
+  // store/orders
   Order,
   OrderList,
   NewOrder,
-  // products
+
+  // store/products
   Product,
   ProductList,
   NewProduct,
-} from './admin/store/index';
 
-
-
-// users
-import {
+  // users
   User,
   UserList,
   NewUser,
   EditUser
-} from './admin/users/index';
+
+} from './admin/index';
+
 
 
 
