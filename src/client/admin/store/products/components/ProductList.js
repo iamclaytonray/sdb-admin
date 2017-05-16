@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
+import ProductListContainer from '../containers/ProductListContainer';
 
-class ProductList extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Product List</h1>
-      </div>
-    );
-  }
+const ProductList = () => {
+  return (
+    <div>
+      <ProductListContainer />
+    </div>
+  );
 }
 
 export default ProductList;

@@ -52,7 +52,6 @@ import NewProduct from './store/products/components/NewProduct';
 import SingleUser from './users/components/SingleUser';
 import UserList from './users/components/UserList';
 import NewUser from './users/components/NewUser';
-import EditUser from './users/components/EditUser';
 
 
 export {
@@ -109,7 +108,6 @@ export {
   // users
   SingleUser,
   UserList,
-  NewUser,
-  EditUser
+  NewUser
 
 }

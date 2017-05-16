@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
+import ServiceListContainer from '../containers/ServiceListContainer';
 
-class ServiceList extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Service List</h1>
-      </div>
-    );
-  }
+const ServiceList = () => {
+  return (
+    <div>
+      <ServiceListContainer />
+    </div>
+  );
 }
 
 export default ServiceList;

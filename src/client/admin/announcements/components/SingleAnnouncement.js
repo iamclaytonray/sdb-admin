@@ -9,12 +9,12 @@ class SingleAnnouncement extends Component {
     const { _id, title, slug, content, featuredImage, timestamp } = this.props.announcement;
     return (
       <div>
-        <p>{_id}</p>
-        <p>{title}</p>
-        <p>{slug}</p>
-        <p>{content}</p>
-        <img src={featuredImage} />
-        <p>{timestamp}</p>
+          <p>{_id}</p>
+          <p>{title}</p>
+          <p>{slug}</p>
+          <p>{content}</p>
+          <img src={featuredImage} />
+          <p>{timestamp}</p>
       </div>
     );
   }

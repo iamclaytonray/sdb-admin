@@ -1,52 +1,26 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import * as actions from '../../../redux/actions/announcements';
-import Announcement from './Announcement';
+import React from 'react';
+import AnnouncementListContainer from '../containers/AnnouncementListContainer';
 
-class AnnouncementList extends Component {
-  render() {
-    return (
-      <div>
-        {this.props.announcements.map(a =>
-          <Announcement
-            key={a._id}
-            title={a.title}
-            slug={a.slug}
-            content={a.content}
-            featuredImage={a.featuredImage}
-          />
-        )}
+const AnnouncementList = () => {
+  return (
+    <div>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="table-responsive">
+            <table className="table table-striped">
+              <tbody>
+                <tr>
+                  <th>Title</th>
+                  <th>Date</th>
+                </tr>
+              </tbody>
+              <AnnouncementListContainer />
+            </table>
+          </div>
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
-AnnouncementList.propTypes = {
-  announcements: PropTypes.arrayOf(PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    slug: PropTypes.string.isRequired,
-    featuredImage: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    timestamp: PropTypes.string.isRequired
-  }).isRequired).isRequired
-}
-
-function mapStateToProps(state) {
-  return {
-    announcements: state.announcements.allAnnouncements.announcements
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  dispatch(actions.fetchAnnouncements())
-}
-
-const FullAnnouncementList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AnnouncementList)
-
-
-export default FullAnnouncementList;
+export default AnnouncementList;

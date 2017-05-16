@@ -16,15 +16,6 @@ import {
 } from './auth/index';
 
 
-/**********************************************
-
-================ ADMIN
-
-**********************************************/
-
-
-
-// dashboard
 import {
 
   // dashboard index
@@ -49,12 +40,12 @@ import {
   NewMedia,
 
   // posts
-  Post,
+  SinglePost,
   PostList,
   NewPost,
 
   // services
-  Service,
+  SingleService,
   ServiceList,
   NewService,
 
@@ -66,25 +57,24 @@ import {
   Store,
   
   // store/coupons
-  Coupon,
+  SingleCoupon,
   CouponList,
   NewCoupon,
   
   // store/orders
-  Order,
+  SingleOrder,
   OrderList,
   NewOrder,
 
   // store/products
-  Product,
+  SingleProduct,
   ProductList,
   NewProduct,
 
   // users
-  User,
+  SingleUser,
   UserList,
-  NewUser,
-  EditUser
+  NewUser
 
 } from './admin/index';
 
@@ -110,15 +100,15 @@ export default (
       {/***  admin/announcements  ***/}
       <Route path="announcements">
         <IndexRoute component={AnnouncementList} />
-        <Route path=":slug" component={SingleAnnouncement} />
         <Route path="new" component={NewAnnouncement} />
+        <Route path=":slug" component={SingleAnnouncement} />
       </Route>
 
       {/***  admin/categories  ***/}
       <Route path="categories">
         <IndexRoute component={CategoryList} />
-        <Route path=":slug" component={Category} />
         <Route path="new" component={NewCategory} />
+        <Route path=":slug" component={Category} />
       </Route>
 
       {/***  admin/email  ***/}
@@ -131,32 +121,32 @@ export default (
       {/***  admin/media  ***/}
       <Route path="media">
         <IndexRoute component={MediaList} />
-        <Route path=":slug" component={Media} />
         <Route path="new" component={NewMedia} />
+        <Route path=":slug" component={Media} />
       </Route>
 
 
       {/***  admin/posts  ***/}
       <Route path="posts">
         <IndexRoute component={PostList} />
-        <Route path=":slug" component={Post} />
         <Route path="new" component={NewPost} />
+        <Route path=":slug" component={SinglePost} />
       </Route>
 
 
       {/***  admin/services  ***/}
       <Route path="services">
         <IndexRoute component={ServiceList} />
-        <Route path=":slug" component={Service} />
         <Route path="new" component={NewService} />
+        <Route path=":slug" component={SingleService} />
       </Route>
 
 
       {/***  admin/users  ***/}
       <Route path="users">
         <IndexRoute component={UserList} />
-        <Route path=":slug" component={User} />
         <Route path="new" component={NewUser} />
+        <Route path=":slug" component={SingleUser} />
       </Route>
 
 
@@ -172,20 +162,20 @@ export default (
 
         <Route path="coupons">
           <IndexRoute component={CouponList} />
-          <Route path=":slug" component={Coupon} />
           <Route path="new" component={NewCoupon} />
+          <Route path=":slug" component={SingleCoupon} />
         </Route>
 
         <Route path="orders">
           <IndexRoute component={OrderList} />
-          <Route path=":slug" component={Order} />
           <Route path="new" component={NewOrder} />
+          <Route path=":slug" component={SingleOrder} />
         </Route>
 
         <Route path="products">
           <IndexRoute component={ProductList} />
-          <Route path=":slug" component={Product} />
           <Route path="new" component={NewProduct} />
+          <Route path=":slug" component={SingleProduct} />
         </Route>
 
 

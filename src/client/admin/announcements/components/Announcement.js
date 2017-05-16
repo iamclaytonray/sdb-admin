@@ -4,20 +4,13 @@ import { Link } from 'react-router';
 
 class Announcement extends Component {
   render() {
-    const { _id, title, slug, featuredImage, content } = this.props;
+    const { _id, title, slug, featuredImage, content, timestamp } = this.props;
     return (
-      <div className="main-container">
-        <div className="posts">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-3">
-                <Link to={`admin/announcements/${slug}`}><p>{title}</p></Link>
-                <img src={featuredImage} />
-                <p className="content">{content}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div>
+        <tr>
+          <td><Link to={`admin/announcements/${slug}`}>{title}</Link></td>
+          <td>{timestamp}</td>
+        </tr>
       </div>
     );
   }

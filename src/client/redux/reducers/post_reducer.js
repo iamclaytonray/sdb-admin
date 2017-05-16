@@ -41,7 +41,7 @@ export default function (state = INITIAL_STATE, action) {
     case types.DELETE_POST_SUCCESS:
       return {
         ...state,
-        deletedPost: { post: action.payload, error: null }
+        deletedPost: { ...state.deletedPost, error: null }
       }
 
     default:

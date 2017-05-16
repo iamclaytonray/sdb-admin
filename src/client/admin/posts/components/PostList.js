@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PostListContainer from '../containers/PostListContainer';
 
-class PostList extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Post List</h1>
-      </div>
-    );
-  }
+const PostList = () => {
+  return (
+    <div>
+      <PostListContainer />
+    </div>
+  );
 }
 
 export default PostList;
