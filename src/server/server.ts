@@ -1,13 +1,11 @@
 import * as express from 'express';
-import * as mongoose from 'mongoose';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
-import * as handlebars from 'handlebars';
 import * as logger from 'morgan';
 import * as helmet from 'helmet';
+import * as cors from 'cors';
 import * as path from 'path';
-
 
 // Server class
 class Server {
@@ -18,7 +16,6 @@ class Server {
   constructor() {
     this.app = express();
     this.config();
-    this.routes();
   }
 
   
@@ -32,19 +29,25 @@ class Server {
     this.app.use(logger('dev'));
     this.app.use(compression());
     this.app.use(helmet());
+    this.app.use(cors());
 
-    // this.app.set('view engine', 'html');
-    // this.app.use('/', express.static(path.join(__dirname, 'bundle')));
+    // cors
+    this.app.use((req, res, next) => {
+      res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials');
+      res.header('Access-Control-Allow-Credentials', 'true');
+      res.header('Cache-Control', 'max-age=31536000');
+      next();
+    });
+
+    const buildPath = express.static(path.join(__dirname))
+
+    this.app.use(buildPath);
+
+    this.app.get('/', (request, response) => {
+      response.sendFile(__dirname, 'index.html');
+    });
     
-  }
-
-  // application routes
-  public routes(): void {
-
-    let router: express.Router;
-    router = express.Router();
-
-    this.app.use('/', router);
   }
 }
 
