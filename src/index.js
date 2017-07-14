@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import reduxThunk from 'redux-thunk';
 import routes from './routes';
 import reducers from './redux/reducers/index';
-import './styles/scss/application.scss';
+import './scss/application.scss';
 
 // create store with middleware
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);

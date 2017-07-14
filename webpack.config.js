@@ -15,14 +15,12 @@ const rules = [
     use: [ 'babel-loader' ]
   },
 
-
   // typescript
   {
     test: /\.tsx?$/,
     exclude: /node_modules/,
     use: [ 'ts-loader' ]
   },
-  
   
   // sass
   { 
@@ -34,32 +32,16 @@ const rules = [
   { 
     test: /\.css$/,
     use: [ 'style-loader', 'css-loader' ]
-  },
-
-  // handlebars
-  {
-    test: /\.handlebars$/,
-    use: [ 'handlebars-loader' ]
-  },
-  
-  // images
-  {
-    test: /\.jpe?g$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/,
-    use: [ 'file-loader?name=[name].[ext]' ]
   }
 ];
 
 
-
-
-
 // webpack config
-
 const config = {
 
   // entry
   entry: {
-    client: './src/client/index.js'
+    client: './src/index.js'
   },
 
   // output
@@ -74,11 +56,11 @@ const config = {
   },
 
   plugins: [
-    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }),
+    new webpack.DefinePlugin({ 'process.env': {NODE_ENV: JSON.stringify('production')}}),
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin('application.scss'),
     new HtmlWebpackPlugin({
-      template: 'src/client/index.html',
+      template: './src/index.html',
       minify: {
         collapseWhitespace: true,
         removeComments: true,
@@ -98,9 +80,7 @@ const config = {
   ],
 
   // shared 
-
   devtool: "source-map",
-
 
   // dev server
   devServer: {

@@ -3,45 +3,35 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../../redux/actions/posts';
 import Post from '../components/Post';
-import NoPost from '../components/NoPost';
+import Loading from '../../../shared/Loading';
 
 class PostListContainer extends Component {
   
-  componentDidMount() {
+  componentWillMount() {
     this.props.dispatch(actions.fetchPosts()); 
   }
 
   render() {
-    
+   
     if (this.props.posts.length === 0) {
-      return ( <NoPost /> );
+      return ( <Loading /> );
     }
-
+console.log(this.props.posts);
     return (
       <div>
         {this.props.posts.map(post =>
-          <div className="container-fluid">
-            <div className="col-lg-6">
-              <div className="row">
-                <div className="post-list">
-                  <div className="post-card">
-                    <Post
-                      key={post._id}
-                      author={post.author}
-                      title={post.title}
-                      slug={post.slug}
-                      featuredImage={post.featuredImage}
-                      excerpt={post.excerpt}
-                      content={post.content}
-                      category={post.category}
-                      tags={post.tags}
-                      timestamp={post.timestamp}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            <Post
+              key={post._id}
+              author={post.author}
+              title={post.title}
+              slug={post.slug}
+              featuredImage={post.featuredImage}
+              excerpt={post.excerpt}
+              content={post.content}
+              category={post.category}
+              tags={post.tags}
+              timestamp={post.timestamp}
+            />
         )}
       </div>
     );

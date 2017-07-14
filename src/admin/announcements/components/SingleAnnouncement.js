@@ -5,16 +5,21 @@ import Announcement from './Announcement';
 import * as actions from '../../../redux/actions/announcements';
 
 class SingleAnnouncement extends Component {  
+  
+  componentWillMount() {
+    this.props.dispatch(actions.fetchAnnouncement(this.props.params.slug));
+  }
+
   render() {
     const { _id, title, slug, content, featuredImage, timestamp } = this.props.announcement;
     return (
       <div>
-          <p>{_id}</p>
-          <p>{title}</p>
-          <p>{slug}</p>
-          <p>{content}</p>
-          <img src={featuredImage} />
-          <p>{timestamp}</p>
+        <p>{_id}</p>
+        <p>{title}</p>
+        <p>{slug}</p>
+        <p>{content}</p>
+        <img src={featuredImage} />
+        <p>{timestamp}</p>
       </div>
     );
   }
@@ -36,15 +41,4 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch, props) {
-  dispatch(actions.fetchAnnouncement(props.params.slug));
-}
-
-
-const FullSingleAnnouncement = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SingleAnnouncement)
-
-
-export default FullSingleAnnouncement;
+export default connect(mapStateToProps)(SingleAnnouncement);

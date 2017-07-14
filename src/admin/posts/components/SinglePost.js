@@ -17,7 +17,7 @@ class SinglePost extends Component {
   } 
 
   handleDeletePost = post => {
-    this.props.dispatch(deletePost(props.params.slug));
+    this.props.dispatch(deletePost(this.props.params.slug));
   };
 
   render() {
@@ -28,7 +28,14 @@ class SinglePost extends Component {
         <div className="container">
           <div className="col-lg-8 col-lg-offset-2">
             <div className="row">
-              <EditPostForm onSubmit={this.submit.bind(this)} />
+              
+              <EditPostForm
+                title={this.props.post.title}
+                content={this.props.post.content}
+                featuredImage={this.props.post.featuredImage}
+                onSubmit={this.submit.bind(this)}
+              />
+
               <p><button onClick={this.props.onDelete}>Delete</button></p>
             </div>
           </div>

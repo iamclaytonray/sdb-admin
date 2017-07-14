@@ -1,19 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
-class Announcement extends Component {
-  render() {
-    const { _id, title, slug, featuredImage, content, timestamp } = this.props;
-    return (
-      <div>
-        <tr>
-          <td><Link to={`admin/announcements/${slug}`}>{title}</Link></td>
-          <td>{timestamp}</td>
-        </tr>
-      </div>
-    );
-  }
+const Announcement = props => {
+  return (
+    <div>
+      <tr>
+        <td><Link to={`admin/announcements/${slug}`}>{title}</Link></td>
+        <td>{timestamp}</td>
+      </tr>
+    </div>
+  );
 }
 
 

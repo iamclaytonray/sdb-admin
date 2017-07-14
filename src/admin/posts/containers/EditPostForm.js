@@ -3,30 +3,40 @@ import { Field, reduxForm } from 'redux-form';
 
 class EditPostForm extends Component {
   render() {
+
+    const data = {
+      title: this.props.title,
+      content: this.props.content
+    }
+
     const { handleSubmit } = this.props;
+    
       return (
         <div>
-          <form onSubmit={handleSubmit}>
+          <form>
 
-            <Field 
+            <label>Title:</label>
+            <input 
               name="title"
               component="input"
               type="text"
-              placeholder="Title"
+              value={data.title}
               className="form-control"
             />
             <p></p>
 
-            <Field
+            <label>Content:</label>
+            <textarea
               name="content"
               component="textarea"
-              type="text"
-              placeholder="Content"
+              type="textarea"
+              value={this.props.content}
               className="form-control"
             />
             <p></p>
 
             <button type="submit" className="btn btn-default">Submit</button>
+            <p></p>
           </form>
         </div>
       );

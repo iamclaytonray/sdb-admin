@@ -6,7 +6,7 @@ import Announcement from '../components/Announcement';
 
 class AnnouncementListContainer extends Component {
   
-  componentDidMount() {
+  componentWillMount() {
     this.props.dispatch(actions.fetchAnnouncements())
   }
 
@@ -21,6 +21,8 @@ class AnnouncementListContainer extends Component {
             content={a.content}
             featuredImage={a.featuredImage}
             timestamp={a.timestamp}
+            from={a.dates.from}
+            to={a.dates.to}
           />
         )}
       </div>

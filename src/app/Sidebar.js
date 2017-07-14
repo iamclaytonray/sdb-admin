@@ -28,7 +28,7 @@ const Sidebar = () => {
           </div>
         </nav>
 
-        <div className="container-fluid">
+        <div>
           <div className="row">
             <div className="col-sm-3 col-md-2 sidebar">
               <ul className="nav nav-sidebar">

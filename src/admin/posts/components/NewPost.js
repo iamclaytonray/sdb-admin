@@ -16,7 +16,7 @@ class NewPost extends Component {
     return (
       <div>
         <h1>New Post</h1>
-        <NewPostForm onSubmit={this.submit.bind(this)} />
+        <NewPostForm onSubmit={this.submit} />
       </div>
     );
   }
