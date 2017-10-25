@@ -1,9 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 
-const Post = props => {
+export const Article = ({ article }) => {
   return (
     <div className='post-list'>
         <table className='table table-striped'>
@@ -14,12 +13,12 @@ const Post = props => {
               <th>Date</th>
             </tr>
           </thead>
-          <Link to={`admin/posts/${props.slug}`}>
+          <Link to={`admin/posts/${article.slug}`}>
           <tbody>
             <tr>
-              <td>{props.title}</td>
-              <td>{props.author}</td>
-              <td>{props.timestamp}</td>
+              <td>{article.title}</td>
+              <td>{article.author}</td>
+              <td>{prarticleops.timestamp}</td>
             </tr>
           </tbody>
           </Link>
@@ -53,20 +52,3 @@ const Post = props => {
     </div>
   );
 }
-
-
-Post.propTypes = {
-  _id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  slug: PropTypes.string.isRequired,
-  featuredImage: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  excerpt: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
-  category: PropTypes.string.isRequired,
-  tags: PropTypes.arrayOf(PropTypes.string),
-  timestamp: PropTypes.string,
-  onDelete: PropTypes.func.isRequired,
-}
-
-export default Post;
