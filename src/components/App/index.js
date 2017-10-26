@@ -1,11 +1,11 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-// import './normalize.css';
-// import './main.css';
+import './main.css';
 
 // components
 import { Dashboard } from 'components/Dashboard';
 import { NotFound } from 'components/NotFound';
+import { Sidebar } from 'components/Sidebar';
 
 // containers
 import AnnouncementList from 'containers/AnnouncementList';
@@ -20,15 +20,17 @@ export const App = () => {
   return (
     <div>
 
+      <Sidebar />
+
       <Switch>
         <Route exact path='/' component={Dashboard} />
-        <Route exact path='/announcements' component={AnnouncementList} />
-        <Route exact path='/articles' component={ArticleList} />
-        <Route exact path='/articles/:slug' component={ArticleListItem} />
-        <Route exact path='/products' component={ProductList} />
-        <Route exact path='/products/:slug' component={ProductListItem} />
-        <Route exact path='/services' component={ServiceList} />
-        <Route exact path='/services/:slug' component={ServiceListItem} />
+        <Route exact path='/admin/announcements' component={AnnouncementList} />
+        <Route exact path='/admin/articles' component={ArticleList} />
+        <Route exact path='/admin/articles/:slug' component={ArticleListItem} />
+        <Route exact path='/admin/products' component={ProductList} />
+        <Route exact path='/admin/products/:slug' component={ProductListItem} />
+        <Route exact path='/admin/services' component={ServiceList} />
+        <Route exact path='/admin/services/:slug' component={ServiceListItem} />
         <Route component={NotFound} />
       </Switch>
 

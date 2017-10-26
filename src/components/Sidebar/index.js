@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
-const Sidebar = () => {
+export const Sidebar = () => {
     return (
       <div>
         <nav className="navbar navbar-inverse navbar-fixed-top">
@@ -34,15 +34,10 @@ const Sidebar = () => {
               <ul className="nav nav-sidebar">
                 <li><Link to="admin">Dashboard</Link></li>
                 <li><Link to="admin/announcements">Announcements</Link></li>
-                <li><Link to="admin/categories">Categories</Link></li>
-                <li><Link to="admin/email">Email</Link></li>
-                <li><Link to="admin/media">Media</Link></li>
-                <li><Link to="admin/posts">Posts</Link></li>
+                <li><Link to="admin/articles">Articles</Link></li>
                 <li><Link to="admin/services">Services</Link></li>
                 <li><Link to="admin/store">Store</Link></li>
-                <li><Link to="admin/store/coupons">Coupons</Link></li>
-                <li><Link to="admin/store/orders">Orders</Link></li>
-                <li><Link to="admin/store/products">Products</Link></li>
+                <li><Link to="admin/products">Products</Link></li>
                 <li><Link to="admin/settings">Settings</Link></li>
                 <li><Link to="logout">Logout</Link></li>
               </ul>
@@ -52,5 +47,3 @@ const Sidebar = () => {
       </div>
     );
 }
-
-export default Sidebar;
