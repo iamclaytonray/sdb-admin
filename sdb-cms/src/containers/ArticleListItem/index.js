@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchArticle } from 'sdb-redux';
-import { Article } from 'components/Article';
 
-class SinglePost extends Component {
+class ArticleListItem extends Component {
 
   componentDidMount() {
     const { dispatch, match } = this.props;

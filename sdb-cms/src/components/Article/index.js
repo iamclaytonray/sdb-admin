@@ -18,7 +18,7 @@ export const Article = ({ article }) => {
             <tr>
               <td>{article.title}</td>
               <td>{article.author}</td>
-              <td>{prarticleops.timestamp}</td>
+              <td>{article.timestamp}</td>
             </tr>
           </tbody>
           </Link>
