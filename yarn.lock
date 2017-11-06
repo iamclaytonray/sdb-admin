@@ -5452,7 +5452,7 @@ redux-form@^7.1.1:
     lodash-es "^4.17.3"
     prop-types "^15.5.9"
 
-redux-thunk@^2.2.0:
+redux-thunk@2.2.0, redux-thunk@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.2.0.tgz#e615a16e16b47a19a515766133d1e3e99b7852e5"
 
@@ -5736,15 +5736,16 @@ schema-utils@^0.3.0:
   dependencies:
     ajv "^5.0.0"
 
-sdb-redux@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/sdb-redux/-/sdb-redux-0.5.0.tgz#7fbbfd0fff62c948ca972e4a9ef4926cb60b1e0f"
+sdb-redux@0.11.3:
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/sdb-redux/-/sdb-redux-0.11.3.tgz#f9999c55bfe568199c19f19964cfccd16bf38aa0"
   dependencies:
     axios "^0.17.0"
     react "^16.0.0"
     react-redux "^5.0.6"
     redux "^3.7.2"
     redux-form "^7.1.1"
+    redux-thunk "2.2.0"
 
 select-hose@^2.0.0:
   version "2.0.0"
