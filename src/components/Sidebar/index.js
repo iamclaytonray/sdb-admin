@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 export const Sidebar = () => {
     return (
@@ -18,8 +18,8 @@ export const Sidebar = () => {
             <div id="navbar" className="navbar-collapse collapse">
               <ul className="nav navbar-nav navbar-right">
                 <li><Link to="admin">Dashboard</Link></li>
-                <li><Link to="admin/settings">Settings</Link></li>
-                <li><Link to="admin/users">Profile</Link></li>
+                <li><Link to="settings">Settings</Link></li>
+                <li><Link to="users">Profile</Link></li>
               </ul>
               <form className="navbar-form navbar-right">
                 <input type="text" className="form-control" placeholder="Search..." />
@@ -32,14 +32,12 @@ export const Sidebar = () => {
           <div className="row">
             <div className="col-sm-3 col-md-2 sidebar">
               <ul className="nav nav-sidebar">
-                <li><Link to="admin">Dashboard</Link></li>
-                <li><Link to="admin/announcements">Announcements</Link></li>
-                <li><Link to="admin/articles">Articles</Link></li>
-                <li><Link to="admin/services">Services</Link></li>
-                <li><Link to="admin/store">Store</Link></li>
-                <li><Link to="admin/products">Products</Link></li>
-                <li><Link to="admin/settings">Settings</Link></li>
-                <li><Link to="logout">Logout</Link></li>
+                <li><NavLink to="/">Dashboard</NavLink></li>
+                <li><NavLink to="announcements">Announcements</NavLink></li>
+                <li><NavLink to="articles">Articles</NavLink></li>
+                <li><NavLink to="services">Services</NavLink></li>
+                <li><NavLink to="products">Products</NavLink></li>
+                <li><NavLink to="logout">Logout</NavLink></li>
               </ul>
             </div>
           </div>
