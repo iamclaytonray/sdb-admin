@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import ReactHtmlParser from 'react-html-parser';
 import { fetchService } from 'sdb-redux';
 
 class ServiceListItem extends Component {
@@ -19,13 +17,16 @@ class ServiceListItem extends Component {
     }
 
     return (
-      <div className='service'>
-        <iframe width="853" height="480" src={`${service.videoUri}?rel=0&amp;showinfo=0`} title={service.title} frameBorder='0' allowFullScreen />
-        <div className='content'>
-          <h1>{service.title}</h1>
-          <p>{ ReactHtmlParser(service.content) }</p>
-          <Link to='/services/categories'>{service.category}</Link>
-        </div>
+      <div className='col-lg-6 col-lg-offset-3' style={{ textAlign: 'center' }}>
+        <form>
+          <input type='text' className='form-control' value={service.title} />
+          <input type='text' className='form-control' value={service.slug} />
+          <input type='text' className='form-control' value={service.featuredImage} />
+          <input type='text' className='form-control' value={service.tags} />
+          <input type='text' className='form-control' value={service.videoUri} />
+          <input type='text' className='form-control' value={service.category} />
+          <input type='text' className='form-control' value={service.content} />
+        </form>
       </div>
     );
   }
