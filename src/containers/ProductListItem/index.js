@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchProduct } from 'sdb-redux';
 
-class SingleProduct extends Component {  
+class ProductListItem extends Component {  
   
   componentDidMount() {
     const { dispatch, match } = this.props;
@@ -34,4 +34,4 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default connect(mapStateToProps)(SingleProduct);
+export default connect(mapStateToProps)(ProductListItem);
