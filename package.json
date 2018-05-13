@@ -3,21 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "NODE_PATH=src:src/components:src/containers BROWSER=none PORT=8081 react-scripts start",
-    "build": "NODE_PATH=src:src/components:src/containers BROWSER=none PORT=8081 react-scripts build",
+    "start": "NODE_PATH=src BROWSER=none PORT=8081 react-scripts start",
+    "build": "NODE_PATH=src BROWSER=none PORT=8081 react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "raven-js": "^3.19.1",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-html-parser": "^2.0.1",
-    "react-redux": "^5.0.6",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.14",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0",
-    "sdb-redux": "0.11.3"
+    "raven-js": "3.19.1",
+    "react": "16.0.0",
+    "react-dom": "16.0.0",
+    "react-html-parser": "2.0.1",
+    "react-router-dom": "4.2.2",
+    "react-scripts": "1.0.14"
   }
 }
