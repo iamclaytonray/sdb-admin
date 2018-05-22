@@ -5,6 +5,7 @@ import { UpdateContainer } from 'containers/UpdateContainer';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Query } from 'react-apollo';
+import { Card, CardBody } from 'reactstrap';
 
 const query = gql`
   query service($slug: String!) {
@@ -52,18 +53,18 @@ const deleteServiceMutation = gql`
 
 export class SingleServicePage extends React.Component<any, any> {
   public state = {
-    title: ''
+    title: '',
   };
 
   // public static getDerivedStateFromProps(nextProps, prevState) {
-    
+
   // }
-  
+
   public handleInputChange = event => {
     const { target } = event;
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-  
+
     this.setState({
       [name]: value,
     });
@@ -84,7 +85,8 @@ export class SingleServicePage extends React.Component<any, any> {
           const { service } = data;
 
           return (
-            <React.Fragment>
+            <Card>
+              <CardBody>
               <div className="form-group">
                 <label>Title</label>
                 <input
@@ -149,7 +151,8 @@ export class SingleServicePage extends React.Component<any, any> {
                 variable={service.slug}
                 history={history}
               />
-            </React.Fragment>
+              </CardBody>
+          </Card>
           );
         }}
       </Query>

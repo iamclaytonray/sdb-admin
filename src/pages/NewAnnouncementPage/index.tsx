@@ -1,9 +1,9 @@
-// import { Loading } from 'components/Loading';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Mutation } from 'react-apollo';
+import { Card, CardBody, CardTitle } from 'reactstrap';
 
 const mutation = gql`
   mutation createAnnouncement(
@@ -71,8 +71,9 @@ export class NewAnnouncementPage extends React.Component<any, any> {
       <Mutation mutation={mutation}>
         {(createAnnouncement, { loading, error }) => {
           return (
-            <div>
-              <h1 className="text-center">New Announcement</h1>
+            <Card>
+              <CardBody>
+              <CardTitle>New Announcement</CardTitle>
 
               {loading && <Loading />}
               {/* Add a Snackbox here noticing the user that there was an error */}
@@ -141,7 +142,8 @@ export class NewAnnouncementPage extends React.Component<any, any> {
                   Create
                 </button>
               </form>
-            </div>
+              </CardBody>
+          </Card>
           );
         }}
       </Mutation>
