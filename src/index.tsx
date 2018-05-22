@@ -8,9 +8,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { ErrorBoundary } from 'containers/ErrorBoundary';
 import { Root } from 'containers/Root';
 
-// styles
-import './styles/dashboard.css';
-import './styles/main.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import './assets/scss/dashboard.scss';
 
 // import registerServiceWorker from './registerServiceWorker';
 
