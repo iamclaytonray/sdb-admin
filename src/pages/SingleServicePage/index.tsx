@@ -87,72 +87,72 @@ export class SingleServicePage extends React.Component<any, any> {
           return (
             <Card>
               <CardBody>
-              <div className="form-group">
-                <label>Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={service.title}
-                  className="form-control"
-                  onChange={this.handleInputChange}
-                />
-              </div>
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={service.title}
+                    className="form-control"
+                    onChange={this.handleInputChange}
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Slug</label>
-                <input
-                  type="text"
-                  value={service.slug}
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label>Video URI</label>
-                <input
-                  type="text"
-                  value={service.videoUri}
-                  className="form-control"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Slug</label>
+                  <input
+                    type="text"
+                    value={service.slug}
+                    className="form-control"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Video URI</label>
+                  <input
+                    type="text"
+                    value={service.videoUri}
+                    className="form-control"
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Category</label>
-                <input
-                  type="text"
-                  value={service.category}
-                  className="form-control"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Category</label>
+                  <input
+                    type="text"
+                    value={service.category}
+                    className="form-control"
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Published</label>
-                <input
-                  type="checkbox"
-                  checked={service.published}
-                  className="form-control"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Published</label>
+                  <input
+                    type="checkbox"
+                    checked={service.published}
+                    className="form-control"
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Content</label>
-                <textarea
-                  value={service.content}
-                  className="form-control"
-                  rows={10}
-                />
-              </div>
+                <div className="form-group">
+                  <label>Content</label>
+                  <textarea
+                    value={service.content}
+                    className="form-control"
+                    rows={10}
+                  />
+                </div>
 
-              <UpdateContainer
-                mutationName={updateServiceMutation}
-                variables={service}
-              />
-              <DeleteContainer
-                mutationName={deleteServiceMutation}
-                variable={service.slug}
-                history={history}
-              />
+                <UpdateContainer
+                  mutationName={updateServiceMutation}
+                  variables={service}
+                />
+                <DeleteContainer
+                  mutationName={deleteServiceMutation}
+                  variable={service.slug}
+                  history={history}
+                />
               </CardBody>
-          </Card>
+            </Card>
           );
         }}
       </Query>

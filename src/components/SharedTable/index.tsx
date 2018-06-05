@@ -70,7 +70,9 @@ export class SharedTable extends React.Component<any, any> {
             <div className="actions-right">
               {/* use this button to add a edit kind of action */}
               <Button
-                onClick={() => { console.log('hit'); }}
+                onClick={() => {
+                  console.log('hit');
+                }}
                 color="warning"
                 size="sm"
                 round
@@ -80,7 +82,9 @@ export class SharedTable extends React.Component<any, any> {
               </Button>{' '}
               {/* use this button to remove the data row */}
               <Button
-                onClick={() => { console.log('hit'); }}
+                onClick={() => {
+                  console.log('hit');
+                }}
                 color="danger"
                 size="sm"
                 round

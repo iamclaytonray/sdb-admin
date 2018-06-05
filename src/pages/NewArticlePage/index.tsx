@@ -89,100 +89,100 @@ export class NewArticlePage extends React.Component<any, any> {
           return (
             <Card>
               <CardBody>
-              <CardTitle>New Article</CardTitle>
+                <CardTitle>New Article</CardTitle>
 
-              {loading && <Loading />}
-              {/* Add a Snackbox here noticing the user that there was an error */}
-              {error && <Error error={error} />}
-              <form onSubmit={e => this.handleSubmit(e, createArticle)}>
-                <div className="form-group">
-                  <label>Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="Title"
-                    value={this.state.title}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                {loading && <Loading />}
+                {/* Add a Snackbox here noticing the user that there was an error */}
+                {error && <Error error={error} />}
+                <form onSubmit={e => this.handleSubmit(e, createArticle)}>
+                  <div className="form-group">
+                    <label>Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="Title"
+                      value={this.state.title}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Slug</label>
-                  <input
-                    type="text"
-                    name="slug"
-                    placeholder="Slug"
-                    value={this.state.slug}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Slug</label>
+                    <input
+                      type="text"
+                      name="slug"
+                      placeholder="Slug"
+                      value={this.state.slug}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Featured Image</label>
-                  <input
-                    type="text"
-                    name="featuredImage"
-                    placeholder="Featured Image"
-                    value={this.state.featuredImage}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Featured Image</label>
+                    <input
+                      type="text"
+                      name="featuredImage"
+                      placeholder="Featured Image"
+                      value={this.state.featuredImage}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Category</label>
-                  <input
-                    type="text"
-                    name="category"
-                    placeholder="Category"
-                    value={this.state.category}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Category</label>
+                    <input
+                      type="text"
+                      name="category"
+                      placeholder="Category"
+                      value={this.state.category}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Link</label>
-                  <input
-                    type="text"
-                    name="link"
-                    placeholder="Link"
-                    value={this.state.link}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Link</label>
+                    <input
+                      type="text"
+                      name="link"
+                      placeholder="Link"
+                      value={this.state.link}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Status/Published</label>
-                  <input
-                    type="checkbox"
-                    name="published"
-                    checked={this.state.published}
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Status/Published</label>
+                    <input
+                      type="checkbox"
+                      name="published"
+                      checked={this.state.published}
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Content</label>
-                  <textarea
-                    name="content"
-                    value={this.state.content}
-                    placeholder="Content"
-                    className="form-control"
-                    rows={10}
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Content</label>
+                    <textarea
+                      name="content"
+                      value={this.state.content}
+                      placeholder="Content"
+                      className="form-control"
+                      rows={10}
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <button type="submit" className="btn btn-primary">
-                  Create
-                </button>
-              </form>
+                  <button type="submit" className="btn btn-primary">
+                    Create
+                  </button>
+                </form>
               </CardBody>
-          </Card>
+            </Card>
           );
         }}
       </Mutation>

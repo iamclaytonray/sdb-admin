@@ -91,7 +91,6 @@ export class Header extends React.Component<any, any> {
                 </InputGroupAddon>
               </InputGroup>
             </form>
-            
           </Collapse>
         </Container>
       </Navbar>
