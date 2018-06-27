@@ -1,9 +1,11 @@
-// import { Loading } from 'components/Loading';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
+import { TextEditor } from 'components/TextEditor';
+// import { Editor, EditorState } from 'draft-js';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Mutation } from 'react-apollo';
+import { Card, CardBody, CardTitle } from 'reactstrap';
 
 const mutation = gql`
   mutation createAnnouncement(
@@ -36,6 +38,8 @@ export class NewAnnouncementPage extends React.Component<any, any> {
     content: '',
     published: false,
   };
+
+  public onEditorChange = editor => this.setState({ editor });
 
   public handleInputChange = event => {
     const target = event.target;
@@ -71,77 +75,86 @@ export class NewAnnouncementPage extends React.Component<any, any> {
       <Mutation mutation={mutation}>
         {(createAnnouncement, { loading, error }) => {
           return (
-            <div>
-              <h1 className="text-center">New Announcement</h1>
+            <Card>
+              <CardBody>
+                <CardTitle>New Announcement</CardTitle>
 
-              {loading && <Loading />}
-              {/* Add a Snackbox here noticing the user that there was an error */}
-              {error && <Error error={error} />}
-              <form onSubmit={e => this.handleSubmit(e, createAnnouncement)}>
-                <div className="form-group">
-                  <label>Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="Title"
-                    value={this.state.title}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                {loading && <Loading />}
+                {/* Add a Snackbox here noticing the user that there was an error */}
+                {error && <Error error={error} />}
+                <form onSubmit={e => this.handleSubmit(e, createAnnouncement)}>
+                  <div className="form-group">
+                    <label>Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="Title"
+                      value={this.state.title}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Slug</label>
-                  <input
-                    type="text"
-                    name="slug"
-                    placeholder="Slug"
-                    value={this.state.slug}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Slug</label>
+                    <input
+                      type="text"
+                      name="slug"
+                      placeholder="Slug"
+                      value={this.state.slug}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Featured Image</label>
-                  <input
-                    type="text"
-                    name="featuredImage"
-                    placeholder="Featured Image"
-                    value={this.state.featuredImage}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Featured Image</label>
+                    <input
+                      type="text"
+                      name="featuredImage"
+                      placeholder="Featured Image"
+                      value={this.state.featuredImage}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Status/Published</label>
-                  <input
-                    type="checkbox"
-                    name="published"
-                    checked={this.state.published}
-                    // className="form-check-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Status/Published</label>
+                    <input
+                      type="checkbox"
+                      name="published"
+                      checked={this.state.published}
+                      // className="form-check-input"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Content</label>
-                  <textarea
+                  <div className="form-group">
+                    <label>Content</label>
+                    <TextEditor />
+                    {/* <textarea
                     name="content"
                     value={this.state.content}
                     placeholder="Content"
                     className="form-control"
                     rows={10}
                     onChange={this.handleInputChange}
-                  />
-                </div>
+                  /> */}
+                    {/* <Editor
+                      name="content"
+                      placeholder="Content"
+                      editorState={this.state.editor}
+                      onChange={this.onEditorChange}
+                    /> */}
+                  </div>
 
-                <button type="submit" className="btn btn-primary">
-                  Create
-                </button>
-              </form>
-            </div>
+                  <button type="submit" className="btn btn-primary">
+                    Create
+                  </button>
+                </form>
+              </CardBody>
+            </Card>
           );
         }}
       </Mutation>

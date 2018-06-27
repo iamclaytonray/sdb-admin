@@ -5,6 +5,7 @@ import { UpdateContainer } from 'containers/UpdateContainer';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Query } from 'react-apollo';
+import { Card, CardBody } from 'reactstrap';
 
 const query = gql`
   query service($slug: String!) {
@@ -52,18 +53,18 @@ const deleteServiceMutation = gql`
 
 export class SingleServicePage extends React.Component<any, any> {
   public state = {
-    title: ''
+    title: '',
   };
 
   // public static getDerivedStateFromProps(nextProps, prevState) {
-    
+
   // }
-  
+
   public handleInputChange = event => {
     const { target } = event;
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-  
+
     this.setState({
       [name]: value,
     });
@@ -84,72 +85,74 @@ export class SingleServicePage extends React.Component<any, any> {
           const { service } = data;
 
           return (
-            <React.Fragment>
-              <div className="form-group">
-                <label>Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={service.title}
-                  className="form-control"
-                  onChange={this.handleInputChange}
-                />
-              </div>
+            <Card>
+              <CardBody>
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={service.title}
+                    className="form-control"
+                    onChange={this.handleInputChange}
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Slug</label>
-                <input
-                  type="text"
-                  value={service.slug}
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label>Video URI</label>
-                <input
-                  type="text"
-                  value={service.videoUri}
-                  className="form-control"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Slug</label>
+                  <input
+                    type="text"
+                    value={service.slug}
+                    className="form-control"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Video URI</label>
+                  <input
+                    type="text"
+                    value={service.videoUri}
+                    className="form-control"
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Category</label>
-                <input
-                  type="text"
-                  value={service.category}
-                  className="form-control"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Category</label>
+                  <input
+                    type="text"
+                    value={service.category}
+                    className="form-control"
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Published</label>
-                <input
-                  type="checkbox"
-                  checked={service.published}
-                  className="form-control"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Published</label>
+                  <input
+                    type="checkbox"
+                    checked={service.published}
+                    className="form-control"
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Content</label>
-                <textarea
-                  value={service.content}
-                  className="form-control"
-                  rows={10}
-                />
-              </div>
+                <div className="form-group">
+                  <label>Content</label>
+                  <textarea
+                    value={service.content}
+                    className="form-control"
+                    rows={10}
+                  />
+                </div>
 
-              <UpdateContainer
-                mutationName={updateServiceMutation}
-                variables={service}
-              />
-              <DeleteContainer
-                mutationName={deleteServiceMutation}
-                variable={service.slug}
-                history={history}
-              />
-            </React.Fragment>
+                <UpdateContainer
+                  mutationName={updateServiceMutation}
+                  variables={service}
+                />
+                <DeleteContainer
+                  mutationName={deleteServiceMutation}
+                  variable={service.slug}
+                  history={history}
+                />
+              </CardBody>
+            </Card>
           );
         }}
       </Query>

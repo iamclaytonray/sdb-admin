@@ -8,14 +8,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { ErrorBoundary } from 'containers/ErrorBoundary';
 import { Root } from 'containers/Root';
 
-// styles
-import './styles/dashboard.css';
-import './styles/main.css';
-
-// import registerServiceWorker from './registerServiceWorker';
+import 'bootstrap/dist/css/bootstrap.css';
+import './assets/scss/dashboard.scss';
+import { API_URL } from './constants';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3000/graphql',
+  uri: API_URL,
   request: async operation => {
     const token = await localStorage.getItem('token');
     operation.setContext({
@@ -36,5 +34,3 @@ render(
   </ApolloProvider>,
   document.getElementById('root'),
 );
-
-// registerServiceWorker();

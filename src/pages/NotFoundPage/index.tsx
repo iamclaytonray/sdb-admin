@@ -1,9 +1,12 @@
 import * as React from 'react';
+import { Card, CardBody, CardTitle } from 'reactstrap';
 
 export const NotFoundPage = () => {
   return (
-    <div>
-      <h1>Page Not Found</h1>
-    </div>
+    <Card>
+      <CardBody>
+        <CardTitle>Page Not Found</CardTitle>
+      </CardBody>
+    </Card>
   );
 };

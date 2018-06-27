@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { Card } from 'reactstrap';
 
 export const DashboardPage = () => {
   return (
-    <div>
+    <Card>
       <h1>Dashboard</h1>
-    </div>
+    </Card>
   );
 };

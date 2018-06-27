@@ -1,9 +1,9 @@
-// import { Loading } from 'components/Loading';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Mutation } from 'react-apollo';
+import { Card, CardBody, CardTitle } from 'reactstrap';
 
 const mutation = gql`
   mutation createProduct(
@@ -87,73 +87,74 @@ export class NewProductPage extends React.Component<any, any> {
       <Mutation mutation={mutation}>
         {(createProduct, { loading, error }) => {
           return (
-            <div>
-              <h1 className="text-center">New Product</h1>
+            <Card>
+              <CardBody>
+                <CardTitle>New Product</CardTitle>
 
-              {loading && <Loading />}
-              {/* Add a Snackbox here noticing the user that there was an error */}
-              {error && <Error error={error} />}
-              <form onSubmit={e => this.handleSubmit(e, createProduct)}>
-                <div className="form-group">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    value={this.state.name}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                {loading && <Loading />}
+                {/* Add a Snackbox here noticing the user that there was an error */}
+                {error && <Error error={error} />}
+                <form onSubmit={e => this.handleSubmit(e, createProduct)}>
+                  <div className="form-group">
+                    <label>Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Name"
+                      value={this.state.name}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Slug</label>
-                  <input
-                    type="text"
-                    name="slug"
-                    placeholder="Slug"
-                    value={this.state.slug}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Slug</label>
+                    <input
+                      type="text"
+                      name="slug"
+                      placeholder="Slug"
+                      value={this.state.slug}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Featured Image</label>
-                  <input
-                    type="text"
-                    name="featuredImage"
-                    placeholder="Featured Image"
-                    value={this.state.featuredImage}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Featured Image</label>
+                    <input
+                      type="text"
+                      name="featuredImage"
+                      placeholder="Featured Image"
+                      value={this.state.featuredImage}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Description</label>
-                  <input
-                    type="text"
-                    name="description"
-                    placeholder="Description"
-                    value={this.state.description}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Description</label>
+                    <input
+                      type="text"
+                      name="description"
+                      placeholder="Description"
+                      value={this.state.description}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label>Status/Published</label>
-                  <input
-                    type="checkbox"
-                    name="published"
-                    checked={this.state.published}
-                    // className="form-check-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Status/Published</label>
+                    <input
+                      type="checkbox"
+                      name="published"
+                      checked={this.state.published}
+                      // className="form-check-input"
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
 
-                {/* <div className="form-group">
+                  {/* <div className="form-group">
                   <label>Content</label>
                   <textarea
                     name="content"
@@ -165,11 +166,12 @@ export class NewProductPage extends React.Component<any, any> {
                   />
                 </div> */}
 
-                <button type="submit" className="btn btn-primary">
-                  Create
-                </button>
-              </form>
-            </div>
+                  <button type="submit" className="btn btn-primary">
+                    Create
+                  </button>
+                </form>
+              </CardBody>
+            </Card>
           );
         }}
       </Mutation>
