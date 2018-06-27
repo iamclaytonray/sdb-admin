@@ -10,11 +10,10 @@ import { Root } from 'containers/Root';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './assets/scss/dashboard.scss';
-
-// import registerServiceWorker from './registerServiceWorker';
+import { API_URL } from './constants';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3000/graphql',
+  uri: API_URL,
   request: async operation => {
     const token = await localStorage.getItem('token');
     operation.setContext({
@@ -35,5 +34,3 @@ render(
   </ApolloProvider>,
   document.getElementById('root'),
 );
-
-// registerServiceWorker();
