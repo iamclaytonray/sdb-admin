@@ -7,8 +7,8 @@ import { Query } from 'react-apollo';
 import { Card, CardBody } from 'reactstrap';
 
 const query = gql`
-  query announcement($slug: String!) {
-    announcement(where: { slug: $slug }) {
+  query event($slug: String!) {
+    event(where: { slug: $slug }) {
       title
       slug
       content
@@ -18,15 +18,15 @@ const query = gql`
   }
 `;
 
-const deleteAnnouncementMutation = gql`
-  mutation deleteAnnouncement($slug: String!) {
-    deleteAnnouncement(where: { slug: $slug }) {
+const deleteEventMutation = gql`
+  mutation deleteEvent($slug: String!) {
+    deleteEvent(where: { slug: $slug }) {
       id
     }
   }
 `;
 
-export const SingleAnnouncementPage = ({ match, history }) => {
+export const SingleEventPage = ({ match, history }) => {
   return (
     <Query query={query} variables={{ slug: match.params.slug }}>
       {({ loading, error, data }) => {
@@ -37,7 +37,7 @@ export const SingleAnnouncementPage = ({ match, history }) => {
           return <Error error={error} />;
         }
 
-        const { announcement } = data;
+        const { event } = data;
 
         return (
           <Card>
@@ -46,7 +46,7 @@ export const SingleAnnouncementPage = ({ match, history }) => {
                 <label>Title</label>
                 <input
                   type="text"
-                  value={announcement.title}
+                  value={event.title}
                   className="form-control"
                 />
               </div>
@@ -55,7 +55,7 @@ export const SingleAnnouncementPage = ({ match, history }) => {
                 <label>Slug</label>
                 <input
                   type="text"
-                  value={announcement.slug}
+                  value={event.slug}
                   className="form-control"
                 />
               </div>
@@ -64,14 +64,14 @@ export const SingleAnnouncementPage = ({ match, history }) => {
                 <label>Featured Image</label>
                 <br />
                 <img
-                  src={announcement.featuredImage}
+                  src={event.featuredImage}
                   style={{ height: 100, width: 'auto' }}
                 />
                 <p />
                 <input
                   name="featuredImage"
                   type="text"
-                  value={announcement.featuredImage}
+                  value={event.featuredImage}
                   className="form-control"
                 />
               </div>
@@ -81,7 +81,7 @@ export const SingleAnnouncementPage = ({ match, history }) => {
                 <input
                   name="published"
                   type="checkbox"
-                  checked={announcement.published}
+                  checked={event.published}
                   className="form-control"
                 />
               </div>
@@ -89,7 +89,7 @@ export const SingleAnnouncementPage = ({ match, history }) => {
               <div className="form-group">
                 <label>Content</label>
                 <textarea
-                  value={announcement.content}
+                  value={event.content}
                   className="form-control"
                   rows={10}
                 />
@@ -97,8 +97,8 @@ export const SingleAnnouncementPage = ({ match, history }) => {
 
               <button className="btn btn-primary">Update</button>
               <DeleteContainer
-                mutationName={deleteAnnouncementMutation}
-                variable={announcement.slug}
+                mutationName={deleteEventMutation}
+                variable={event.slug}
                 history={history}
               />
             </CardBody>

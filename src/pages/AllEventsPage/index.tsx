@@ -1,14 +1,14 @@
 import { Error } from 'components/Error';
-import { Loading } from 'components/Loading';
 // import { NewButton } from 'components/NewButton';
-import { SharedTable } from 'components/SharedTable';
+import { EventsTable } from 'components/EventsTable';
+import { Loading } from 'components/Loading';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Query } from 'react-apollo';
 
 const query = gql`
   {
-    announcements {
+    events {
       createdAt
       title
       slug
@@ -18,7 +18,7 @@ const query = gql`
   }
 `;
 
-export const AllAnnouncementsPage = () => {
+export const AllEventsPage = () => {
   return (
     <Query query={query}>
       {({ loading, error, data }) => {
@@ -30,13 +30,13 @@ export const AllAnnouncementsPage = () => {
         }
 
         return (
-          <SharedTable
-            data={data.announcements}
-            title="Announcements"
-            location="/dashboard/announcements/new"
+          <EventsTable
+            data={data.events}
+            title="Events"
+            location="/dashboard/events/new"
           >
-            New Announcement
-          </SharedTable>
+            New Event
+          </EventsTable>
         );
       }}
     </Query>
