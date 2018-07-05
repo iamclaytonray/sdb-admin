@@ -1,6 +1,6 @@
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import { SharedTable } from 'components/SharedTable';
+import { ServicesTable } from 'components/ServicesTable';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Query } from 'react-apollo';
@@ -29,13 +29,13 @@ export const AllServicesPage = () => {
         }
 
         return (
-          <SharedTable
+          <ServicesTable
             data={data.services}
             title="Services"
             location="/dashboard/services/new"
           >
             New Service
-          </SharedTable>
+          </ServicesTable>
         );
       }}
     </Query>

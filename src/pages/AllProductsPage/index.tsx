@@ -1,6 +1,6 @@
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import { SharedTable } from 'components/SharedTable';
+import { ProductsTable } from 'components/ProductsTable';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Query } from 'react-apollo';
@@ -29,13 +29,13 @@ export const AllProductsPage = () => {
         }
 
         return (
-          <SharedTable
+          <ProductsTable
             data={data.products}
             title="Products"
             location="/dashboard/products/new"
           >
             New Product
-          </SharedTable>
+          </ProductsTable>
         );
       }}
     </Query>

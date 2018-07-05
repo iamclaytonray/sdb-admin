@@ -1,6 +1,6 @@
+import { ArticlesTable } from 'components/ArticlesTable';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import { SharedTable } from 'components/SharedTable';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Query } from 'react-apollo';
@@ -29,13 +29,13 @@ export const AllArticlesPage = () => {
         }
 
         return (
-          <SharedTable
+          <ArticlesTable
             data={data.articles}
             title="Articles"
             location="/dashboard/articles/new"
           >
             New Article
-          </SharedTable>
+          </ArticlesTable>
         );
       }}
     </Query>
