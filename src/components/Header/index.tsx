@@ -1,11 +1,6 @@
 import * as React from 'react';
-// import { Link } from 'react-router-dom';
 import {
-  Collapse,
   Container,
-  Input,
-  InputGroup,
-  InputGroupAddon,
   Navbar,
   NavbarBrand,
   NavbarToggler,
@@ -77,21 +72,7 @@ export class Header extends React.Component<any, any> {
             <span className="navbar-toggler-bar navbar-kebab" />
             <span className="navbar-toggler-bar navbar-kebab" />
           </NavbarToggler>
-          <Collapse
-            isOpen={this.state.isOpen}
-            navbar
-            className="justify-content-end"
-          >
-            <form>
-              <InputGroup className="no-border">
-                <Input placeholder="Search..." />
-                {/* or append */}
-                <InputGroupAddon addonType="prepend">
-                  <i className="now-ui-icons ui-1_zoom-bold" />
-                </InputGroupAddon>
-              </InputGroup>
-            </form>
-          </Collapse>
+          
         </Container>
       </Navbar>
     );
