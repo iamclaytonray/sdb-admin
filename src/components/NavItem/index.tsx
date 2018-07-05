@@ -15,6 +15,7 @@ import { NavLink } from 'react-router-dom';
 export const NavItem = ({ name, location, icon }) => {
   return (
     <React.Fragment>
+      {/* <li className={location ? 'active' : ''}> */}
       <li>
         <NavLink to={location} className="nav-link" activeClassName="active">
           <i className={`now-ui-icons ${icon}`} />
