@@ -6,19 +6,21 @@ import { DashboardWrapper } from 'components/DashboardWrapper';
 import { Sidebar } from 'components/Sidebar';
 
 // Pages
-import { AllAnnouncementsPage } from 'pages/AllAnnouncementsPage';
 import { AllArticlesPage } from 'pages/AllArticlesPage';
+import { AllEventsPage } from 'pages/AllEventsPage';
+import { AllMediasPage } from 'pages/AllMediaPage';
 import { AllProductsPage } from 'pages/AllProductsPage';
 import { AllServicesPage } from 'pages/AllServicesPage';
 import { DashboardPage } from 'pages/DashboardPage';
 import { LoginPage } from 'pages/LoginPage';
-import { NewAnnouncementPage } from 'pages/NewAnnouncementPage';
 import { NewArticlePage } from 'pages/NewArticlePage';
+import { NewEventPage } from 'pages/NewEventPage';
+import { NewMediaPage } from 'pages/NewMediaPage';
 import { NewProductPage } from 'pages/NewProductPage';
 import { NewServicePage } from 'pages/NewServicePage';
 import { NotFoundPage } from 'pages/NotFoundPage';
-import { SingleAnnouncementPage } from 'pages/SingleAnnouncementPage';
 import { SingleArticlePage } from 'pages/SingleArticlePage';
+import { SingleEventPage } from 'pages/SingleEventPage';
 import { SingleProductPage } from 'pages/SingleProductPage';
 import { SingleServicePage } from 'pages/SingleServicePage';
 
@@ -31,21 +33,13 @@ export const Root = () => {
           <Route exact path="/" component={LoginPage} />
           <Route exact path="/dashboard" component={DashboardPage} />
 
-          {/* Announcements */}
+          {/* Events */}
+          <Route exact path="/dashboard/events" component={AllEventsPage} />
+          <Route exact path="/dashboard/events/new" component={NewEventPage} />
           <Route
             exact
-            path="/dashboard/announcements"
-            component={AllAnnouncementsPage}
-          />
-          <Route
-            exact
-            path="/dashboard/announcements/new"
-            component={NewAnnouncementPage}
-          />
-          <Route
-            exact
-            path="/dashboard/announcements/:slug"
-            component={SingleAnnouncementPage}
+            path="/dashboard/events/:slug"
+            component={SingleEventPage}
           />
 
           {/* Articles */}
@@ -73,6 +67,10 @@ export const Root = () => {
             path="/dashboard/services/:slug"
             component={SingleServicePage}
           />
+
+          {/* Media */}
+          <Route exact path="/dashboard/media" component={AllMediasPage} />
+          <Route exact path="/dashboard/media/new" component={NewMediaPage} />
 
           {/* Products */}
           <Route exact path="/dashboard/products" component={AllProductsPage} />
