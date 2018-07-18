@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  Container,
-  Navbar,
-  NavbarBrand,
-  NavbarToggler,
-} from 'reactstrap';
+import { Container, Navbar, NavbarBrand, NavbarToggler } from 'reactstrap';
 
 export class Header extends React.Component<any, any> {
   public state = {
@@ -72,7 +67,6 @@ export class Header extends React.Component<any, any> {
             <span className="navbar-toggler-bar navbar-kebab" />
             <span className="navbar-toggler-bar navbar-kebab" />
           </NavbarToggler>
-          
         </Container>
       </Navbar>
     );

@@ -8,13 +8,11 @@ const logo =
   'https://yt3.ggpht.com/-R26L2yuqZno/AAAAAAAAAAI/AAAAAAAAAAA/ItklyVrs2gw/s288-mo-c-c0xffffffff-rj-k-no/photo.jpg';
 
 export class Sidebar extends React.Component<any, any> {
-
   public minimizeSidebar = () => {
     document.body.classList.toggle('sidebar-mini');
   }
 
   public render() {
-    
     return (
       <div className="sidebar" data-color="orange">
         <div className="logo">
