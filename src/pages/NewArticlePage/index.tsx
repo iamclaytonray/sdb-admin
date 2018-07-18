@@ -75,14 +75,12 @@ export class NewArticlePage extends React.Component<any, any> {
         link,
       },
     }).then(data => {
-      console.log(data);
       const article = data.data.createArticle;
       this.props.history.push(`/dashboard/articles/${article.slug}`);
     });
   }
 
   public render() {
-    console.log(this.state);
     return (
       <Mutation mutation={mutation}>
         {(createArticle, { loading, error }) => {

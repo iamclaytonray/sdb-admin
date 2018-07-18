@@ -3,31 +3,41 @@ import { Loading } from 'components/Loading';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Mutation } from 'react-apollo';
-import { Card, CardBody, CardTitle } from 'reactstrap';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap';
 
 const mutation = gql`
   mutation createService(
     $title: String!
     $slug: String!
     $category: String!
-    $content: String!
-    $videoUri: String!
+    $description: String!
     $featuredImage: String!
     $published: Boolean!
+    $mediumLink: String!
   ) {
     createService(
       data: {
         title: $title
         slug: $slug
         category: $category
-        content: $content
-        videoUri: $videoUri
+        description: $description
         featuredImage: $featuredImage
         published: $published
+        anchorLink: $anchorLink
+        mediumLink: $mediumLink
+        youtubeLink: $youtubeLink
       }
     ) {
       id
-      slug
     }
   }
 `;
@@ -36,11 +46,13 @@ export class NewServicePage extends React.Component<any, any> {
   public state = {
     title: '',
     slug: '',
-    videoUri: '',
     category: '',
-    content: '',
+    description: '',
     featuredImage: '',
     published: false,
+    anchorLink: '',
+    mediumLink: '',
+    youtubeLink: '',
   };
 
   public handleInputChange = event => {
@@ -59,23 +71,26 @@ export class NewServicePage extends React.Component<any, any> {
       title,
       slug,
       category,
-      content,
-      videoUri,
+      description,
       featuredImage,
       published,
+      anchorLink,
+      mediumLink,
+      youtubeLink,
     } = this.state;
     createService({
       variables: {
         title,
         slug,
         category,
-        content,
-        videoUri,
+        description,
         featuredImage,
         published,
+        anchorLink,
+        mediumLink,
+        youtubeLink,
       },
     }).then(data => {
-      console.log(data);
       const service = data.data.createService;
       this.props.history.push(`/dashboard/services/${service.slug}`);
     });
@@ -92,10 +107,10 @@ export class NewServicePage extends React.Component<any, any> {
                 {loading && <Loading />}
                 {/* Add a Snackbox here noticing the user that there was an error */}
                 {error && <Error error={error} />}
-                <form onSubmit={e => this.handleSubmit(e, createService)}>
-                  <div className="form-group">
-                    <label>Title</label>
-                    <input
+                <Form onSubmit={e => this.handleSubmit(e, createService)}>
+                  <FormGroup>
+                    <Label>Title</Label>
+                    <Input
                       type="text"
                       name="title"
                       placeholder="Title"
@@ -103,11 +118,11 @@ export class NewServicePage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Slug</label>
-                    <input
+                  <FormGroup>
+                    <Label>Slug</Label>
+                    <Input
                       type="text"
                       name="slug"
                       placeholder="Slug"
@@ -115,11 +130,11 @@ export class NewServicePage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Featured Image</label>
-                    <input
+                  <FormGroup>
+                    <Label>Featured Image</Label>
+                    <Input
                       type="text"
                       name="featuredImage"
                       placeholder="Featured Image"
@@ -127,23 +142,59 @@ export class NewServicePage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Video URI</label>
-                    <input
+                  <FormGroup>
+                    <Label>Description</Label>
+                    <Input
                       type="text"
-                      name="videoUri"
-                      placeholder="Video URI"
-                      value={this.state.videoUri}
+                      name="description"
+                      placeholder="Description"
+                      value={this.state.description}
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Category</label>
-                    <input
+                  <FormGroup>
+                    <Label>Medium Link</Label>
+                    <Input
+                      type="text"
+                      name="mediumLink"
+                      placeholder="Medium Link"
+                      value={this.state.mediumLink}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label>Anchor Link</Label>
+                    <Input
+                      type="text"
+                      name="anchorLink"
+                      placeholder="Anchor Link"
+                      value={this.state.anchorLink}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label>YouTube Link</Label>
+                    <Input
+                      type="text"
+                      name="youtubeLink"
+                      placeholder="YouTube Link"
+                      value={this.state.youtubeLink}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label>Category</Label>
+                    <Input
                       type="text"
                       name="category"
                       placeholder="Category"
@@ -151,35 +202,23 @@ export class NewServicePage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Status/Published</label>
-                    <input
+                  <FormGroup>
+                    <Label>Published?</Label>
+                    <Input
                       type="checkbox"
                       name="published"
                       checked={this.state.published}
-                      // className="form-check-input"
+                      className="form-check-input"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Content</label>
-                    <textarea
-                      name="content"
-                      value={this.state.content}
-                      placeholder="Content"
-                      className="form-control"
-                      rows={10}
-                      onChange={this.handleInputChange}
-                    />
-                  </div>
-
-                  <button type="submit" className="btn btn-primary">
+                  <Button type="submit" className="btn btn-primary">
                     Create
-                  </button>
-                </form>
+                  </Button>
+                </Form>
               </CardBody>
             </Card>
           );

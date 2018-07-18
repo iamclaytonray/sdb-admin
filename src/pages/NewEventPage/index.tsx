@@ -1,13 +1,21 @@
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
 import { TextEditor } from 'components/TextEditor';
-// import { Editor, EditorState } from 'draft-js';
 import gql from 'graphql-tag';
 import * as moment from 'moment';
 import * as React from 'react';
 import { Mutation } from 'react-apollo';
 import * as Datetime from 'react-datetime';
-import { Button, Card, CardBody, CardTitle, FormGroup, Label } from 'reactstrap';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap';
 import { slugify } from '../../utils/slugify';
 
 const mutation = gql`
@@ -74,14 +82,12 @@ export class NewEventPage extends React.Component<any, any> {
         published,
       },
     }).then(data => {
-      console.log(data);
       const event = data.data.createEvent;
       this.props.history.push(`/dashboard/events/${event.slug}`);
     });
   }
 
   public render() {
-    console.log(this.state);
     return (
       <Mutation mutation={mutation}>
         {(createEvent, { loading, error }) => {
@@ -93,10 +99,10 @@ export class NewEventPage extends React.Component<any, any> {
                 {loading && <Loading />}
                 {/* Add a Snackbox here noticing the user that there was an error */}
                 {error && <Error error={error} />}
-                <form onSubmit={e => this.handleSubmit(e, createEvent)}>
-                  <div className="form-group">
-                    <label>Title</label>
-                    <input
+                <Form onSubmit={e => this.handleSubmit(e, createEvent)}>
+                  <FormGroup>
+                    <Label>Title</Label>
+                    <Input
                       type="text"
                       name="title"
                       placeholder="Title"
@@ -104,11 +110,11 @@ export class NewEventPage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Slug</label>
-                    <input
+                  <FormGroup>
+                    <Label>Slug</Label>
+                    <Input
                       type="text"
                       name="slug"
                       placeholder="Slug"
@@ -116,11 +122,11 @@ export class NewEventPage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Featured Image</label>
-                    <input
+                  <FormGroup>
+                    <Label>Featured Image</Label>
+                    <Input
                       type="text"
                       name="featuredImage"
                       placeholder="Featured Image"
@@ -128,21 +134,21 @@ export class NewEventPage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Published &nbsp;</label>
-                    <input
+                  <FormGroup>
+                    <Label>Published &nbsp;</Label>
+                    <Input
                       type="checkbox"
                       name="published"
                       checked={this.state.published}
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Start Date</label>
-                    {/* <input
+                  <FormGroup>
+                    <Label>Start Date</Label>
+                    {/* <Input
                       type="date"
                       name="startDate"
                       placeholder="Start Date"
@@ -154,18 +160,9 @@ export class NewEventPage extends React.Component<any, any> {
                       // value={this.state.startDate}
                       // onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
                   <FormGroup>
-                    {/* <input
-                      type="date"
-                      name="endDate"
-                      placeholder="End Date"
-                      value={this.state.endDate}
-                      onChange={this.handleInputChange}
-                      className="form-control"
-                      min="01-01-2017"
-                    /> */}
                     <Label>End Date</Label>
                     <Datetime
                       timeFormat={false}
@@ -177,14 +174,6 @@ export class NewEventPage extends React.Component<any, any> {
 
                   <FormGroup>
                     <Label>Start Time</Label>
-                    {/* <input
-                      type="time"
-                      name="startTime"
-                      placeholder="Start Time"
-                      value={this.state.startTime}
-                      onChange={this.handleInputChange}
-                      className="form-control"
-                    /> */}
                     <Datetime
                       dateFormat={false}
                       inputProps={{ placeholder: 'Start Time' }}
@@ -195,25 +184,16 @@ export class NewEventPage extends React.Component<any, any> {
 
                   <FormGroup>
                     <Label>End Time</Label>
-                    {/* <input
-                      type="time"
-                      name="endTime"
-                      placeholder="End Time"
-                      value={this.state.endTime}
-                      onChange={this.handleInputChange}
-                      className="form-control"
-                    /> */}
                     <Datetime
                       dateFormat={false}
                       inputProps={{ placeholder: 'End Time' }}
-                      // value={}
                       defaultValue={this.state.endTime}
                     />
                   </FormGroup>
 
                   <FormGroup>
-                    <label>Address</label>
-                    <input
+                    <Label>Address</Label>
+                    <Input
                       type="text"
                       name="address"
                       placeholder="Address"
@@ -224,8 +204,8 @@ export class NewEventPage extends React.Component<any, any> {
                   </FormGroup>
 
                   <FormGroup>
-                    <label>Host</label>
-                    <input
+                    <Label>Host</Label>
+                    <Input
                       type="text"
                       name="host"
                       placeholder="Host"
@@ -236,8 +216,8 @@ export class NewEventPage extends React.Component<any, any> {
                   </FormGroup>
 
                   <FormGroup>
-                    <label>Phone</label>
-                    <input
+                    <Label>Phone</Label>
+                    <Input
                       type="text"
                       name="phone"
                       placeholder="Phone"
@@ -248,8 +228,8 @@ export class NewEventPage extends React.Component<any, any> {
                   </FormGroup>
 
                   <FormGroup>
-                    <label>Email</label>
-                    <input
+                    <Label>Email</Label>
+                    <Input
                       type="text"
                       name="email"
                       placeholder="Email"
@@ -260,14 +240,14 @@ export class NewEventPage extends React.Component<any, any> {
                   </FormGroup>
 
                   <FormGroup>
-                    <label>Content</label>
+                    <Label>Content</Label>
                     <TextEditor />
                   </FormGroup>
 
                   <Button color="primary" type="submit">
                     Create
                   </Button>
-                </form>
+                </Form>
               </CardBody>
             </Card>
           );

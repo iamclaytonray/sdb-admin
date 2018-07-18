@@ -1,36 +1,41 @@
 import * as React from 'react';
-import { Card, CardBody, CardText, CardTitle, Col } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { Card, CardBody, CardTitle, Col, Row } from 'reactstrap';
 
 export const DashboardPage = () => {
   return (
     <Card>
       <CardBody>
         <CardTitle>Dashboard</CardTitle>
-        {/*  */}
-        <Col lg="3">
-          <Card>
-            <CardBody>
-              <CardText>Articles</CardText>
-            </CardBody>
-          </Card>
-        </Col>
-        {/*  */}
-        <Col lg="3">
-          <Card>
-            <CardBody>
-              <CardText>Media</CardText>
-            </CardBody>
-          </Card>
-        </Col>
-        {/*  */}
-        <Col lg="3">
-          <Card>
-            <CardBody>
-              <CardText>Products</CardText>
-            </CardBody>
-          </Card>
-        </Col>
-        {/*  */}
+        <Row>
+          {/*  */}
+          <Col lg="3">
+            <Link to="/dashboard/articles/">
+              <Card>
+                <CardBody>
+                  <CardTitle>Articles</CardTitle>
+                </CardBody>
+              </Card>
+            </Link>
+          </Col>
+          {/*  */}
+          <Col lg="3">
+            <Card>
+              <CardBody>
+                <CardTitle>Media</CardTitle>
+              </CardBody>
+            </Card>
+          </Col>
+          {/*  */}
+          <Col lg="3">
+            <Card>
+              <CardBody>
+                <CardTitle>Products</CardTitle>
+              </CardBody>
+            </Card>
+          </Col>
+          {/*  */}
+        </Row>
       </CardBody>
     </Card>
   );

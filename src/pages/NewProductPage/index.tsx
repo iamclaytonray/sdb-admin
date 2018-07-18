@@ -3,31 +3,41 @@ import { Loading } from 'components/Loading';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Mutation } from 'react-apollo';
-import { Card, CardBody, CardTitle } from 'reactstrap';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap';
 
 const mutation = gql`
   mutation createProduct(
     $name: String!
     $slug: String!
-    $category: String!
-    $content: String!
-    $videoUri: String!
+    $price: Float!
+    $content: String
     $featuredImage: String!
     $published: Boolean!
+    $description: String!
+    $storeLink: String!
   ) {
     createProduct(
       data: {
         name: $name
         slug: $slug
-        category: $category
+        price: $price
+        description: $description
         content: $content
-        videoUri: $videoUri
         featuredImage: $featuredImage
         published: $published
+        storeLink: $storeLink
       }
     ) {
       id
-      slug
     }
   }
 `;
@@ -37,7 +47,7 @@ export class NewProductPage extends React.Component<any, any> {
     name: '',
     slug: '',
     description: '',
-    // content: '',
+    content: '',
     featuredImage: '',
     published: false,
     storeLink: '',
@@ -76,13 +86,11 @@ export class NewProductPage extends React.Component<any, any> {
         published,
       },
     }).then(data => {
-      console.log(data);
       const product = data.data.createProduct;
       this.props.history.push(`/dashboard/products/${product.slug}`);
     });
   }
   public render() {
-    console.log(this.state);
     return (
       <Mutation mutation={mutation}>
         {(createProduct, { loading, error }) => {
@@ -94,10 +102,10 @@ export class NewProductPage extends React.Component<any, any> {
                 {loading && <Loading />}
                 {/* Add a Snackbox here noticing the user that there was an error */}
                 {error && <Error error={error} />}
-                <form onSubmit={e => this.handleSubmit(e, createProduct)}>
-                  <div className="form-group">
-                    <label>Name</label>
-                    <input
+                <Form onSubmit={e => this.handleSubmit(e, createProduct)}>
+                  <FormGroup>
+                    <Label>Name</Label>
+                    <Input
                       type="text"
                       name="name"
                       placeholder="Name"
@@ -105,11 +113,11 @@ export class NewProductPage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Slug</label>
-                    <input
+                  <FormGroup>
+                    <Label>Slug</Label>
+                    <Input
                       type="text"
                       name="slug"
                       placeholder="Slug"
@@ -117,11 +125,11 @@ export class NewProductPage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Featured Image</label>
-                    <input
+                  <FormGroup>
+                    <Label>Featured Image</Label>
+                    <Input
                       type="text"
                       name="featuredImage"
                       placeholder="Featured Image"
@@ -129,11 +137,11 @@ export class NewProductPage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Description</label>
-                    <input
+                  <FormGroup>
+                    <Label>Description</Label>
+                    <Input
                       type="text"
                       name="description"
                       placeholder="Description"
@@ -141,21 +149,45 @@ export class NewProductPage extends React.Component<any, any> {
                       className="form-control"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  <div className="form-group">
-                    <label>Status/Published</label>
-                    <input
+                  <FormGroup>
+                    <Label>Store Link</Label>
+                    <Input
+                      type="text"
+                      name="storeLink"
+                      placeholder="Store Link"
+                      value={this.state.storeLink}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label>Price</Label>
+                    <Input
+                      type="number"
+                      name="price"
+                      placeholder="Price"
+                      value={this.state.price}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label>Status/Published</Label>
+                    <Input
                       type="checkbox"
                       name="published"
                       checked={this.state.published}
-                      // className="form-check-input"
+                      className="form-check-input"
                       onChange={this.handleInputChange}
                     />
-                  </div>
+                  </FormGroup>
 
-                  {/* <div className="form-group">
-                  <label>Content</label>
+                  {/* <FormGroup>
+                  <Label>Content</Label>
                   <textarea
                     name="content"
                     value={this.state.content}
@@ -166,10 +198,10 @@ export class NewProductPage extends React.Component<any, any> {
                   />
                 </div> */}
 
-                  <button type="submit" className="btn btn-primary">
+                  <Button type="submit" color="primary">
                     Create
-                  </button>
-                </form>
+                  </Button>
+                </Form>
               </CardBody>
             </Card>
           );

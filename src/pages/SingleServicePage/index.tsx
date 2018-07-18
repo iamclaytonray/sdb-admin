@@ -5,7 +5,7 @@ import { UpdateContainer } from 'containers/UpdateContainer';
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Query } from 'react-apollo';
-import { Card, CardBody } from 'reactstrap';
+import { Card, CardBody, Form, FormGroup, Input, Label } from 'reactstrap';
 
 const query = gql`
   query service($slug: String!) {
@@ -13,8 +13,10 @@ const query = gql`
       title
       slug
       category
-      content
-      videoUri
+      # content
+      anchorLink
+      mediumLink
+      youtubeLink
       published
     }
   }
@@ -25,8 +27,10 @@ const updateServiceMutation = gql`
     $title: String!
     $slug: String!
     $category: String!
-    $content: String!
-    $videoUri: String!
+    # $content: String!
+    $anchorLink: String!
+    $mediumLink: String!
+    $youtubeLink: String!
   ) {
     updateService(
       where: { slug: $slug }
@@ -34,8 +38,10 @@ const updateServiceMutation = gql`
         title: $title
         slug: $slug
         category: $category
-        content: $content
-        videoUri: $videoUri
+        # content: $content
+        anchorLink: $anchorLink
+        mediumLink: $mediumLink
+        youtubeLink: $youtubeLink
       }
     ) {
       id
@@ -55,10 +61,6 @@ export class SingleServicePage extends React.Component<any, any> {
   public state = {
     title: '',
   };
-
-  // public static getDerivedStateFromProps(nextProps, prevState) {
-
-  // }
 
   public handleInputChange = event => {
     const { target } = event;
@@ -87,60 +89,81 @@ export class SingleServicePage extends React.Component<any, any> {
           return (
             <Card>
               <CardBody>
-                <div className="form-group">
-                  <label>Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={service.title}
-                    className="form-control"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                <Form>
+                  <FormGroup>
+                    <Label>Title</Label>
+                    <Input
+                      type="text"
+                      name="title"
+                      value={service.title}
+                      className="form-control"
+                      onChange={this.handleInputChange}
+                    />
+                  </FormGroup>
 
-                <div className="form-group">
-                  <label>Slug</label>
-                  <input
-                    type="text"
-                    value={service.slug}
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Video URI</label>
-                  <input
-                    type="text"
-                    value={service.videoUri}
-                    className="form-control"
-                  />
-                </div>
+                  <FormGroup>
+                    <Label>Slug</Label>
+                    <Input
+                      type="text"
+                      value={service.slug}
+                      className="form-control"
+                    />
+                  </FormGroup>
 
-                <div className="form-group">
-                  <label>Category</label>
-                  <input
-                    type="text"
-                    value={service.category}
-                    className="form-control"
-                  />
-                </div>
+                  <FormGroup>
+                    <Label>Anchor Link</Label>
+                    <Input
+                      type="text"
+                      value={service.anchorLink}
+                      className="form-control"
+                    />
+                  </FormGroup>
 
-                <div className="form-group">
-                  <label>Published</label>
-                  <input
-                    type="checkbox"
-                    checked={service.published}
-                    className="form-control"
-                  />
-                </div>
+                  <FormGroup>
+                    <Label>Medium Link</Label>
+                    <Input
+                      type="text"
+                      value={service.mediumLink}
+                      className="form-control"
+                    />
+                  </FormGroup>
 
-                <div className="form-group">
-                  <label>Content</label>
+                  <FormGroup>
+                    <Label>YouTube Link</Label>
+                    <Input
+                      type="text"
+                      value={service.youtubeLink}
+                      className="form-control"
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label>Category</Label>
+                    <Input
+                      type="text"
+                      value={service.category}
+                      className="form-control"
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Label>Published</Label>
+                    <Input
+                      type="checkbox"
+                      checked={service.published}
+                      className="form-control"
+                    />
+                  </FormGroup>
+
+                  {/* <FormGroup>
+                  <Label>Content</Label>
                   <textarea
                     value={service.content}
                     className="form-control"
                     rows={10}
                   />
-                </div>
+                </FormGroup> */}
+                </Form>
 
                 <UpdateContainer
                   mutationName={updateServiceMutation}

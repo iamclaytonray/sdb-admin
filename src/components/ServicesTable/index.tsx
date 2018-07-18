@@ -23,48 +23,48 @@ export class ServicesTable extends React.Component<any, any> {
   }
   public render() {
     return (
-        <div>
-          <Row>
-            <Col xs={12} md={12}>
-              <Card>
-                <CardHeader>
-                  <CardTitle>{this.props.title}</CardTitle>
-                  <NewButton location={this.props.location}>
-                    {this.props.children}
-                  </NewButton>
-                </CardHeader>
-                <CardBody>
-                  <ReactTable
-                    data={this.state.data}
-                    filterable
-                    columns={[
-                      {
-                        Header: 'Title',
-                        accessor: 'title',
-                      },
-                      {
-                        Header: 'Slug',
-                        accessor: 'slug',
-                      },
-                      {
-                        Header: 'Published',
-                        accessor: 'published',
-                      },
-                      {
-                        Header: 'Featured Image',
-                        accessor: 'featuredImage',
-                      },
-                    ]}
-                    defaultPageSize={10}
-                    showPaginationTop={false}
-                    showPaginationBottom={true}
-                    className="-striped -highlight"
-                  />
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </div>
+      <div>
+        <Row>
+          <Col xs={12} md={12}>
+            <Card>
+              <CardHeader>
+                <CardTitle>{this.props.title}</CardTitle>
+                <NewButton location={this.props.location}>
+                  {this.props.children}
+                </NewButton>
+              </CardHeader>
+              <CardBody>
+                <ReactTable
+                  data={this.state.data}
+                  filterable
+                  columns={[
+                    {
+                      Header: 'Title',
+                      accessor: 'title',
+                    },
+                    {
+                      Header: 'Slug',
+                      accessor: 'slug',
+                    },
+                    {
+                      Header: 'Published',
+                      accessor: 'published',
+                    },
+                    {
+                      Header: 'Featured Image',
+                      accessor: 'featuredImage',
+                    },
+                  ]}
+                  defaultPageSize={10}
+                  showPaginationTop={false}
+                  showPaginationBottom={true}
+                  className="-striped -highlight"
+                />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     );
   }
 }
