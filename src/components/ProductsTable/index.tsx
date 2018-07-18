@@ -1,11 +1,8 @@
+import { NewButton } from 'components/NewButton';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Card, CardBody, CardHeader, CardTitle, Col, Row } from 'reactstrap';
-
-import { CustomButton as Button } from 'components/CustomButton';
-import { NewButton } from 'components/NewButton';
-import { Link } from 'react-router-dom';
-// import { PanelHeader } from 'components/PanelHeader';
 
 export class ProductsTable extends React.Component<any, any> {
   constructor(props: any) {
@@ -20,32 +17,6 @@ export class ProductsTable extends React.Component<any, any> {
           slug: prop.slug,
           published: props.published ? 'Yes' : 'No',
           featuredImage: <img src={prop.featuredImage} height={50} />,
-          actions: (
-            <div className="actions-right">
-              <Button
-                onClick={() => {
-                  console.log('hit');
-                }}
-                color="warning"
-                size="sm"
-                round
-                icon
-              >
-                <i className="fa fa-edit" />
-              </Button>{' '}
-              <Button
-                onClick={() => {
-                  console.log('hit');
-                }}
-                color="danger"
-                size="sm"
-                round
-                icon
-              >
-                <i className="fa fa-times" />
-              </Button>{' '}
-            </div>
-          ),
         };
       }),
     };
@@ -83,12 +54,6 @@ export class ProductsTable extends React.Component<any, any> {
                       {
                         Header: 'Featured Image',
                         accessor: 'featuredImage',
-                      },
-                      {
-                        Header: 'Actions',
-                        accessor: 'actions',
-                        sortable: false,
-                        filterable: false,
                       },
                     ]}
                     defaultPageSize={10}
