@@ -1,4 +1,5 @@
 import { NewButton } from 'components/NewButton';
+import * as moment from 'moment';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import ReactTable from 'react-table';
@@ -8,15 +9,15 @@ export class ProductsTable extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      data: props.data.map((prop, key) => {
+      data: props.data.data.map((prop, key) => {
         return {
           id: key,
           name: (
             <Link to={`/dashboard/products/${prop.slug}`}>{prop.name}</Link>
           ),
           slug: prop.slug,
-          published: props.published ? 'Yes' : 'No',
-          featuredImage: <img src={prop.featuredImage} height={50} />,
+          published: prop.published ? 'Yes' : 'No',
+          createdAt: moment(prop.createdAt).format('MM-DD-YYYY'),
         };
       }),
     };
@@ -52,11 +53,11 @@ export class ProductsTable extends React.Component<any, any> {
                         accessor: 'published',
                       },
                       {
-                        Header: 'Featured Image',
-                        accessor: 'featuredImage',
+                        Header: 'Created At',
+                        accessor: 'createdAt',
                       },
                     ]}
-                    defaultPageSize={10}
+                    defaultPageSize={20}
                     showPaginationTop={false}
                     showPaginationBottom={true}
                     className="-striped -highlight"
