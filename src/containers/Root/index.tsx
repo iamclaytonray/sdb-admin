@@ -26,6 +26,7 @@ import { NewMediaPage } from 'pages/NewMediaPage';
 import { NewPartPage } from 'pages/NewPartPage';
 import { NewProductPage } from 'pages/NewProductPage';
 import { NewServicePage } from 'pages/NewServicePage';
+import { NewTabPage } from 'pages/NewTabPage';
 import { NotFoundPage } from 'pages/NotFoundPage';
 import { SingleArticlePage } from 'pages/SingleArticlePage';
 import { SingleEventPage } from 'pages/SingleEventPage';
@@ -108,11 +109,19 @@ export const Root = () => {
         />
 
         {/* Tabs */}
-        <PrivateRoute exact path="/dashboard/tabs" component={AllTabsPage} />
-        {/* <PrivateRoute exact path="/dashboard/tabs/new" component={NewPartPage} /> */}
         <PrivateRoute
           exact
-          path="/dashboard/tabs/:slug"
+          path="/dashboard/menu-items"
+          component={AllTabsPage}
+        />
+        <PrivateRoute
+          exact
+          path="/dashboard/menu-items/new"
+          component={NewTabPage}
+        />
+        <PrivateRoute
+          exact
+          path="/dashboard/menu-items/:slug"
           component={SingleTabPage}
         />
 
