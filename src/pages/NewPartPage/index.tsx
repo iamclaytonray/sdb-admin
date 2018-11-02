@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { Error } from 'components/Error';
 import * as React from 'react';
 import {
   Button,
@@ -18,7 +19,9 @@ export class NewPartPage extends React.Component<any, any> {
     anchorLink: '',
     mediumLink: '',
     youtubeLink: '',
-    published: false,
+    published: 'draft',
+
+    error: null,
   };
 
   public handleInputChange = event => {
@@ -47,10 +50,13 @@ export class NewPartPage extends React.Component<any, any> {
       youtubeLink,
       published,
     })
-      .then(res => {
+      .then(() => {
         this.props.history.push(`/dashboard/parts`);
       })
-      .catch(err => this.setState({ error: err }));
+      .catch(err => {
+        this.setState({ error: err.response.data.error });
+        window.scroll(0, 0);
+      });
   }
 
   public render() {
@@ -58,6 +64,7 @@ export class NewPartPage extends React.Component<any, any> {
       <Card>
         <CardBody>
           <CardTitle>New Part</CardTitle>
+          {this.state.error && <Error error={this.state.error} />}
           <Form onSubmit={e => this.handleSubmit(e)}>
             <FormGroup>
               <Label>Title</Label>
@@ -110,12 +117,14 @@ export class NewPartPage extends React.Component<any, any> {
             <FormGroup>
               <Label>Published</Label>
               <Input
-                type="checkbox"
                 name="published"
-                checked={this.state.published}
-                className="form-check-input"
+                type="select"
                 onChange={this.handleInputChange}
-              />
+                className="form-control"
+              >
+                <option>Published</option>
+                <option>Draft</option>
+              </Input>
             </FormGroup>
 
             <Button type="submit" color="primary">

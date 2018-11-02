@@ -96,17 +96,6 @@ class SingleTab extends React.Component<any, any> {
                 <option>Teachings</option>
               </Input>
             </FormGroup>
-
-            <FormGroup>
-              <Label>Published</Label>
-              <Input
-                type="checkbox"
-                name="published"
-                checked={this.state.published}
-                onChange={this.handleInputChange}
-                className="form-control"
-              />
-            </FormGroup>
           </Form>
           <Button color="danger" onClick={this.handleDelete}>
             Delete

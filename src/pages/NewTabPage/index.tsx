@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { Error } from 'components/Error';
 import * as React from 'react';
 import {
   Button,
@@ -17,7 +18,7 @@ export class NewTabPage extends React.Component<any, any> {
     label: '',
     slug: '',
     page: 'Discoveries',
-    published: false,
+    published: 'Draft',
 
     error: null,
   };
@@ -34,22 +35,21 @@ export class NewTabPage extends React.Component<any, any> {
 
   public handleSubmit = (e): any => {
     e.preventDefault();
-    const {
-      label,
-      slug,
-      page,
-      published,
-    } = this.state;
+    const { label, slug, page, published } = this.state;
+    const pub = published.toLowerCase();
     Axios.post(`${API_URL}/tabs`, {
       label,
       slug,
       page,
-      published,
+      published: pub,
     })
       .then(() => {
         this.props.history.push(`/dashboard/menu-items`);
       })
-      .catch(err => this.setState({ error: err }));
+      .catch(err => {
+        this.setState({ error: err.response.data.error });
+        window.scroll(0, 0);
+      });
   }
   public render() {
     console.log(this.state);
@@ -57,6 +57,7 @@ export class NewTabPage extends React.Component<any, any> {
       <Card>
         <CardBody>
           <CardTitle>New Menu Item</CardTitle>
+          {this.state.error && <Error error={this.state.error} />}
 
           <Form onSubmit={e => this.handleSubmit(e)}>
             <FormGroup>
@@ -83,18 +84,6 @@ export class NewTabPage extends React.Component<any, any> {
               />
             </FormGroup>
 
-            {/* <FormGroup>
-              <Label>Page</Label>
-              <Input
-                type="text"
-                name="page"
-                placeholder="Page"
-                value={this.state.page}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </FormGroup> */}
-
             <FormGroup>
               <Label>Page</Label>
               <Input
@@ -110,14 +99,17 @@ export class NewTabPage extends React.Component<any, any> {
             </FormGroup>
 
             <FormGroup>
-              <Label>Published?</Label>
+              <Label>Published</Label>
               <Input
-                type="checkbox"
                 name="published"
-                checked={this.state.published}
-                className="form-check-input"
+                type="select"
                 onChange={this.handleInputChange}
-              />
+                className="form-control"
+                value={this.state.published}
+              >
+                <option>Published</option>
+                <option>Draft</option>
+              </Input>
             </FormGroup>
 
             <Button type="submit" className="btn btn-primary">

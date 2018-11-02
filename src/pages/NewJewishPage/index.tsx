@@ -1,15 +1,17 @@
 import Axios from 'axios';
+import { Error } from 'components/Error';
 import * as React from 'react';
 import {
   Button,
   Card,
   CardBody,
   CardTitle,
+  Form,
   FormGroup,
+  Input,
   Label,
 } from 'reactstrap';
 import { API_URL } from '../../constants';
-import { slugify } from '../../utils/slugify';
 
 export class NewJewishPage extends React.Component<any, any> {
   public state = {
@@ -18,7 +20,9 @@ export class NewJewishPage extends React.Component<any, any> {
     description: '',
     featuredImage: '',
     link: '',
-    published: false,
+    published: 'draft',
+
+    error: null,
   };
 
   public handleInputChange = event => {
@@ -50,21 +54,27 @@ export class NewJewishPage extends React.Component<any, any> {
       link,
       published,
     })
-      .then(res => {
+      .then(() => {
         this.props.history.push(`/dashboard/jewish`);
       })
-      .catch(err => this.setState({ error: err }));
+      .catch(err => {
+        this.setState({ error: err.response.data.error });
+        window.scroll(0, 0);
+      });
   }
   public render() {
     return (
       <Card>
         <CardBody>
           <CardTitle>New Jewish</CardTitle>
+          {this.state.error && (
+            <Error error={JSON.stringify(this.state.error)} />
+          )}
 
-          <form onSubmit={e => this.handleSubmit(e)}>
+          <Form onSubmit={e => this.handleSubmit(e)}>
             <FormGroup>
               <Label>Title</Label>
-              <input
+              <Input
                 type="text"
                 name="title"
                 placeholder="Title"
@@ -76,11 +86,11 @@ export class NewJewishPage extends React.Component<any, any> {
 
             <FormGroup>
               <Label>Slug</Label>
-              <input
+              <Input
                 type="text"
                 name="slug"
                 placeholder="Slug"
-                value={slugify(this.state.title)}
+                value={this.state.slug}
                 className="form-control"
                 onChange={this.handleInputChange}
               />
@@ -88,7 +98,7 @@ export class NewJewishPage extends React.Component<any, any> {
 
             <FormGroup>
               <Label>Description</Label>
-              <input
+              <Input
                 type="text"
                 name="description"
                 placeholder="Description"
@@ -100,7 +110,7 @@ export class NewJewishPage extends React.Component<any, any> {
 
             <FormGroup>
               <Label>Featured Image</Label>
-              <input
+              <Input
                 type="text"
                 name="featuredImage"
                 placeholder="Featured Image"
@@ -112,7 +122,7 @@ export class NewJewishPage extends React.Component<any, any> {
 
             <FormGroup>
               <Label>Link</Label>
-              <input
+              <Input
                 type="text"
                 name="link"
                 placeholder="Link"
@@ -124,20 +134,21 @@ export class NewJewishPage extends React.Component<any, any> {
 
             <FormGroup>
               <Label>Published</Label>
-              <input
-                type="checkbox"
+              <Input
                 name="published"
-                placeholder="Published"
-                checked={this.state.published}
-                className="form-control"
+                type="select"
                 onChange={this.handleInputChange}
-              />
+                className="form-control"
+              >
+                <option>Published</option>
+                <option>Draft</option>
+              </Input>
             </FormGroup>
 
             <Button color="primary" type="submit">
               Create
             </Button>
-          </form>
+          </Form>
         </CardBody>
       </Card>
     );

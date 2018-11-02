@@ -1,13 +1,13 @@
 import { CustomButton as Button } from 'components/CustomButton';
 import { NavItem } from 'components/NavItem';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Nav } from 'reactstrap';
 
 const logo =
   'https://yt3.ggpht.com/-R26L2yuqZno/AAAAAAAAAAI/AAAAAAAAAAA/ItklyVrs2gw/s288-mo-c-c0xffffffff-rj-k-no/photo.jpg';
 
-export class Sidebar extends React.Component<any, any> {
+class SidebarComponent extends React.Component<any, any> {
   public minimizeSidebar = () => {
     document.body.classList.toggle('sidebar-mini');
   }
@@ -24,6 +24,7 @@ export class Sidebar extends React.Component<any, any> {
           <Link
             to="https://shoreshdavidbrandon.com/"
             target="_blank"
+            rel="noopener noreferrer"
             className="simple-text logo-normal"
           >
             SDB
@@ -46,43 +47,50 @@ export class Sidebar extends React.Component<any, any> {
         <div className="sidebar-wrapper">
           <Nav>
             <NavItem
-              name="Articles"
+              name="Discoveries"
               location="/dashboard/articles"
-              icon="files_paper"
+              pathName={this.props.location.pathname}
             />
-            {/* <NavItem
-              name="Email"
-              location="/dashboard/email"
-              icon="ui-1_email-85"
-            /> */}
             <NavItem
               name="Events"
               location="/dashboard/events"
-              icon="ui-1_calendar-60"
+              pathName={this.props.location.pathname}
+            />
+            <NavItem
+              name="Jewish"
+              location="/dashboard/jewish"
+              pathName={this.props.location.pathname}
             />
             <NavItem
               name="Media"
               location="/dashboard/media"
-              icon="media-1_album"
+              pathName={this.props.location.pathname}
+            />
+            <NavItem
+              name="Parts"
+              location="/dashboard/parts"
+              pathName={this.props.location.pathname}
             />
             <NavItem
               name="Products"
               location="/dashboard/products"
-              icon="shopping_shop"
+              pathName={this.props.location.pathname}
             />
             <NavItem
-              name="Services"
-              location="/dashboard/services"
-              icon="tech_tv"
+              name="Menu Items"
+              location="/dashboard/menu-items"
+              pathName={this.props.location.pathname}
             />
-            {/* <NavItem
-              name="Users"
-              location="/dashboard/users"
-              icon="users_single-02"
-            /> */}
+            <NavItem
+              name="Teachings"
+              location="/dashboard/services"
+              pathName={this.props.location.pathname}
+            />
           </Nav>
         </div>
       </div>
     );
   }
 }
+
+export const Sidebar = withRouter(SidebarComponent);

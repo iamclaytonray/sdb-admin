@@ -12,6 +12,7 @@ import {
   Label,
 } from 'reactstrap';
 import { API_URL } from '../../constants';
+import { handleDelete } from '../../utils/methods';
 
 class SingleJewish extends React.Component<any, any> {
   constructor(props: any) {
@@ -69,13 +70,6 @@ class SingleJewish extends React.Component<any, any> {
       phone,
       email,
     })
-      .then(() => this.props.history.push('/dashboard/jewish'))
-      .catch(err => this.setState({ error: err }));
-  }
-
-  public handleDelete = () => {
-    alert('Are you sure?');
-    Axios.delete(`${API_URL}/jewish/${this.props.match.params.slug}`)
       .then(() => this.props.history.push('/dashboard/jewish'))
       .catch(err => this.setState({ error: err }));
   }
@@ -146,18 +140,16 @@ class SingleJewish extends React.Component<any, any> {
               />
             </FormGroup>
 
-            <FormGroup>
-              <Label>Published</Label>
-              <Input
-                name="published"
-                type="checkbox"
-                checked={this.state.published}
-                onChange={this.handleInputChange}
-                className="form-control"
-              />
-            </FormGroup>
-
-            <Button color="danger" onClick={this.handleDelete}>
+            <Button
+              color="danger"
+              onClick={() =>
+                handleDelete(
+                  'jewish',
+                  this.props.match.params.slug,
+                  this.props.history,
+                )
+              }
+            >
               Delete
             </Button>
             <Button color="primary" onClick={this.handleUpdate}>
@@ -193,6 +185,6 @@ export class SingleJewishPage extends React.Component<any, any> {
     if (this.state.error) {
       return <Error error={this.state.error} />;
     }
-    return <SingleJewish jewish={this.state.jewish} />;
+    return <SingleJewish jewish={this.state.jewish} {...this.props} />;
   }
 }

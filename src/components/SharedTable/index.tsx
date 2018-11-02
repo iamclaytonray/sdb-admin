@@ -5,18 +5,28 @@ import { Link } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Card, CardBody, CardHeader, CardTitle, Col, Row } from 'reactstrap';
 
-export class ServicesTable extends React.Component<any, any> {
+export class SharedTable extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      data: props.data.data.map((prop, key) => {
+      data: props.data.map((prop, key) => {
         return {
-          id: key,
-          title: (
-            <Link to={`/dashboard/services/${prop.slug}`}>{prop.title}</Link>
+          // id: key,
+          label: (
+            <Link to={`/dashboard/${props.otherLocation}/${prop.slug ? prop.slug : prop._id}`}>
+              {prop.title
+                ? prop.title
+                : (prop.label)
+                ? prop.label
+                : (prop.name)
+                ? prop.name
+                : 'Undefined prop'
+              }
+            </Link>
           ),
-          slug: prop.slug,
-          published: prop.published ? 'Yes' : 'No',
+          slug: prop.slug ? prop.slug : prop._id,
+          // fix
+          published: prop.published,
           createdAt: moment(prop.createdAt).format('MM-DD-YYYY'),
         };
       }),
@@ -40,8 +50,8 @@ export class ServicesTable extends React.Component<any, any> {
                   filterable
                   columns={[
                     {
-                      Header: 'Title',
-                      accessor: 'title',
+                      Header: 'Label',
+                      accessor: 'label',
                     },
                     {
                       Header: 'Slug',

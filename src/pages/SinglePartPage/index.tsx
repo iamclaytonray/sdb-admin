@@ -12,6 +12,7 @@ import {
   Label,
 } from 'reactstrap';
 import { API_URL } from '../../constants';
+import { handleDelete } from '../../utils/methods';
 
 class SinglePart extends React.Component<any, any> {
   constructor(props: any) {
@@ -52,13 +53,6 @@ class SinglePart extends React.Component<any, any> {
       youtubeLink,
       published,
     })
-      .then(() => this.props.history.push('/dashboard/parts'))
-      .catch(err => this.setState({ error: err }));
-  }
-
-  public handleDelete = () => {
-    alert('Are you sure?');
-    Axios.delete(`${API_URL}/parts/${this.props.match.params.id}`)
       .then(() => this.props.history.push('/dashboard/parts'))
       .catch(err => this.setState({ error: err }));
   }
@@ -116,18 +110,16 @@ class SinglePart extends React.Component<any, any> {
               />
             </FormGroup>
 
-            <FormGroup>
-              <Label>Status/Published</Label>
-              <Input
-                type="checkbox"
-                name="published"
-                checked={this.state.published}
-                className="form-check-input"
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
-
-            <Button color="danger" onClick={this.handleDelete}>
+            <Button
+              color="danger"
+              onClick={() =>
+                handleDelete(
+                  'parts',
+                  this.props.match.params.id,
+                  this.props.history,
+                )
+              }
+            >
               Delete
             </Button>
             <Button color="primary" onClick={this.handleUpdate}>

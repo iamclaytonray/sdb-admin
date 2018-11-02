@@ -1,66 +1,35 @@
+import Axios from 'axios';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import { DeleteContainer } from 'containers/DeleteContainer';
-import { UpdateContainer } from 'containers/UpdateContainer';
-import gql from 'graphql-tag';
 import * as React from 'react';
-import { Query } from 'react-apollo';
-import { Card, CardBody, Form, FormGroup, Input, Label } from 'reactstrap';
+import Select from 'react-select';
+import {
+  Button,
+  Card,
+  CardBody,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap';
+import { API_URL } from '../../constants';
+import { handleDelete } from '../../utils/methods';
 
-const query = gql`
-  query service($slug: String!) {
-    service(where: { slug: $slug }) {
-      title
-      slug
-      category
-      # content
-      anchorLink
-      mediumLink
-      youtubeLink
-      published
-    }
+class SingleService extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      title: props.service.title,
+      slug: props.service.slug,
+      featuredImage: props.service.featuredImage,
+      description: props.service.description,
+      category: props.service.category,
+      published: props.service.published,
+      parts: props.service.parts,
+
+      error: null,
+    };
   }
-`;
-
-const updateServiceMutation = gql`
-  mutation updateService(
-    $title: String!
-    $slug: String!
-    $category: String!
-    # $content: String!
-    $anchorLink: String!
-    $mediumLink: String!
-    $youtubeLink: String!
-  ) {
-    updateService(
-      where: { slug: $slug }
-      data: {
-        title: $title
-        slug: $slug
-        category: $category
-        # content: $content
-        anchorLink: $anchorLink
-        mediumLink: $mediumLink
-        youtubeLink: $youtubeLink
-      }
-    ) {
-      id
-    }
-  }
-`;
-
-const deleteServiceMutation = gql`
-  mutation deleteService($slug: String!) {
-    deleteService(where: { slug: $slug }) {
-      id
-    }
-  }
-`;
-
-export class SingleServicePage extends React.Component<any, any> {
-  public state = {
-    title: '',
-  };
 
   public handleInputChange = event => {
     const { target } = event;
@@ -72,113 +41,142 @@ export class SingleServicePage extends React.Component<any, any> {
     });
   }
 
-  public render() {
-    const { match, history } = this.props;
-    return (
-      <Query query={query} variables={{ slug: match.params.slug }}>
-        {({ loading, error, data }) => {
-          if (loading) {
-            return <Loading />;
-          }
-          if (error) {
-            return <Error error={error} />;
-          }
-
-          const { service } = data;
-
-          return (
-            <Card>
-              <CardBody>
-                <Form>
-                  <FormGroup>
-                    <Label>Title</Label>
-                    <Input
-                      type="text"
-                      name="title"
-                      value={service.title}
-                      className="form-control"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <Label>Slug</Label>
-                    <Input
-                      type="text"
-                      value={service.slug}
-                      className="form-control"
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <Label>Anchor Link</Label>
-                    <Input
-                      type="text"
-                      value={service.anchorLink}
-                      className="form-control"
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <Label>Medium Link</Label>
-                    <Input
-                      type="text"
-                      value={service.mediumLink}
-                      className="form-control"
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <Label>YouTube Link</Label>
-                    <Input
-                      type="text"
-                      value={service.youtubeLink}
-                      className="form-control"
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <Label>Category</Label>
-                    <Input
-                      type="text"
-                      value={service.category}
-                      className="form-control"
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <Label>Published</Label>
-                    <Input
-                      type="checkbox"
-                      checked={service.published}
-                      className="form-control"
-                    />
-                  </FormGroup>
-
-                  {/* <FormGroup>
-                  <Label>Content</Label>
-                  <textarea
-                    value={service.content}
-                    className="form-control"
-                    rows={10}
-                  />
-                </FormGroup> */}
-                </Form>
-
-                <UpdateContainer
-                  mutationName={updateServiceMutation}
-                  variables={service}
-                />
-                <DeleteContainer
-                  mutationName={deleteServiceMutation}
-                  variable={service.slug}
-                  history={history}
-                />
-              </CardBody>
-            </Card>
-          );
-        }}
-      </Query>
+  public onSelectChange = (e: any) => {
+    let value: any = Array.from(
+      e.target.selectedOptions as HTMLOptionsCollection,
+      option => option.value,
     );
+    console.log(value);
+    // let values = Array.from(e.target.value, (option: any) => option.value);
+    this.setState({ parts: value });
+  }
+
+  public handleUpdate = (e: any) => {
+    e.preventDefault();
+    const {
+      title,
+      featuredImage,
+      description,
+      slug,
+      category,
+      published,
+      parts,
+    } = this.state;
+    Axios.put(`${API_URL}/services/${this.props.match.params.slug}`, {
+      title,
+      featuredImage,
+      description,
+      slug,
+      category,
+      published,
+      parts,
+    })
+      .then(() => this.props.history.push('/dashboard/services'))
+      .catch(err => this.setState({ error: err }));
+  }
+
+  public render() {
+    return (
+      <Card>
+        <CardBody>
+          <Form>
+            <FormGroup>
+              <Label>Title</Label>
+              <Input
+                type="text"
+                name="title"
+                value={this.state.title}
+                className="form-control"
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Slug</Label>
+              <Input
+                type="text"
+                name="slug"
+                value={this.state.slug}
+                onChange={this.handleInputChange}
+                className="form-control"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Category</Label>
+              <Input
+                type="text"
+                name="category"
+                value={this.state.category}
+                onChange={this.handleInputChange}
+                className="form-control"
+              />
+            </FormGroup>
+
+            {/* <FormGroup>
+              <Label>Parts</Label>
+              <Input
+                type="select"
+                name="parts"
+                multiple={true}
+                value={this.state.parts}
+                onChange={this.handleInputChange}
+              >
+                {this.state.parts && this.state.parts.map(part => (
+                  <option key={part._id} value={part._id}>
+                    {part.title}
+                  </option>
+                )
+              )}
+              </Input>
+            </FormGroup> */}
+            <Select value={this.state.parts} />
+          </Form>
+          <Button
+            color="danger"
+            onClick={() =>
+              handleDelete(
+                'services',
+                this.props.match.params.slug,
+                this.props.history,
+              )
+            }
+          >
+            Delete
+          </Button>
+          <Button color="primary" onClick={this.handleUpdate}>
+            Update
+          </Button>
+        </CardBody>
+      </Card>
+    );
+  }
+}
+
+export class SingleServicePage extends React.Component<any, any> {
+  public state = {
+    loading: true,
+    error: null,
+    service: {},
+  };
+  public componentDidMount() {
+    Axios.get(`${API_URL}/services/${this.props.match.params.slug}`)
+      .then(res => {
+        this.setState({
+          loading: false,
+          service: res.data.data,
+        });
+      })
+      .catch(err => this.setState({ loading: false, error: err }));
+  }
+  public render() {
+    if (this.state.loading) {
+      return <Loading />;
+    }
+    if (this.state.error) {
+      return <Error error={this.state.error} />;
+    }
+    console.log(this.state.service);
+    return <SingleService service={this.state.service} {...this.props} />;
   }
 }

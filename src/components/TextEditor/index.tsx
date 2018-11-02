@@ -23,22 +23,22 @@ export class TextEditor extends React.Component<any, any> {
       return true;
     }
     return false;
-  }
+  };
 
   public _onTab = (e: any) => {
     const maxDepth = 4;
     this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
-  }
+  };
 
   public _toggleBlockType = (blockType: any) => {
     this.onChange(RichUtils.toggleBlockType(this.state.editorState, blockType));
-  }
+  };
 
   public _toggleInlineStyle = (inlineStyle: any) => {
     this.onChange(
       RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle),
     );
-  }
+  };
 
   public render() {
     const { editorState } = this.state;
@@ -107,7 +107,7 @@ class StyleButton extends React.Component<any, any> {
   public onToggle = e => {
     e.preventDefault();
     this.props.onToggle(this.props.style);
-  }
+  };
 
   public render() {
     let className = 'RichEditor-styleButton';

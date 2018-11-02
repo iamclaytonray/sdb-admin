@@ -1,25 +1,14 @@
-import { ArticlesTable } from 'components/ArticlesTable';
+// import { ArticlesTable } from 'components/ArticlesTable';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import gql from 'graphql-tag';
+import { SharedTable } from 'components/SharedTable';
 import * as React from 'react';
-import { Query } from 'react-apollo';
-
-const query = gql`
-  {
-    articles {
-      createdAt
-      title
-      slug
-      featuredImage
-      published
-    }
-  }
-`;
+import { Fetch } from 'react-refetch-component';
+import { API_URL } from '../../constants';
 
 export const AllArticlesPage = () => {
   return (
-    <Query query={query}>
+    <Fetch url={`${API_URL}/articles`} method="GET" lifecycle="onMount">
       {({ loading, error, data }) => {
         if (loading) {
           return <Loading />;
@@ -27,17 +16,17 @@ export const AllArticlesPage = () => {
         if (error) {
           return <Error error={error} />;
         }
-
+        const articles = data.data;
         return (
-          <ArticlesTable
-            data={data.articles}
-            title="Articles"
+          <SharedTable
+            data={articles}
+            title="Discoveries"
             location="/dashboard/articles/new"
-          >
-            New Article
-          </ArticlesTable>
+            otherLocation="articles"
+            children="New Discovery"
+          />
         );
       }}
-    </Query>
+    </Fetch>
   );
 };

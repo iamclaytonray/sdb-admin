@@ -1,43 +1,33 @@
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import { ServicesTable } from 'components/ServicesTable';
-import gql from 'graphql-tag';
+import { SharedTable } from 'components/SharedTable';
 import * as React from 'react';
-import { Query } from 'react-apollo';
+import { Fetch } from 'react-refetch-component';
+import { API_URL } from '../../constants';
 
-const query = gql`
-  {
-    services {
-      createdAt
-      title
-      slug
-      featuredImage
-      published
-    }
+export class AllServicesPage extends React.Component {
+  public render() {
+    return (
+      <Fetch url={`${API_URL}/services`} method="GET" lifecycle="onMount">
+        {({ loading, error, data }) => {
+          if (loading) {
+            return <Loading />;
+          }
+          if (error) {
+            return <Error error={error} />;
+          }
+          const services = data.data;
+          return (
+            <SharedTable
+              data={services}
+              title="Service"
+              location="/dashboard/services/new"
+              otherLocation="services"
+              children="New Service"
+            />
+          );
+        }}
+      </Fetch>
+    );
   }
-`;
-
-export const AllServicesPage = () => {
-  return (
-    <Query query={query}>
-      {({ loading, error, data }) => {
-        if (loading) {
-          return <Loading />;
-        }
-        if (error) {
-          return <Error error={error} />;
-        }
-
-        return (
-          <ServicesTable
-            data={data.services}
-            title="Services"
-            location="/dashboard/services/new"
-          >
-            New Service
-          </ServicesTable>
-        );
-      }}
-    </Query>
-  );
-};
+}

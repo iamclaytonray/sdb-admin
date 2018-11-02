@@ -1,132 +1,225 @@
+import Axios from 'axios';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import { DeleteContainer } from 'containers/DeleteContainer';
-import gql from 'graphql-tag';
 import * as React from 'react';
-import { Query } from 'react-apollo';
-import { Card, CardBody } from 'reactstrap';
+import {
+  Button,
+  Card,
+  CardBody,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap';
+import { API_URL } from '../../constants';
+import { handleDelete } from '../../utils/methods';
 
-const query = gql`
-  query article($slug: String!) {
-    article(where: { slug: $slug }) {
-      title
-      slug
-      featuredImage
-      content
-      published
-      link
-      category
-    }
+export class SingleArticlePage extends React.Component<any, any> {
+  public state = {
+    loading: true,
+    error: null,
+    article: {},
+  };
+  public componentDidMount() {
+    Axios.get(`${API_URL}/articles/${this.props.match.params.slug}`)
+      .then(res => {
+        this.setState({
+          loading: false,
+          article: res.data.data,
+        });
+      })
+      .catch(err => this.setState({ loading: false, error: err }));
   }
-`;
-
-const deleteArticleMutation = gql`
-  mutation deleteArticle($slug: String!) {
-    deleteArticle(where: { slug: $slug }) {
-      id
+  public render() {
+    if (this.state.loading) {
+      return <Loading />;
     }
+    if (this.state.error) {
+      return <Error error={this.state.error} />;
+    }
+
+    return <SingleArticle article={this.state.article} {...this.props} />;
   }
-`;
+}
 
-export const SingleArticlePage = ({ match, history }) => {
-  return (
-    <Query query={query} variables={{ slug: match.params.slug }}>
-      {({ loading, error, data }) => {
-        if (loading) {
-          return <Loading />;
-        }
-        if (error) {
-          return <Error error={error} />;
-        }
+class SingleArticle extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      title: props.article.title,
+      slug: props.article.slug,
+      featuredImage: props.article.featuredImage,
+      category: props.article.category,
+      link: props.article.link,
+      published: props.article.published,
+      content: props.article.content,
+      parts: props.article.parts,
 
-        const { article } = data;
+      error: null,
+    };
+  }
 
-        return (
-          <Card>
-            <CardBody>
-              <div className="form-group">
-                <label>Title</label>
-                <input
-                  type="text"
-                  value={article.title}
-                  className="form-control"
-                />
-              </div>
+  public onSelectChange = (e: any) => {
+    console.log(e.target.selectedOptions);
+    let value: any = Array.from(
+      e.target.selectedOptions as HTMLOptionsCollection,
+      option => option.value,
+    );
+    this.setState({ parts: value });
+  }
 
-              <div className="form-group">
-                <label>Slug</label>
-                <input
-                  type="text"
-                  value={article.slug}
-                  className="form-control"
-                />
-              </div>
+  public handleUpdate = () => {
+    const {
+      title,
+      slug,
+      featuredImage,
+      category,
+      link,
+      published,
+      content,
+    } = this.state;
+    Axios.put(`${API_URL}/articles/${this.props.match.params.slug}`, {
+      title,
+      slug,
+      featuredImage,
+      category,
+      link,
+      published,
+      content,
+    })
+      .then(() => this.props.history.push('/dashboard/articles'))
+      .catch(err => {
+        this.setState({ error: err.response.data.error });
+        window.scroll(0, 0);
+      });
+  }
 
-              <div className="form-group">
-                <label>Featured Image</label>
-                <br />
-                <img
-                  src={article.featuredImage}
-                  style={{ height: 100, width: 'auto' }}
-                />
-                <p />
-                <input
-                  name="featuredImage"
-                  type="text"
-                  value={article.featuredImage}
-                  className="form-control"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Category</label>
-                <input
-                  name="category"
-                  type="text"
-                  value={article.category}
-                  className="form-control"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Link</label>
-                <input
-                  name="link"
-                  type="text"
-                  value={article.link}
-                  className="form-control"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Published</label>
-                <input
-                  name="published"
-                  type="checkbox"
-                  checked={article.published}
-                  className="form-control"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Content</label>
-                <textarea
-                  value={article.content}
-                  className="form-control"
-                  rows={10}
-                />
-              </div>
-
-              <button className="btn btn-primary">Update</button>
-              <DeleteContainer
-                mutationName={deleteArticleMutation}
-                variable={article.slug}
-                history={history}
+  public render() {
+    console.log(this.state.parts);
+    return (
+      <Card>
+        <CardBody>
+          {this.state.error && <Error error={this.state.error} />}
+          <Form>
+            <FormGroup>
+              <Label>Title</Label>
+              <Input
+                type="text"
+                value={this.state.title}
+                onChange={e => this.setState({ title: e.target.value })}
+                className="form-control"
               />
-            </CardBody>
-          </Card>
-        );
-      }}
-    </Query>
-  );
-};
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Slug</Label>
+              <Input
+                type="text"
+                value={this.state.slug}
+                onChange={e => this.setState({ slug: e.target.value })}
+                className="form-control"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Featured Image</Label>
+              <br />
+              <img
+                src={this.state.featuredImage}
+                style={{ height: 100, width: 'auto' }}
+              />
+              <p />
+              <Input
+                name="featuredImage"
+                placeholder="Featured Image"
+                type="text"
+                value={this.state.featuredImage}
+                onChange={e => this.setState({ featuredImage: e.target.value })}
+                className="form-control"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Category</Label>
+              <Input
+                name="category"
+                type="text"
+                value={this.state.category}
+                onChange={e => this.setState({ category: e.target.value })}
+                className="form-control"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Link</Label>
+              <Input
+                name="link"
+                type="text"
+                value={this.state.link}
+                onChange={e => this.setState({ link: e.target.value })}
+                className="form-control"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Published</Label>
+              <Input
+                name="published"
+                type="select"
+                onChange={e => this.setState({ published: e.target.value })}
+                className="form-control"
+                value={this.state.published}
+              >
+                <option>Published</option>
+                <option>Draft</option>
+              </Input>
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Parts</Label>
+              <Input
+                type="select"
+                name="parts"
+                multiple
+                onChange={this.onSelectChange}
+                value={this.state.parts}
+              >
+                {this.state.parts.map((p, id) => (
+                  <option key={id} value={id}>
+                    {p.title}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Content</Label>
+              <textarea
+                value={this.state.content}
+                onChange={e => this.setState({ content: e.target.value })}
+                className="form-control"
+                rows={10}
+              />
+            </FormGroup>
+
+            <Button
+              color="danger"
+              onClick={() =>
+                handleDelete(
+                  'articles',
+                  this.props.match.params.slug,
+                  this.props.history,
+                )
+              }
+            >
+              Delete
+            </Button>
+            <Button color="primary" onClick={this.handleUpdate}>
+              Update
+            </Button>
+          </Form>
+        </CardBody>
+      </Card>
+    );
+  }
+}

@@ -1,144 +1,203 @@
+import Axios from 'axios';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import { DeleteContainer } from 'containers/DeleteContainer';
-import gql from 'graphql-tag';
 import * as React from 'react';
-import { Query } from 'react-apollo';
-import { Card, CardBody } from 'reactstrap';
+import {
+  Button,
+  Card,
+  CardBody,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap';
+import { API_URL } from '../../constants';
+import { handleDelete } from '../../utils/methods';
 
-const query = gql`
-  query product($slug: String!) {
-    product(where: { slug: $slug }) {
-      name
-      slug
-      featuredImage
-      description
-      storeLink
-      price
-      published
-      # content
-    }
+class SingleProduct extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      name: props.product.name,
+      slug: props.product.slug,
+      featuredImage: props.product.featuredImage,
+      description: props.product.description,
+      storeLink: props.product.storeLink,
+      published: props.product.published,
+      price: props.product.price,
+
+      error: null,
+    };
   }
-`;
+  public handleInputChange = event => {
+    const { target } = event;
+    const { name } = target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
 
-const deleteProductMutation = gql`
-  mutation deleteProduct($slug: String!) {
-    deleteProduct(where: { slug: $slug }) {
-      id
-    }
+    this.setState({
+      [name]: value,
+    });
   }
-`;
 
-export const SingleProductPage = ({ match, history }) => {
-  return (
-    <Query query={query} variables={{ slug: match.params.slug }}>
-      {({ loading, error, data }) => {
-        if (loading) {
-          return <Loading />;
-        }
-        if (error) {
-          return <Error error={error} />;
-        }
+  public handleUpdate = (e: any) => {
+    e.preventDefault();
+    const {
+      name,
+      slug,
+      featuredImage,
+      description,
+      storeLink,
+      published,
+      price,
+    } = this.state;
+    Axios.put(`${API_URL}/products/${this.props.match.params.slug}`, {
+      name,
+      slug,
+      featuredImage,
+      description,
+      storeLink,
+      published,
+      price,
+    })
+      .then(() => this.props.history.push('/dashboard/products'))
+      .catch(err => this.setState({ error: err }));
+  }
 
-        const { product } = data;
-
-        return (
-          <Card>
-            <CardBody>
-              <div className="form-group">
-                <label>Title</label>
-                <input
-                  type="text"
-                  value={product.name}
-                  className="form-control"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Slug</label>
-                <input
-                  type="text"
-                  value={product.slug}
-                  className="form-control"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Featured Image</label>
-                <br />
-                <img
-                  src={product.featuredImage}
-                  style={{ height: 100, width: 'auto' }}
-                />
-                <p />
-                <input
-                  name="featuredImage"
-                  type="text"
-                  value={product.featuredImage}
-                  className="form-control"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Description</label>
-                <input
-                  name="description"
-                  type="text"
-                  value={product.description}
-                  className="form-control"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Store Link</label>
-                <input
-                  name="storeLink"
-                  type="text"
-                  value={product.storeLink}
-                  className="form-control"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Price</label>
-                <input
-                  name="price"
-                  type="text"
-                  value={product.price}
-                  className="form-control"
-                />
-              </div>
-
-              {/* Fix onChange */}
-              <div className="form-group">
-                <label>Published</label>
-                <input
-                  name="published"
-                  type="checkbox"
-                  checked={product.published}
-                  className="form-control"
-                />
-              </div>
-
-              {/* <div className="form-group">
-              <label>Content</label>
-              <textarea
-                value={product.content}
+  public render() {
+    return (
+      <Card>
+        <CardBody>
+          <Form>
+            <FormGroup>
+              <Label>Name</Label>
+              <Input
+                type="text"
+                name="name"
+                value={this.state.name}
+                onChange={this.handleInputChange}
                 className="form-control"
-                rows={10}
               />
-            </div> */}
+            </FormGroup>
 
-              <button className="btn btn-primary">Update</button>
-              <DeleteContainer
-                mutationName={deleteProductMutation}
-                variable={product.slug}
-                history={history}
+            <FormGroup>
+              <Label>Slug</Label>
+              <Input
+                type="text"
+                name="slug"
+                value={this.state.slug}
+                onChange={this.handleInputChange}
+                className="form-control"
               />
-            </CardBody>
-          </Card>
-        );
-      }}
-    </Query>
-  );
-};
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Featured Image</Label>
+              <br />
+              <img
+                src={this.state.featuredImage}
+                style={{ height: 100, width: 'auto' }}
+              />
+              <p />
+              <Input
+                name="featuredImage"
+                type="text"
+                value={this.state.featuredImage}
+                onChange={this.handleInputChange}
+                className="form-control"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Description</Label>
+              <Input
+                name="description"
+                type="text"
+                value={this.state.description}
+                onChange={this.handleInputChange}
+                className="form-control"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Store Link</Label>
+              <Input
+                name="storeLink"
+                type="text"
+                value={this.state.storeLink}
+                onChange={this.handleInputChange}
+                className="form-control"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Price</Label>
+              <Input
+                name="price"
+                type="text"
+                value={this.state.price}
+                onChange={this.handleInputChange}
+                className="form-control"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Published</Label>
+              <Input
+                name="published"
+                type="select"
+                onChange={this.handleInputChange}
+                className="form-control"
+              >
+                <option>Published</option>
+                <option>Draft</option>
+              </Input>
+            </FormGroup>
+
+            <Button
+              color="danger"
+              onClick={() =>
+                handleDelete(
+                  'products',
+                  this.props.match.params.slug,
+                  this.props.history,
+                )
+              }
+            >
+              Delete
+            </Button>
+            <Button color="primary" onClick={this.handleUpdate}>
+              Update
+            </Button>
+          </Form>
+        </CardBody>
+      </Card>
+    );
+  }
+}
+
+export class SingleProductPage extends React.Component<any, any> {
+  public state = {
+    loading: true,
+    error: null,
+    product: {},
+  };
+  public componentDidMount() {
+    Axios.get(`${API_URL}/products/${this.props.match.params.slug}`)
+      .then(res => {
+        this.setState({
+          loading: false,
+          product: res.data.data,
+        });
+      })
+      .catch(err => this.setState({ loading: false, error: err }));
+  }
+  public render() {
+    if (this.state.loading) {
+      return <Loading />;
+    }
+    if (this.state.error) {
+      return <Error error={this.state.error} />;
+    }
+    return <SingleProduct product={this.state.product} {...this.props} />;
+  }
+}

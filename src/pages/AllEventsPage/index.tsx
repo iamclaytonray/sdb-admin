@@ -1,44 +1,33 @@
 import { Error } from 'components/Error';
-// import { NewButton } from 'components/NewButton';
-import { EventsTable } from 'components/EventsTable';
 import { Loading } from 'components/Loading';
-import gql from 'graphql-tag';
+import { SharedTable } from 'components/SharedTable';
 import * as React from 'react';
-import { Query } from 'react-apollo';
+import { Fetch } from 'react-refetch-component';
+import { API_URL } from '../../constants';
 
-const query = gql`
-  {
-    events {
-      createdAt
-      title
-      slug
-      featuredImage
-      published
-    }
+export class AllEventsPage extends React.Component<any, any> {
+  public render() {
+    return (
+      <Fetch url={`${API_URL}/events`} method="GET" lifecycle="onMount">
+        {({ loading, error, data }) => {
+          if (loading) {
+            return <Loading />;
+          }
+          if (error) {
+            return <Error error={error} />;
+          }
+          const events = data.data;
+          return (
+            <SharedTable
+              data={events}
+              title="Events"
+              location="/dashboard/events/new"
+              otherLocation="events"
+              children="New Event"
+            />
+          );
+        }}
+      </Fetch>
+    );
   }
-`;
-
-export const AllEventsPage = () => {
-  return (
-    <Query query={query}>
-      {({ loading, error, data }) => {
-        if (loading) {
-          return <Loading />;
-        }
-        if (error) {
-          return <Error error={error} />;
-        }
-
-        return (
-          <EventsTable
-            data={data.events}
-            title="Events"
-            location="/dashboard/events/new"
-          >
-            New Event
-          </EventsTable>
-        );
-      }}
-    </Query>
-  );
-};
+}

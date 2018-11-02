@@ -1,8 +1,6 @@
+import Axios from 'axios';
 import { Error } from 'components/Error';
-import { Loading } from 'components/Loading';
-import gql from 'graphql-tag';
 import * as React from 'react';
-import { Mutation } from 'react-apollo';
 import {
   Button,
   Card,
@@ -13,34 +11,7 @@ import {
   Input,
   Label,
 } from 'reactstrap';
-
-const mutation = gql`
-  mutation createService(
-    $title: String!
-    $slug: String!
-    $category: String!
-    $description: String!
-    $featuredImage: String!
-    $published: Boolean!
-    $mediumLink: String!
-  ) {
-    createService(
-      data: {
-        title: $title
-        slug: $slug
-        category: $category
-        description: $description
-        featuredImage: $featuredImage
-        published: $published
-        anchorLink: $anchorLink
-        mediumLink: $mediumLink
-        youtubeLink: $youtubeLink
-      }
-    ) {
-      id
-    }
-  }
-`;
+import { API_URL } from '../../constants';
 
 export class NewServicePage extends React.Component<any, any> {
   public state = {
@@ -49,11 +20,17 @@ export class NewServicePage extends React.Component<any, any> {
     category: '',
     description: '',
     featuredImage: '',
-    published: false,
-    anchorLink: '',
-    mediumLink: '',
-    youtubeLink: '',
+    parts: [] as any,
+    partOptions: [] as any,
+
+    error: null,
   };
+
+  public componentDidMount() {
+    Axios.get(`${API_URL}/parts`)
+      .then(res => this.setState({ partOptions: res.data.data }))
+      .catch(err => console.log(err));
+  }
 
   public handleInputChange = event => {
     const { target } = event;
@@ -65,7 +42,7 @@ export class NewServicePage extends React.Component<any, any> {
     });
   }
 
-  public handleSubmit = (e, createService): any => {
+  public handleSubmit = (e): any => {
     e.preventDefault();
     const {
       title,
@@ -73,157 +50,125 @@ export class NewServicePage extends React.Component<any, any> {
       category,
       description,
       featuredImage,
-      published,
-      anchorLink,
-      mediumLink,
-      youtubeLink,
+      parts,
     } = this.state;
-    createService({
-      variables: {
-        title,
-        slug,
-        category,
-        description,
-        featuredImage,
-        published,
-        anchorLink,
-        mediumLink,
-        youtubeLink,
-      },
-    }).then(data => {
-      const service = data.data.createService;
-      this.props.history.push(`/dashboard/services/${service.slug}`);
-    });
+    Axios.post(`${API_URL}/services`, {
+      title,
+      slug,
+      category,
+      description,
+      featuredImage,
+      parts,
+    })
+      .then(() => {
+        this.props.history.push(`/dashboard/services`);
+      })
+      .catch(err => {
+        this.setState({ error: err.response.data.error });
+        window.scroll(0, 0);
+      });
   }
+
+  public onSelectChange = (e: any) => {
+    let value: any = Array.from(
+      e.target.selectedOptions as HTMLOptionsCollection,
+      option => option.value,
+    );
+    this.setState({ parts: value });
+  }
+
   public render() {
     return (
-      <Mutation mutation={mutation}>
-        {(createService, { loading, error }) => {
-          return (
-            <Card>
-              <CardBody>
-                <CardTitle>New Service</CardTitle>
+      <Card>
+        <CardBody>
+          <CardTitle>New Service</CardTitle>
+          {this.state.error && <Error error={this.state.error} />}
 
-                {loading && <Loading />}
-                {/* Add a Snackbox here noticing the user that there was an error */}
-                {error && <Error error={error} />}
-                <Form onSubmit={e => this.handleSubmit(e, createService)}>
-                  <FormGroup>
-                    <Label>Title</Label>
-                    <Input
-                      type="text"
-                      name="title"
-                      placeholder="Title"
-                      value={this.state.title}
-                      className="form-control"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
+          <Form onSubmit={e => this.handleSubmit(e)}>
+            <FormGroup>
+              <Label>Title</Label>
+              <Input
+                type="text"
+                name="title"
+                placeholder="Title"
+                value={this.state.title}
+                className="form-control"
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
 
-                  <FormGroup>
-                    <Label>Slug</Label>
-                    <Input
-                      type="text"
-                      name="slug"
-                      placeholder="Slug"
-                      value={this.state.slug}
-                      className="form-control"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
+            <FormGroup>
+              <Label>Slug</Label>
+              <Input
+                type="text"
+                name="slug"
+                placeholder="Slug"
+                value={this.state.slug}
+                className="form-control"
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
 
-                  <FormGroup>
-                    <Label>Featured Image</Label>
-                    <Input
-                      type="text"
-                      name="featuredImage"
-                      placeholder="Featured Image"
-                      value={this.state.featuredImage}
-                      className="form-control"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
+            <FormGroup>
+              <Label>Featured Image</Label>
+              <Input
+                type="text"
+                name="featuredImage"
+                placeholder="Featured Image"
+                value={this.state.featuredImage}
+                className="form-control"
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
 
-                  <FormGroup>
-                    <Label>Description</Label>
-                    <Input
-                      type="text"
-                      name="description"
-                      placeholder="Description"
-                      value={this.state.description}
-                      className="form-control"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
+            <FormGroup>
+              <Label>Description</Label>
+              <Input
+                type="text"
+                name="description"
+                placeholder="Description"
+                value={this.state.description}
+                className="form-control"
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
 
-                  <FormGroup>
-                    <Label>Medium Link</Label>
-                    <Input
-                      type="text"
-                      name="mediumLink"
-                      placeholder="Medium Link"
-                      value={this.state.mediumLink}
-                      className="form-control"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
+            <FormGroup>
+              <Label>Category</Label>
+              <Input
+                type="text"
+                name="category"
+                placeholder="Category"
+                value={this.state.category}
+                className="form-control"
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
 
-                  <FormGroup>
-                    <Label>Anchor Link</Label>
-                    <Input
-                      type="text"
-                      name="anchorLink"
-                      placeholder="Anchor Link"
-                      value={this.state.anchorLink}
-                      className="form-control"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
+            <FormGroup>
+              <Label>Parts</Label>
+              <Input
+                type="select"
+                name="parts"
+                multiple
+                onChange={(e: any) => this.onSelectChange(e)}
+              >
+                {this.state.partOptions.map(p => {
+                  return (
+                    <option key={p._id} value={p._id}>
+                      {p.title}
+                    </option>
+                  );
+                })}
+              </Input>
+            </FormGroup>
 
-                  <FormGroup>
-                    <Label>YouTube Link</Label>
-                    <Input
-                      type="text"
-                      name="youtubeLink"
-                      placeholder="YouTube Link"
-                      value={this.state.youtubeLink}
-                      className="form-control"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <Label>Category</Label>
-                    <Input
-                      type="text"
-                      name="category"
-                      placeholder="Category"
-                      value={this.state.category}
-                      className="form-control"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
-
-                  <FormGroup>
-                    <Label>Published?</Label>
-                    <Input
-                      type="checkbox"
-                      name="published"
-                      checked={this.state.published}
-                      className="form-check-input"
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
-
-                  <Button type="submit" className="btn btn-primary">
-                    Create
-                  </Button>
-                </Form>
-              </CardBody>
-            </Card>
-          );
-        }}
-      </Mutation>
+            <Button type="submit" className="btn btn-primary">
+              Create
+            </Button>
+          </Form>
+        </CardBody>
+      </Card>
     );
   }
 }

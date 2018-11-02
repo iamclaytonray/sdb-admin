@@ -1,8 +1,9 @@
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import { PartsTable } from 'components/PartsTable';
-import { AllPartsContainer } from 'containers/AllPartsContainer';
+import { SharedTable } from 'components/SharedTable';
 import * as React from 'react';
+import { Fetch } from 'react-refetch-component';
+import { API_URL } from '../../constants';
 
 export class AllPartsPage extends React.Component<any, any> {
   public state = {
@@ -12,25 +13,26 @@ export class AllPartsPage extends React.Component<any, any> {
   };
   public render() {
     return (
-      <AllPartsContainer>
-        {({ loading, error, parts }) => {
+      <Fetch url={`${API_URL}/parts`} method="GET" lifecycle="onMount">
+        {({ loading, error, data }) => {
           if (loading) {
             return <Loading />;
           }
           if (error) {
             return <Error error={error} />;
           }
+          const parts = data.data;
           return (
-            <PartsTable
+            <SharedTable
               data={parts}
-              title="Parts"
+              title="Part"
               location="/dashboard/parts/new"
-            >
-              New Part
-            </PartsTable>
+              otherLocation="parts"
+              children="New Part"
+            />
           );
         }}
-      </AllPartsContainer>
+      </Fetch>
     );
   }
 }

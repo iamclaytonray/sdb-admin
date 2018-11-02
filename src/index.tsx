@@ -6,6 +6,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { ErrorBoundary } from 'containers/ErrorBoundary';
 import { Root } from 'containers/Root';
 
+import registerServiceWorker from './registerServiceWorker';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import './assets/scss/dashboard.scss';
 
@@ -17,3 +19,5 @@ render(
   </BrowserRouter>,
   document.getElementById('root'),
 );
+
+registerServiceWorker();
