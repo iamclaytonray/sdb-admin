@@ -71,7 +71,6 @@ export class NewTabPage extends React.Component<any, any> {
                 name="label"
                 placeholder="Label"
                 value={this.state.label}
-                className="form-control"
                 onChange={this.handleInputChange}
               />
             </FormGroup>
@@ -83,7 +82,6 @@ export class NewTabPage extends React.Component<any, any> {
                 name="slug"
                 placeholder="Slug"
                 value={this.state.slug}
-                className="form-control"
                 onChange={this.handleInputChange}
               />
             </FormGroup>
@@ -95,7 +93,6 @@ export class NewTabPage extends React.Component<any, any> {
                 name="page"
                 value={this.state.page}
                 onChange={this.handleInputChange}
-                className="form-control"
               >
                 <option>Discoveries</option>
                 <option>Teachings</option>
