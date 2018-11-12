@@ -1,3 +1,4 @@
+import { DashboardWrapper } from 'components/DashboardWrapper';
 import * as React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
@@ -6,7 +7,9 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
     {...rest}
     render={props =>
       localStorage.getItem('token') !== null ? (
-        <Component {...props} />
+        <DashboardWrapper>
+          <Component {...props} />
+        </DashboardWrapper>
       ) : (
         <Redirect
           to={{
