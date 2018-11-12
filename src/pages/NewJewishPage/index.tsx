@@ -20,7 +20,6 @@ export class NewJewishPage extends React.Component<any, any> {
     description: '',
     featuredImage: '',
     link: '',
-    published: 'draft',
 
     error: null,
   };
@@ -37,23 +36,23 @@ export class NewJewishPage extends React.Component<any, any> {
 
   public handleSubmit = (e): any => {
     e.preventDefault();
-    const {
-      title,
-      slug,
-      description,
-      featuredImage,
-      link,
-      published,
-    } = this.state;
+    const { title, slug, description, featuredImage, link } = this.state;
 
-    Axios.post(`${API_URL}/jewish`, {
-      title,
-      slug,
-      description,
-      featuredImage,
-      link,
-      published,
-    })
+    Axios.post(
+      `${API_URL}/jewish`,
+      {
+        title,
+        slug,
+        description,
+        featuredImage,
+        link,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(() => {
         this.props.history.push(`/dashboard/jewish`);
       })
@@ -130,19 +129,6 @@ export class NewJewishPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Published</Label>
-              <Input
-                name="published"
-                type="select"
-                onChange={this.handleInputChange}
-                className="form-control"
-              >
-                <option>Published</option>
-                <option>Draft</option>
-              </Input>
             </FormGroup>
 
             <Button color="primary" type="submit">

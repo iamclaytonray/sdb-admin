@@ -23,7 +23,6 @@ class SingleProduct extends React.Component<any, any> {
       featuredImage: props.product.featuredImage,
       description: props.product.description,
       storeLink: props.product.storeLink,
-      published: props.product.published,
       price: props.product.price,
 
       error: null,
@@ -47,18 +46,24 @@ class SingleProduct extends React.Component<any, any> {
       featuredImage,
       description,
       storeLink,
-      published,
       price,
     } = this.state;
-    Axios.put(`${API_URL}/products/${this.props.match.params.slug}`, {
-      name,
-      slug,
-      featuredImage,
-      description,
-      storeLink,
-      published,
-      price,
-    })
+    Axios.put(
+      `${API_URL}/products/${this.props.match.params.slug}`,
+      {
+        name,
+        slug,
+        featuredImage,
+        description,
+        storeLink,
+        price,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(() => this.props.history.push('/dashboard/products'))
       .catch(err => this.setState({ error: err }));
   }
@@ -138,19 +143,6 @@ class SingleProduct extends React.Component<any, any> {
                 onChange={this.handleInputChange}
                 className="form-control"
               />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Published</Label>
-              <Input
-                name="published"
-                type="select"
-                onChange={this.handleInputChange}
-                className="form-control"
-              >
-                <option>Published</option>
-                <option>Draft</option>
-              </Input>
             </FormGroup>
 
             <Button

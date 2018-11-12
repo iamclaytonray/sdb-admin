@@ -20,17 +20,15 @@ export class NewServicePage extends React.Component<any, any> {
     category: '',
     description: '',
     featuredImage: '',
-    parts: [] as any,
-    partOptions: [] as any,
+    parts: [],
+
+    partNumber: '',
+    anchorLink: 'https://anchor.fm/',
+    mediumLink: 'https://medium.com/',
+    youtubeLink: 'https://youtube.com/',
 
     error: null,
   };
-
-  public componentDidMount() {
-    Axios.get(`${API_URL}/parts`)
-      .then(res => this.setState({ partOptions: res.data.data }))
-      .catch(err => console.log(err));
-  }
 
   public handleInputChange = event => {
     const { target } = event;
@@ -52,14 +50,22 @@ export class NewServicePage extends React.Component<any, any> {
       featuredImage,
       parts,
     } = this.state;
-    Axios.post(`${API_URL}/services`, {
-      title,
-      slug,
-      category,
-      description,
-      featuredImage,
-      parts,
-    })
+    Axios.post(
+      `${API_URL}/services`,
+      {
+        title,
+        slug,
+        category,
+        description,
+        featuredImage,
+        parts,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(() => {
         this.props.history.push(`/dashboard/services`);
       })
@@ -145,22 +151,54 @@ export class NewServicePage extends React.Component<any, any> {
               />
             </FormGroup>
 
+            <h1>Parts:</h1>
+
             <FormGroup>
-              <Label>Parts</Label>
+              <Label>Part Number</Label>
               <Input
-                type="select"
-                name="parts"
-                multiple
-                onChange={(e: any) => this.onSelectChange(e)}
-              >
-                {this.state.partOptions.map(p => {
-                  return (
-                    <option key={p._id} value={p._id}>
-                      {p.title}
-                    </option>
-                  );
-                })}
-              </Input>
+                type="text"
+                name="partNumber"
+                placeholder="Part Number"
+                value={this.state.partNumber}
+                className="form-control"
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Anchor Link</Label>
+              <Input
+                type="text"
+                name="anchorLink"
+                placeholder="Anchor Link"
+                value={this.state.anchorLink}
+                className="form-control"
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Medium Link</Label>
+              <Input
+                type="text"
+                name="mediumLink"
+                placeholder="Medium Link"
+                value={this.state.mediumLink}
+                className="form-control"
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label>YouTube Link</Label>
+              <Input
+                type="text"
+                name="youtubeLink"
+                placeholder="YouTube Link"
+                value={this.state.youtubeLink}
+                className="form-control"
+                onChange={this.handleInputChange}
+              />
             </FormGroup>
 
             <Button type="submit" className="btn btn-primary">

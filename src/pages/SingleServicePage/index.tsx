@@ -1,8 +1,8 @@
 import Axios from 'axios';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
+import { Part } from 'components/Part';
 import * as React from 'react';
-import Select from 'react-select';
 import {
   Button,
   Card,
@@ -24,7 +24,6 @@ class SingleService extends React.Component<any, any> {
       featuredImage: props.service.featuredImage,
       description: props.service.description,
       category: props.service.category,
-      published: props.service.published,
       parts: props.service.parts,
 
       error: null,
@@ -59,18 +58,24 @@ class SingleService extends React.Component<any, any> {
       description,
       slug,
       category,
-      published,
       parts,
     } = this.state;
-    Axios.put(`${API_URL}/services/${this.props.match.params.slug}`, {
-      title,
-      featuredImage,
-      description,
-      slug,
-      category,
-      published,
-      parts,
-    })
+    Axios.put(
+      `${API_URL}/services/${this.props.match.params.slug}`,
+      {
+        title,
+        featuredImage,
+        description,
+        slug,
+        category,
+        parts,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(() => this.props.history.push('/dashboard/services'))
       .catch(err => this.setState({ error: err }));
   }
@@ -103,6 +108,17 @@ class SingleService extends React.Component<any, any> {
             </FormGroup>
 
             <FormGroup>
+              <Label>Featured Image</Label>
+              <Input
+                type="text"
+                name="featuredImage"
+                value={this.state.featuredImage}
+                onChange={this.handleInputChange}
+                className="form-control"
+              />
+            </FormGroup>
+
+            <FormGroup>
               <Label>Category</Label>
               <Input
                 type="text"
@@ -112,25 +128,9 @@ class SingleService extends React.Component<any, any> {
                 className="form-control"
               />
             </FormGroup>
-
-            {/* <FormGroup>
-              <Label>Parts</Label>
-              <Input
-                type="select"
-                name="parts"
-                multiple={true}
-                value={this.state.parts}
-                onChange={this.handleInputChange}
-              >
-                {this.state.parts && this.state.parts.map(part => (
-                  <option key={part._id} value={part._id}>
-                    {part.title}
-                  </option>
-                )
-              )}
-              </Input>
-            </FormGroup> */}
-            <Select value={this.state.parts} />
+            {/*  */}
+            <Part />
+            {/*  */}
           </Form>
           <Button
             color="danger"

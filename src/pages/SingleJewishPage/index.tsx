@@ -55,21 +55,29 @@ class SingleJewish extends React.Component<any, any> {
       phone,
       email,
     } = this.state;
-    Axios.put(`${API_URL}/jewish/${this.props.match.params.slug}`, {
-      title,
-      slug,
-      featuredImage,
-      content,
-      published,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      address,
-      host,
-      phone,
-      email,
-    })
+    Axios.put(
+      `${API_URL}/jewish/${this.props.match.params.slug}`,
+      {
+        title,
+        slug,
+        featuredImage,
+        content,
+        published,
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+        address,
+        host,
+        phone,
+        email,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(() => this.props.history.push('/dashboard/jewish'))
       .catch(err => this.setState({ error: err }));
   }

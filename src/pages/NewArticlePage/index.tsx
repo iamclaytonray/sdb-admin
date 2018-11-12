@@ -1,8 +1,7 @@
 import Axios from 'axios';
 import { Error } from 'components/Error';
-import { Loading } from 'components/Loading';
 import * as React from 'react';
-import { Card, CardBody, CardTitle, FormGroup, Input, Label } from 'reactstrap';
+import { Card, CardBody, CardTitle } from 'reactstrap';
 import { API_URL } from '../../constants';
 
 export class NewArticlePage extends React.Component<any, any> {
@@ -14,18 +13,10 @@ export class NewArticlePage extends React.Component<any, any> {
     link: '',
     featuredImage: '',
     parts: [] as any,
-    partOptions: [] as any,
-    published: 'draft',
 
     error: null,
     loading: true,
   };
-
-  public componentDidMount() {
-    Axios.get(`${API_URL}/parts`)
-      .then(res => this.setState({ loading: false, partOptions: res.data.data }))
-      .catch(err => this.setState({ loading: false, error: err }));
-  }
 
   public handleInputChange = event => {
     const target = event.target;
@@ -37,15 +28,6 @@ export class NewArticlePage extends React.Component<any, any> {
     });
   }
 
-  public onSelectChange = (e: any) => {
-    let value: any = Array.from(
-      e.target.selectedOptions as HTMLOptionsCollection,
-      option => option.value,
-    );
-    // let values = Array.from(e.target.value, (option: any) => option.value);
-    this.setState({ parts: value });
-  }
-
   public handleSubmit = (e): any => {
     e.preventDefault();
     const {
@@ -54,20 +36,26 @@ export class NewArticlePage extends React.Component<any, any> {
       featuredImage,
       category,
       link,
-      published,
       content,
-      parts,
+      // parts,
     } = this.state;
-    Axios.post(`${API_URL}/articles`, {
-      title,
-      slug,
-      featuredImage,
-      category,
-      link,
-      published,
-      content,
-      parts,
-    })
+    Axios.post(
+      `${API_URL}/articles`,
+      {
+        title,
+        slug,
+        featuredImage,
+        category,
+        link,
+        content,
+        parts: [],
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(res => {
         this.props.history.push(`/dashboard/articles`);
       })
@@ -79,10 +67,6 @@ export class NewArticlePage extends React.Component<any, any> {
   }
 
   public render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-    console.log(this.state);
     return (
       <Card>
         <CardBody>
@@ -148,37 +132,6 @@ export class NewArticlePage extends React.Component<any, any> {
                 onChange={this.handleInputChange}
               />
             </div>
-
-            <FormGroup>
-              <Label>Published</Label>
-              <Input
-                name="published"
-                type="select"
-                onChange={this.handleInputChange}
-                className="form-control"
-              >
-                <option>Published</option>
-                <option>Draft</option>
-              </Input>
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Parts</Label>
-              <Input
-                type="select"
-                name="parts"
-                multiple
-                onChange={(e: any) => this.onSelectChange(e)}
-              >
-                {this.state.partOptions.map(p => {
-                  return (
-                    <option key={p._id} value={p._id}>
-                      {p.title}
-                    </option>
-                  );
-                })}
-              </Input>
-            </FormGroup>
 
             <div className="form-group">
               <label>Content</label>

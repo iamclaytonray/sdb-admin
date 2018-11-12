@@ -22,7 +22,6 @@ export class NewProductPage extends React.Component<any, any> {
     featuredImage: '',
     storeLink: '',
     price: 0.0,
-    published: 'draft',
 
     error: null,
   };
@@ -46,17 +45,23 @@ export class NewProductPage extends React.Component<any, any> {
       description,
       storeLink,
       price,
-      published,
     } = this.state;
-    Axios.post(`${API_URL}/products`, {
-      name,
-      slug,
-      featuredImage,
-      description,
-      storeLink,
-      price,
-      published,
-    })
+    Axios.post(
+      `${API_URL}/products`,
+      {
+        name,
+        slug,
+        featuredImage,
+        description,
+        storeLink,
+        price,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(() => {
         this.props.history.push(`/dashboard/products`);
       })
@@ -145,19 +150,6 @@ export class NewProductPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Published</Label>
-              <Input
-                name="published"
-                type="select"
-                onChange={this.handleInputChange}
-                className="form-control"
-              >
-                <option>Published</option>
-                <option>Draft</option>
-              </Input>
             </FormGroup>
 
             <Button type="submit" color="primary">

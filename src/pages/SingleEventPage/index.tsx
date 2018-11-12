@@ -2,7 +2,6 @@ import Axios from 'axios';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
 import * as React from 'react';
-import * as Datetime from 'react-datetime';
 import {
   Button,
   Card,
@@ -23,15 +22,6 @@ class SingleEvent extends React.Component<any, any> {
       slug: props.event.slug,
       featuredImage: props.event.featuredImage,
       content: props.event.content,
-      startDate: props.event.startDate,
-      endDate: props.event.endDate,
-      startTime: props.event.startTime,
-      endTime: props.event.endTime,
-      hostName: props.event.hostName,
-      hostAddress: props.event.hostAddress,
-      hostPhone: props.event.hostPhone,
-      hostEmail: props.event.hostEmail,
-      published: props.event.published,
 
       error: null,
     };
@@ -54,31 +44,23 @@ class SingleEvent extends React.Component<any, any> {
       slug,
       featuredImage,
       content,
-      published,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      address,
-      host,
-      phone,
       email,
     } = this.state;
-    Axios.put(`${API_URL}/events/${this.props.match.params.slug}`, {
-      title,
-      slug,
-      featuredImage,
-      content,
-      published,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      address,
-      host,
-      phone,
-      email,
-    })
+    Axios.put(
+      `${API_URL}/events/${this.props.match.params.slug}`,
+      {
+        title,
+        slug,
+        featuredImage,
+        content,
+        email,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(() => this.props.history.push('/dashboard/events'))
       .catch(err => {
         this.setState({ error: err.response.data.error });
@@ -145,18 +127,6 @@ class SingleEvent extends React.Component<any, any> {
             </FormGroup>
 
             <FormGroup>
-              <div className="form-check">
-                <Label className="form-check-label">Published</Label>
-                <Input
-                  name="published"
-                  type="checkbox"
-                  checked={this.state.published}
-                  onChange={this.handleInputChange}
-                />
-              </div>
-            </FormGroup>
-
-            <FormGroup>
               <Label>Content</Label>
               <textarea
                 name="content"
@@ -164,101 +134,6 @@ class SingleEvent extends React.Component<any, any> {
                 onChange={this.handleInputChange}
                 className="form-control"
                 rows={10}
-              />
-            </FormGroup>
-
-            {/* Time Info */}
-            <h3>Time Info</h3>
-
-            <FormGroup>
-              <Label>Start Date</Label>
-              <Datetime
-                timeFormat={false}
-                inputProps={{ placeholder: 'Start Date' }}
-                value={this.state.startDate}
-                onChange={(event: any) =>
-                  this.setState({ startDate: event.target })
-                }
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>End Date</Label>
-              <Datetime
-                timeFormat={false}
-                inputProps={{ placeholder: 'End Date' }}
-                value={this.state.endDate}
-                onChange={(event: any) =>
-                  this.setState({ startDate: event.target })
-                }
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Start Time</Label>
-              <Datetime
-                dateFormat={false}
-                inputProps={{ placeholder: 'Start Time' }}
-                value={this.state.startTime}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>End Time</Label>
-              <Datetime
-                dateFormat={false}
-                inputProps={{ placeholder: 'End Time' }}
-                value={this.state.endTime}
-              />
-            </FormGroup>
-
-            {/* Host Info */}
-            <h3>Host Info</h3>
-            <FormGroup>
-              <Label>Address</Label>
-              <Input
-                type="text"
-                name="address"
-                placeholder="Address"
-                value={this.state.hostAddress}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Host Name</Label>
-              <Input
-                type="text"
-                name="hostName"
-                placeholder="Host Name"
-                value={this.state.hostName}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Host Phone</Label>
-              <Input
-                type="text"
-                name="hostPhone"
-                placeholder="Host Phone"
-                value={this.state.hostPhone}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Host Email</Label>
-              <Input
-                type="text"
-                name="hostEmail"
-                placeholder="Host Email"
-                value={this.state.hostEmail}
-                className="form-control"
-                onChange={this.handleInputChange}
               />
             </FormGroup>
 

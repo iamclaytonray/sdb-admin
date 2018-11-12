@@ -18,8 +18,6 @@ export class NewTabPage extends React.Component<any, any> {
     label: '',
     slug: '',
     page: 'Discoveries',
-    published: 'Draft',
-
     error: null,
   };
 
@@ -35,16 +33,22 @@ export class NewTabPage extends React.Component<any, any> {
 
   public handleSubmit = (e): any => {
     e.preventDefault();
-    const { label, slug, page, published } = this.state;
-    const pub = published.toLowerCase();
-    Axios.post(`${API_URL}/tabs`, {
-      label,
-      slug,
-      page,
-      published: pub,
-    })
+    const { label, slug, page } = this.state;
+    Axios.post(
+      `${API_URL}/tabs`,
+      {
+        label,
+        slug,
+        page,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(() => {
-        this.props.history.push(`/dashboard/menu-items`);
+        this.props.history.push(`/dashboard/tabs`);
       })
       .catch(err => {
         this.setState({ error: err.response.data.error });
@@ -95,20 +99,6 @@ export class NewTabPage extends React.Component<any, any> {
               >
                 <option>Discoveries</option>
                 <option>Teachings</option>
-              </Input>
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Published</Label>
-              <Input
-                name="published"
-                type="select"
-                onChange={this.handleInputChange}
-                className="form-control"
-                value={this.state.published}
-              >
-                <option>Published</option>
-                <option>Draft</option>
               </Input>
             </FormGroup>
 

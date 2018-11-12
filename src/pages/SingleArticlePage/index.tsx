@@ -78,15 +78,23 @@ class SingleArticle extends React.Component<any, any> {
       published,
       content,
     } = this.state;
-    Axios.put(`${API_URL}/articles/${this.props.match.params.slug}`, {
-      title,
-      slug,
-      featuredImage,
-      category,
-      link,
-      published,
-      content,
-    })
+    Axios.put(
+      `${API_URL}/articles/${this.props.match.params.slug}`,
+      {
+        title,
+        slug,
+        featuredImage,
+        category,
+        link,
+        published,
+        content,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(() => this.props.history.push('/dashboard/articles'))
       .catch(err => {
         this.setState({ error: err.response.data.error });
@@ -95,7 +103,6 @@ class SingleArticle extends React.Component<any, any> {
   }
 
   public render() {
-    console.log(this.state.parts);
     return (
       <Card>
         <CardBody>
@@ -159,37 +166,6 @@ class SingleArticle extends React.Component<any, any> {
                 onChange={e => this.setState({ link: e.target.value })}
                 className="form-control"
               />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Published</Label>
-              <Input
-                name="published"
-                type="select"
-                onChange={e => this.setState({ published: e.target.value })}
-                className="form-control"
-                value={this.state.published}
-              >
-                <option>Published</option>
-                <option>Draft</option>
-              </Input>
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Parts</Label>
-              <Input
-                type="select"
-                name="parts"
-                multiple
-                onChange={this.onSelectChange}
-                value={this.state.parts}
-              >
-                {this.state.parts.map((p, id) => (
-                  <option key={id} value={id}>
-                    {p.title}
-                  </option>
-                ))}
-              </Input>
             </FormGroup>
 
             <FormGroup>

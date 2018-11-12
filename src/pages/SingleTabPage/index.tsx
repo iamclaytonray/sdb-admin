@@ -20,7 +20,6 @@ class SingleTab extends React.Component<any, any> {
       label: props.tab.label,
       slug: props.tab.slug,
       page: props.tab.page,
-      published: props.tab.published,
 
       error: null,
     };
@@ -38,21 +37,28 @@ class SingleTab extends React.Component<any, any> {
 
   public handleUpdate = (e: any) => {
     e.preventDefault();
-    const { label, slug, page, published } = this.state;
-    Axios.put(`${API_URL}/tabs/${this.props.match.params.slug}`, {
-      label,
-      slug,
-      page,
-      published,
-    })
-      .then(() => this.props.history.push('/dashboard/menu-items'))
+    const { label, slug, page } = this.state;
+    Axios.put(
+      `${API_URL}/tabs/${this.props.match.params.slug}`,
+      {
+        label,
+        slug,
+        page,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
+      .then(() => this.props.history.push('/dashboard/tabs'))
       .catch(err => this.setState({ error: err }));
   }
 
   public handleDelete = () => {
     alert('Are you sure?');
     Axios.delete(`${API_URL}/tabs/${this.props.match.params.slug}`)
-      .then(() => this.props.history.push('/dashboard/menu-items'))
+      .then(() => this.props.history.push('/dashboard/tabs'))
       .catch(err => console.log(err));
   }
 

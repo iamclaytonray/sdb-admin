@@ -1,9 +1,7 @@
 // import { TextEditor } from 'components/TextEditor';
 import Axios from 'axios';
 import { Error } from 'components/Error';
-import * as moment from 'moment';
 import * as React from 'react';
-import * as Datetime from 'react-datetime';
 import {
   Button,
   Card,
@@ -22,15 +20,6 @@ export class NewEventPage extends React.Component<any, any> {
     slug: '',
     featuredImage: '',
     content: '',
-    startDate: moment().format('MM-DD-YYYY'),
-    endDate: moment().format('MM-DD-YYYY'),
-    startTime: '',
-    endTime: '',
-    hostAddress: '',
-    hostName: '',
-    hostPhone: '',
-    hostEmail: '',
-    published: 'draft',
 
     error: null,
   };
@@ -54,32 +43,22 @@ export class NewEventPage extends React.Component<any, any> {
       slug,
       featuredImage,
       content,
-      published,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      hostAddress,
-      hostName,
-      hostPhone,
-      hostEmail,
     } = this.state;
 
-    Axios.post(`${API_URL}/events`, {
-      title,
-      slug,
-      featuredImage,
-      content,
-      published,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      hostAddress,
-      hostName,
-      hostPhone,
-      hostEmail,
-    })
+    Axios.post(
+      `${API_URL}/events`,
+      {
+        title,
+        slug,
+        featuredImage,
+        content,
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      },
+    )
       .then(() => {
         this.props.history.push(`/dashboard/events`);
       })
@@ -132,119 +111,6 @@ export class NewEventPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Published</Label>
-              <Input
-                name="published"
-                type="select"
-                onChange={this.handleInputChange}
-                className="form-control"
-              >
-                <option>Published</option>
-                <option>Draft</option>
-              </Input>
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Start Date</Label>
-              <Datetime
-                timeFormat={false}
-                inputProps={{ placeholder: 'Start Date' }}
-                // value={this.state.startDate}
-                // onChange={this.handleInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>End Date</Label>
-              <Datetime
-                timeFormat={false}
-                inputProps={{ placeholder: 'End Date' }}
-                // value={}
-                defaultValue={this.state.endDate}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Start Time</Label>
-              <Datetime
-                dateFormat={false}
-                inputProps={{ placeholder: 'Start Time' }}
-                // value={}
-                defaultValue={this.state.startTime}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>End Time</Label>
-              <Datetime
-                dateFormat={false}
-                inputProps={{ placeholder: 'End Time' }}
-                defaultValue={this.state.endTime}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Host Address</Label>
-              <Input
-                type="text"
-                name="hostAddress"
-                placeholder="Host Address"
-                value={this.state.hostAddress}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Host Name</Label>
-              <Input
-                type="text"
-                name="hostName"
-                placeholder="Host Name"
-                value={this.state.hostName}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Host Phone</Label>
-              <Input
-                type="text"
-                name="hostPhone"
-                placeholder="Host Phone"
-                value={this.state.hostPhone}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Host Email</Label>
-              <Input
-                type="text"
-                name="hostEmail"
-                placeholder="Host Email"
-                value={this.state.hostEmail}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label>Published</Label>
-              <Input
-                name="published"
-                type="select"
-                onChange={this.handleInputChange}
-                className="form-control"
-              >
-                <option>Published</option>
-                <option>Draft</option>
-              </Input>
             </FormGroup>
 
             <FormGroup>
