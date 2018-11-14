@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { Loading } from 'components/Loading';
 import * as React from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { Button } from 'reactstrap';
+import { Button, Nav, NavItem, NavLink } from 'reactstrap';
 import { API_URL } from '../../constants';
 
 const reorder = (list, startIndex, endIndex) => {
@@ -38,14 +38,18 @@ export class OrderItems extends React.Component<any, any> {
     items: [] as any,
     loading: true,
     error: null,
+    categories: [] as any,
+    category: '',
   };
 
   public componentDidMount() {
     this.fetch();
+    this.fetchCategories();
   }
 
-  public componentDidUpdate(prevProps: any) {
+  public async componentDidUpdate(prevProps: any) {
     if (prevProps.resource !== this.props.resource) {
+      await this.fetchCategories();
       this.fetch();
     }
   }
@@ -59,6 +63,22 @@ export class OrderItems extends React.Component<any, any> {
         });
       })
       .catch(err => this.setState({ loading: false, error: err }));
+  }
+
+  public fetchCategories = () => {
+    if (this.props.resource !== 'articles' || this.props.resource !== 'services') {
+      this.setState({ categories: [] });
+    }
+    Axios.get(`${API_URL}/tabs/${
+        (this.props.resource === 'articles')
+        ? 'discoveries'
+        : (this.props.resource === 'services')
+        ? 'services'
+        : null
+      }`)
+      .then(res => this.setState({ categories: res.data.data, category: res.data.data[0].slug }))
+      .catch(err => this.setState({ error: err }));
+    
   }
 
   public onDragEnd = result => {
@@ -81,7 +101,7 @@ export class OrderItems extends React.Component<any, any> {
   public handleSave = () => {
     this.state.items.map((item, i) => {
       Axios.put(`${API_URL}/${this.props.resource}/${item.slug}`, {
-        orderNumber: i + 1,
+        order: i + this.state.category + (i + 1),
       })
         .then(res => {
           console.log('RES: ', res);
@@ -91,12 +111,47 @@ export class OrderItems extends React.Component<any, any> {
     console.log('this.state.items: ', this.state.items);
   }
 
+  public toggle = async category => {
+    await this.setState({
+      category,
+    });
+
+    Axios.get(
+      `${API_URL}/${this.props.resource}?category=${category}&page=1&size=100`,
+    )
+      .then(res => {
+        console.log('RES: ', res);
+        this.setState({
+          items: res.data.data,
+        });
+      })
+      .catch(error => this.setState({ error }));
+  }
+
   public render() {
+    console.log(this.state);
     if (this.state.loading) {
       return <Loading />;
     }
     return (
       <React.Fragment>
+        {/*  */}
+        <Nav tabs className="nav-pills-primary nav-pills">
+            {this.state.categories && this.state.categories.map((category: any, i: number) => (
+              <NavItem key={i}>
+              <NavLink
+                onClick={() => {
+                  this.toggle(category.slug);
+                }}
+                className={this.state.category === category.slug ? 'active' : ''}
+                style={{ border: 'none' }}
+              >
+                {category.label}
+              </NavLink>
+            </NavItem>
+            ))}
+          </Nav>
+        {/*  */}
         <DragDropContext onDragEnd={this.onDragEnd}>
           <Droppable droppableId="droppable">
             {(provided, snapshot) => (
