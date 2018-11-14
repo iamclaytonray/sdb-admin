@@ -1,7 +1,6 @@
 import Axios from 'axios';
-import { CustomButton as Button } from 'components/CustomButton';
 import * as React from 'react';
-import { Card, CardBody, CardTitle, Form, Input } from 'reactstrap';
+import { Button, Card, CardBody, CardTitle, Form, Input } from 'reactstrap';
 import { API_URL } from '../../constants';
 
 // interface Props {

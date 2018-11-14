@@ -92,9 +92,9 @@ class SingleEvent extends React.Component<any, any> {
               <Input
                 type="text"
                 name="title"
+                placeholder="Title"
                 value={this.state.title}
                 onChange={this.handleInputChange}
-                className="form-control"
               />
             </FormGroup>
 
@@ -103,9 +103,9 @@ class SingleEvent extends React.Component<any, any> {
               <Input
                 type="text"
                 name="slug"
+                placeholder="Slug"
                 value={this.state.slug}
                 onChange={this.handleInputChange}
-                className="form-control"
               />
             </FormGroup>
 
@@ -120,9 +120,9 @@ class SingleEvent extends React.Component<any, any> {
               <Input
                 name="featuredImage"
                 type="text"
+                placeholder="Featured Image"
                 value={this.state.featuredImage}
                 onChange={this.handleInputChange}
-                className="form-control"
               />
             </FormGroup>
 
@@ -130,6 +130,7 @@ class SingleEvent extends React.Component<any, any> {
               <Label>Content</Label>
               <textarea
                 name="content"
+                placeholder="Content"
                 value={this.state.content}
                 onChange={this.handleInputChange}
                 className="form-control"

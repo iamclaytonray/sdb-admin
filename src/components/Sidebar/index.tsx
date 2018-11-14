@@ -1,7 +1,6 @@
-import { CustomButton as Button } from 'components/CustomButton';
 import * as React from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
-import { Nav } from 'reactstrap';
+import { Button, Nav } from 'reactstrap';
 
 const logo =
   'https://yt3.ggpht.com/-R26L2yuqZno/AAAAAAAAAAI/AAAAAAAAAAA/ItklyVrs2gw/s288-mo-c-c0xffffffff-rj-k-no/photo.jpg';
@@ -35,14 +34,7 @@ const SidebarComponent = ({ location }) => (
         SDB
       </Link>
       <div className="navbar-minimize">
-        <Button
-          simple="true"
-          neutral="true"
-          icon="true"
-          round="true"
-          id="minimizeSidebar"
-          onClick={minimizeSidebar}
-        >
+        <Button id="minimizeSidebar" onClick={minimizeSidebar} color="primary">
           <i className="now-ui-icons text_align-center visible-on-sidebar-regular" />
           <i className="now-ui-icons design_bullet-list-67 visible-on-sidebar-mini" />
         </Button>

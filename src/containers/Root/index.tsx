@@ -7,6 +7,7 @@ import { PrivateRoute } from 'containers/PrivateRoute';
 
 // Pages
 import { All } from 'pages/All';
+import { Dashboard } from 'pages/Dashboard';
 import { LoginPage } from 'pages/LoginPage';
 import { NewArticlePage } from 'pages/NewArticlePage';
 import { NewEventPage } from 'pages/NewEventPage';
@@ -25,6 +26,7 @@ import { SingleTabPage } from 'pages/SingleTabPage';
 export const Root = () => (
   <Switch>
     <Route exact path="/" component={LoginPage} />
+    <PrivateRoute exact path="/dashboard" component={Dashboard} />
 
     {/* Articles */}
     <Route
