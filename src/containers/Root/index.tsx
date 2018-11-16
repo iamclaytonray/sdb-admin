@@ -12,14 +12,12 @@ import { LoginPage } from 'pages/LoginPage';
 import { NewArticlePage } from 'pages/NewArticlePage';
 import { NewEventPage } from 'pages/NewEventPage';
 import { NewJewishPage } from 'pages/NewJewishPage';
-import { NewProductPage } from 'pages/NewProductPage';
 import { NewServicePage } from 'pages/NewServicePage';
 import { NewTabPage } from 'pages/NewTabPage';
 import { NotFoundPage } from 'pages/NotFoundPage';
 import { SingleArticlePage } from 'pages/SingleArticlePage';
 import { SingleEventPage } from 'pages/SingleEventPage';
 import { SingleJewishPage } from 'pages/SingleJewishPage';
-import { SingleProductPage } from 'pages/SingleProductPage';
 import { SingleServicePage } from 'pages/SingleServicePage';
 import { SingleTabPage } from 'pages/SingleTabPage';
 
@@ -193,41 +191,6 @@ export const Root = () => (
       exact
       path="/dashboard/services/:slug"
       component={SingleServicePage}
-    />
-
-    {/* Products */}
-    <Route
-      exact
-      path="/dashboard/products"
-      render={(props: any) =>
-        localStorage.getItem('token') !== null ? (
-          <DashboardWrapper>
-            <All
-              resource="products"
-              title="Products"
-              buttonText="Product"
-              {...props}
-            />
-          </DashboardWrapper>
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/',
-              state: { from: props.location },
-            }}
-          />
-        )
-      }
-    />
-    <PrivateRoute
-      exact
-      path="/dashboard/products/new"
-      component={NewProductPage}
-    />
-    <PrivateRoute
-      exact
-      path="/dashboard/products/:slug"
-      component={SingleProductPage}
     />
 
     <Route component={NotFoundPage} />

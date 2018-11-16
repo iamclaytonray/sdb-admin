@@ -59,11 +59,6 @@ const SidebarComponent = ({ location }) => (
           pathName={location.pathname}
         />
         <NavItem
-          name="Products"
-          location="/dashboard/products"
-          pathName={location.pathname}
-        />
-        <NavItem
           name="Menu Items"
           location="/dashboard/tabs"
           pathName={location.pathname}
