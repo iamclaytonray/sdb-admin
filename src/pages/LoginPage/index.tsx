@@ -15,8 +15,8 @@ import { API_URL } from '../../constants';
 
 export class LoginPage extends React.Component<any, any> {
   public state = {
-    email: 'rabbi@1messiah.org',
-    password: 'password',
+    email: '',
+    password: '',
     error: null,
   };
 

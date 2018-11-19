@@ -43,41 +43,54 @@ export class OrderItems extends React.Component<any, any> {
   };
 
   public componentDidMount() {
-    this.fetch();
-    this.fetchCategories();
+    this.setState({ categories: [] });
+    this.fetchTabs();
   }
 
   public async componentDidUpdate(prevProps: any) {
     if (prevProps.resource !== this.props.resource) {
-      await this.fetchCategories();
+      if (this.props.resource === 'articles' || this.props.resource === 'services') {
+        console.log('hit');
+        this.fetchTabs();
+      }
+
+      this.setState({ categories: [] });
       this.fetch();
     }
   }
 
-  public fetch = () => {
-    Axios.get(`${API_URL}/${this.props.resource}/unfiltered`)
-      .then(res => {
-        this.setState({
-          loading: false,
-          items: res.data.data,
-        });
-      })
-      .catch(err => this.setState({ loading: false, error: err }));
+  public fetchTabs = () => {
+    Axios.get(`${API_URL}/tabs/${
+      (this.props.resource === 'articles')
+      ? 'discoveries'
+      : (this.props.resource === 'services')
+      ? 'services'
+      : null
+    }`)
+    .then(res => {
+      this.setState({ categories: res.data.data, category: res.data.data[0].slug });
+      this.fetch();
+  })
+    .catch(err => this.setState({ error: err }));
   }
 
-  public fetchCategories = () => {
-    if (this.props.resource !== 'articles' || this.props.resource !== 'services') {
-      this.setState({ categories: [] });
+  public fetch = async () => {
+    const { category } = this.state;
+
+    try {
+      const res = await Axios.get(
+        `${API_URL}/${this.props.resource}?category=${category}&page=1&size=100`,
+      );
+      this.setState({
+        loading: false,
+        items: res.data.data,
+      });
+    } catch (err) {
+      this.setState({
+        loading: false,
+        error: err.response.data.error,
+      });
     }
-    Axios.get(`${API_URL}/tabs/${
-        (this.props.resource === 'articles')
-        ? 'discoveries'
-        : (this.props.resource === 'services')
-        ? 'services'
-        : null
-      }`)
-      .then(res => this.setState({ categories: res.data.data, category: res.data.data[0].slug }))
-      .catch(err => this.setState({ error: err }));
     
   }
 
