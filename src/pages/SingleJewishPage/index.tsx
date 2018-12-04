@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
 import * as React from 'react';
 import {
@@ -14,20 +13,38 @@ import {
 import { API_URL } from '../../constants';
 import { handleDelete } from '../../utils/methods';
 
-class SingleJewish extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      title: props.jewish.title,
-      slug: props.jewish.slug,
-      featuredImage: props.jewish.featuredImage,
-      description: props.jewish.description,
-      link: props.jewish.link,
-      published: props.jewish.published,
+export class SingleJewishPage extends React.Component<any, any> {
+  public state = {
+    title: '',
+    slug: '',
+    featuredImage: '',
+    link: '',
 
-      error: null,
-    };
+    error: null,
+    loading: true,
+  };
+
+  public componentDidMount() {
+    this.fetch();
   }
+
+  public fetch = async () => {
+    try {
+      const res = await Axios.get(
+        `${API_URL}/jewish/${this.props.match.params.slug}`,
+      );
+      this.setState({
+        loading: false,
+        title: res.data.data.title,
+        slug: res.data.data.slug,
+        featuredImage: res.data.data.featuredImage,
+        link: res.data.data.link,
+      });
+    } catch (error) {
+      this.setState({ loading: false, error: error.response.data.message });
+    }
+  }
+
   public handleInputChange = event => {
     const { target } = event;
     const { name } = target;
@@ -40,37 +57,14 @@ class SingleJewish extends React.Component<any, any> {
 
   public handleUpdate = (e: any) => {
     e.preventDefault();
-    const {
-      title,
-      slug,
-      featuredImage,
-      content,
-      published,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      address,
-      host,
-      phone,
-      email,
-    } = this.state;
+    const { title, slug, featuredImage, link } = this.state;
     Axios.put(
       `${API_URL}/jewish/${this.props.match.params.slug}`,
       {
         title,
         slug,
         featuredImage,
-        content,
-        published,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-        address,
-        host,
-        phone,
-        email,
+        link,
       },
       {
         headers: {
@@ -79,10 +73,20 @@ class SingleJewish extends React.Component<any, any> {
       },
     )
       .then(() => this.props.history.push('/dashboard/jewish'))
-      .catch(err => this.setState({ error: err }));
+      .catch(error => this.setState({ error: error.response.data.message }));
   }
 
   public render() {
+    if (this.state.loading) {
+      return <Loading />;
+    }
+    if (this.state.error) {
+      return (
+        <Card>
+          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
+        </Card>
+      );
+    }
     return (
       <Card>
         <CardBody>
@@ -127,17 +131,6 @@ class SingleJewish extends React.Component<any, any> {
             </FormGroup>
 
             <FormGroup>
-              <Label>Description</Label>
-              <Input
-                name="description"
-                type="text"
-                value={this.state.description}
-                onChange={this.handleInputChange}
-                className="form-control"
-              />
-            </FormGroup>
-
-            <FormGroup>
               <Label>Link</Label>
               <Input
                 name="link"
@@ -167,32 +160,5 @@ class SingleJewish extends React.Component<any, any> {
         </CardBody>
       </Card>
     );
-  }
-}
-
-export class SingleJewishPage extends React.Component<any, any> {
-  public state = {
-    loading: true,
-    error: null,
-    jewish: {},
-  };
-  public componentDidMount() {
-    Axios.get(`${API_URL}/jewish/${this.props.match.params.slug}`)
-      .then(res => {
-        this.setState({
-          loading: false,
-          jewish: res.data.data,
-        });
-      })
-      .catch(err => this.setState({ loading: false, error: err }));
-  }
-  public render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-    if (this.state.error) {
-      return <Error error={this.state.error} />;
-    }
-    return <SingleJewish jewish={this.state.jewish} {...this.props} />;
   }
 }

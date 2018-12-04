@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
 import { Part } from 'components/Part';
 import * as React from 'react';
@@ -15,19 +14,39 @@ import {
 import { API_URL } from '../../constants';
 import { handleDelete } from '../../utils/methods';
 
-class SingleService extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      title: props.service.title,
-      slug: props.service.slug,
-      featuredImage: props.service.featuredImage,
-      description: props.service.description,
-      category: props.service.category,
-      parts: props.service.parts,
+export class SingleServicePage extends React.Component<any, any> {
+  public state = {
+    title: '',
+    slug: '',
+    featuredImage: '',
+    description: '',
+    category: '',
+    parts: [],
 
-      error: null,
-    };
+    loading: true,
+    error: null,
+  };
+
+  public componentDidMount() {
+    this.fetch();
+  }
+
+  public fetch = async() => {
+    try {
+      const res = await Axios.get(`${API_URL}/services/${this.props.match.params.slug}`);
+      this.setState({
+          loading: false,
+
+          title: res.data.data.title,
+          slug: res.data.data.slug,
+          featuredImage: res.data.data.featuredImage,
+          description: res.data.data.description,
+          category: res.data.data.category,
+          // parts: [],
+        });
+    } catch (error) {
+      this.setState({ loading: false, error: error.response.data.message });
+    }
   }
 
   public handleInputChange = event => {
@@ -77,10 +96,20 @@ class SingleService extends React.Component<any, any> {
       },
     )
       .then(() => this.props.history.push('/dashboard/services'))
-      .catch(err => this.setState({ error: err }));
+      .catch(error => this.setState({ error: error.response.data.message }));
   }
 
   public render() {
+    if (this.state.loading) {
+      return <Loading />;
+    }
+    if (this.state.error) {
+      return (
+        <Card>
+          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
+        </Card>
+      );
+    }
     return (
       <Card>
         <CardBody>
@@ -150,33 +179,5 @@ class SingleService extends React.Component<any, any> {
         </CardBody>
       </Card>
     );
-  }
-}
-
-export class SingleServicePage extends React.Component<any, any> {
-  public state = {
-    loading: true,
-    error: null,
-    service: {},
-  };
-  public componentDidMount() {
-    Axios.get(`${API_URL}/services/${this.props.match.params.slug}`)
-      .then(res => {
-        this.setState({
-          loading: false,
-          service: res.data.data,
-        });
-      })
-      .catch(err => this.setState({ loading: false, error: err }));
-  }
-  public render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-    if (this.state.error) {
-      return <Error error={this.state.error} />;
-    }
-    console.log(this.state.service);
-    return <SingleService service={this.state.service} {...this.props} />;
   }
 }

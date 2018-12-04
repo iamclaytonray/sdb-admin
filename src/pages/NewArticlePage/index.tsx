@@ -28,7 +28,7 @@ export class NewArticlePage extends React.Component<any, any> {
     });
   }
 
-  public handleSubmit = (e): any => {
+  public handleSubmit = async (e: any): Promise<any> => {
     e.preventDefault();
     const {
       title,
@@ -39,34 +39,42 @@ export class NewArticlePage extends React.Component<any, any> {
       content,
       // parts,
     } = this.state;
-    Axios.post(
-      `${API_URL}/articles`,
-      {
-        title,
-        slug,
-        featuredImage,
-        category,
-        link,
-        content,
-        parts: [],
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('token'),
+    try {
+      const res = await Axios.post(
+        `${API_URL}/articles`,
+        {
+          title,
+          slug,
+          featuredImage,
+          category,
+          link,
+          content,
+          parts: [],
+          order: category + Math.round(Math.random() * 1000),
         },
-      },
-    )
-      .then(res => {
-        this.props.history.push(`/dashboard/articles`);
-      })
-      .catch(err => {
-        this.setState({
-          error: err.response.data.error,
-        });
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      );
+      this.props.history.push(`/dashboard/articles`);
+    } catch (error) {
+      this.setState({
+        error: error.response ? error.response.data.error : error,
       });
+      window.scrollTo(0, 0);
+    }
   }
 
   public render() {
+    if (this.state.error) {
+      return (
+        <Card>
+          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
+        </Card>
+      );
+    }
     return (
       <Card>
         <CardBody>

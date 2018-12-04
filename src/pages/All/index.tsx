@@ -24,7 +24,7 @@ export class All extends React.Component<any, any> {
     error: null,
     data: null as any,
 
-    isToastOpen: false
+    isToastOpen: false,
   };
   public componentDidMount() {
     this.fetch();

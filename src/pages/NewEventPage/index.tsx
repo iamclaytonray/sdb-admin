@@ -38,12 +38,7 @@ export class NewEventPage extends React.Component<any, any> {
 
   public handleSubmit = (e): any => {
     e.preventDefault();
-    const {
-      title,
-      slug,
-      featuredImage,
-      content,
-    } = this.state;
+    const { title, slug, featuredImage, content } = this.state;
 
     Axios.post(
       `${API_URL}/events`,
@@ -52,6 +47,7 @@ export class NewEventPage extends React.Component<any, any> {
         slug,
         featuredImage,
         content,
+        orderNumber: Math.round(Math.random() * 1000),
       },
       {
         headers: {
@@ -62,8 +58,8 @@ export class NewEventPage extends React.Component<any, any> {
       .then(() => {
         this.props.history.push(`/dashboard/events`);
       })
-      .catch(err => {
-        this.setState({ error: err.response.data.error });
+      .catch(error => {
+        this.setState({ error: error.response.data.message });
         window.scroll(0, 0);
       });
   }

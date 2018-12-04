@@ -59,6 +59,7 @@ export class NewServicePage extends React.Component<any, any> {
         description,
         featuredImage,
         parts,
+        order: category + Math.round(Math.random() * 1000),
       },
       {
         headers: {
@@ -69,8 +70,8 @@ export class NewServicePage extends React.Component<any, any> {
       .then(() => {
         this.props.history.push(`/dashboard/services`);
       })
-      .catch(err => {
-        this.setState({ error: err.response.data.error });
+      .catch(error => {
+        this.setState({ error: error.response.data.message });
         window.scroll(0, 0);
       });
   }

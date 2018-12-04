@@ -14,17 +14,36 @@ import {
 } from 'reactstrap';
 import { API_URL } from '../../constants';
 
-class SingleEvent extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      title: props.event.title,
-      slug: props.event.slug,
-      featuredImage: props.event.featuredImage,
-      content: props.event.content,
+export class SingleEventPage extends React.Component<any, any> {
+  public state = {
+    title: '',
+    slug: '',
+    featuredImage: '',
+    content: '',
 
-      error: null,
-    };
+    loading: true,
+    error: null,
+  };
+
+  public componentDidMount() {
+    this.fetch();
+  }
+
+  public fetch = async () => {
+    try {
+      const res = await Axios.get(
+        `${API_URL}/events/${this.props.match.params.slug}`,
+      );
+      this.setState({
+        loading: false,
+        title: res.data.data.title,
+        slug: res.data.data.slug,
+        featuredImage: res.data.data.featuredImage,
+        content: res.data.data.content,
+      });
+    } catch (error) {
+      this.setState({ loading: false, error: error.response.data.message });
+    }
   }
 
   public handleInputChange = event => {
@@ -39,13 +58,7 @@ class SingleEvent extends React.Component<any, any> {
 
   public handleUpdate = (e: any) => {
     e.preventDefault();
-    const {
-      title,
-      slug,
-      featuredImage,
-      content,
-      email,
-    } = this.state;
+    const { title, slug, featuredImage, content } = this.state;
     Axios.put(
       `${API_URL}/events/${this.props.match.params.slug}`,
       {
@@ -53,7 +66,6 @@ class SingleEvent extends React.Component<any, any> {
         slug,
         featuredImage,
         content,
-        email,
       },
       {
         headers: {
@@ -62,23 +74,35 @@ class SingleEvent extends React.Component<any, any> {
       },
     )
       .then(() => this.props.history.push('/dashboard/events'))
-      .catch(err => {
-        this.setState({ error: err.response.data.error });
+      .catch(error => {
+        this.setState({ error: error.response.data.message });
         window.scroll(0, 0);
       });
   }
 
-  public handleDelete = () => {
-    alert('Are you sure?');
-    Axios.delete(`${API_URL}/events/${this.props.match.params.slug}`)
-      .then(() => this.props.history.push('/dashboard/events'))
-      .catch(err => {
-        this.setState({ error: err.response.data.error });
-        window.scroll(0, 0);
-      });
+  public handleDelete = async () => {
+    // const res = await window.confirm('Are you sure?');
+    try {
+      await Axios.delete(`${API_URL}/events/${this.props.match.params.slug}`);
+
+      this.props.history.push('/dashboard/events');
+    } catch (error) {
+      this.setState({ error: error.response.data.message });
+      window.scroll(0, 0);
+    }
   }
 
   public render() {
+    if (this.state.loading) {
+      return <Loading />;
+    }
+    if (this.state.error) {
+      return (
+        <Card>
+          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
+        </Card>
+      );
+    }
     return (
       <Card>
         <CardBody>
@@ -149,32 +173,5 @@ class SingleEvent extends React.Component<any, any> {
         </CardBody>
       </Card>
     );
-  }
-}
-
-export class SingleEventPage extends React.Component<any, any> {
-  public state = {
-    loading: true,
-    error: null,
-    event: {},
-  };
-  public componentDidMount() {
-    Axios.get(`${API_URL}/events/${this.props.match.params.slug}`)
-      .then(res => {
-        this.setState({
-          loading: false,
-          event: res.data.data,
-        });
-      })
-      .catch(err => this.setState({ loading: false, error: err }));
-  }
-  public render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-    if (this.state.error) {
-      return <Error error={this.state.error} />;
-    }
-    return <SingleEvent event={this.state.event} {...this.props} />;
   }
 }

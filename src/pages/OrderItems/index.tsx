@@ -43,14 +43,21 @@ export class OrderItems extends React.Component<any, any> {
   };
 
   public componentDidMount() {
-    this.setState({ categories: [] });
-    this.fetchTabs();
+    if (
+      this.props.resource === 'articles' ||
+      this.props.resource === 'services'
+    ) {
+      this.fetchTabs();
+    }
+    this.fetch();
   }
 
   public async componentDidUpdate(prevProps: any) {
     if (prevProps.resource !== this.props.resource) {
-      if (this.props.resource === 'articles' || this.props.resource === 'services') {
-        console.log('hit');
+      if (
+        this.props.resource === 'articles' ||
+        this.props.resource === 'services'
+      ) {
         this.fetchTabs();
       }
 
@@ -60,18 +67,24 @@ export class OrderItems extends React.Component<any, any> {
   }
 
   public fetchTabs = () => {
-    Axios.get(`${API_URL}/tabs/${
-      (this.props.resource === 'articles')
-      ? 'discoveries'
-      : (this.props.resource === 'services')
-      ? 'services'
-      : null
-    }`)
-    .then(res => {
-      this.setState({ categories: res.data.data, category: res.data.data[0].slug });
-      this.fetch();
-  })
-    .catch(err => this.setState({ error: err }));
+    Axios.get(
+      `${API_URL}/tabs/${
+        this.props.resource === 'articles'
+          ? 'discoveries'
+          : this.props.resource === 'services'
+            ? 'services'
+            : null
+      }`,
+    )
+      .then(res => {
+        this.setState({
+          loading: false,
+          categories: res.data.data,
+          category: res.data.data[0].slug,
+        });
+        this.fetch();
+      })
+      .catch(err => this.setState({ loading: false, error: err }));
   }
 
   public fetch = async () => {
@@ -79,7 +92,9 @@ export class OrderItems extends React.Component<any, any> {
 
     try {
       const res = await Axios.get(
-        `${API_URL}/${this.props.resource}?category=${category}&page=1&size=100`,
+        `${API_URL}/${
+          this.props.resource
+        }?category=${category}&page=1&size=100`,
       );
       this.setState({
         loading: false,
@@ -91,7 +106,6 @@ export class OrderItems extends React.Component<any, any> {
         error: err.response.data.error,
       });
     }
-    
   }
 
   public onDragEnd = result => {
@@ -113,9 +127,21 @@ export class OrderItems extends React.Component<any, any> {
 
   public handleSave = () => {
     this.state.items.map((item, i) => {
-      Axios.put(`${API_URL}/${this.props.resource}/${item.slug}`, {
-        order: i + this.state.category + (i + 1),
-      })
+      // console.log({
+      //   item: item,
+      //   category: this.state.category + (i + 1)
+      // });
+      Axios.put(
+        `${API_URL}/${this.props.resource}/${item.slug}`,
+        {
+          order: this.state.category + (i + 1),
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          } as any,
+        },
+      )
         .then(res => {
           console.log('RES: ', res);
         })
@@ -133,16 +159,14 @@ export class OrderItems extends React.Component<any, any> {
       `${API_URL}/${this.props.resource}?category=${category}&page=1&size=100`,
     )
       .then(res => {
-        console.log('RES: ', res);
         this.setState({
           items: res.data.data,
         });
       })
-      .catch(error => this.setState({ error }));
+      .catch(error => this.setState({ error: error.response.data.message }));
   }
 
   public render() {
-    console.log(this.state);
     if (this.state.loading) {
       return <Loading />;
     }
@@ -150,20 +174,23 @@ export class OrderItems extends React.Component<any, any> {
       <React.Fragment>
         {/*  */}
         <Nav tabs className="nav-pills-primary nav-pills">
-            {this.state.categories && this.state.categories.map((category: any, i: number) => (
+          {this.state.categories &&
+            this.state.categories.map((category: any, i: number) => (
               <NavItem key={i}>
-              <NavLink
-                onClick={() => {
-                  this.toggle(category.slug);
-                }}
-                className={this.state.category === category.slug ? 'active' : ''}
-                style={{ border: 'none' }}
-              >
-                {category.label}
-              </NavLink>
-            </NavItem>
+                <NavLink
+                  onClick={() => {
+                    this.toggle(category.slug);
+                  }}
+                  className={
+                    this.state.category === category.slug ? 'active' : ''
+                  }
+                  style={{ border: 'none' }}
+                >
+                  {category.label}
+                </NavLink>
+              </NavItem>
             ))}
-          </Nav>
+        </Nav>
         {/*  */}
         <DragDropContext onDragEnd={this.onDragEnd}>
           <Droppable droppableId="droppable">
@@ -172,7 +199,6 @@ export class OrderItems extends React.Component<any, any> {
                 ref={provided.innerRef}
                 style={getListStyle(snapshot.isDraggingOver)}
               >
-                <h1>Order</h1>
                 {this.state.items.map((item, index) => (
                   <Draggable key={index} draggableId={index} index={index}>
                     {/* tslint:disable-next-line */}
@@ -186,13 +212,13 @@ export class OrderItems extends React.Component<any, any> {
                           provided.draggableProps.style,
                         )}
                       >
-                        {
-                          (this.props.resource === 'tabs')
+                        {this.props.resource === 'tabs'
                           ? item.label
-                          : (this.props.resource === 'products')
-                          ? item.name
-                          : item.title
-                        }
+                          : this.props.resource === 'products'
+                            ? item.name
+                            : item.title}
+                        <br />
+                        <p>{item.order}</p>
                       </div>
                     )}
                   </Draggable>

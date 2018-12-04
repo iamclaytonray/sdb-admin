@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { Error } from 'components/Error';
+// import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
 import * as React from 'react';
 import {
@@ -13,16 +13,34 @@ import {
 } from 'reactstrap';
 import { API_URL } from '../../constants';
 
-class SingleTab extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      label: props.tab.label,
-      slug: props.tab.slug,
-      page: props.tab.page,
+export class SingleTabPage extends React.Component<any, any> {
+  public state = {
+    label: '',
+    slug: '',
+    page: '',
 
-      error: null,
-    };
+    loading: true,
+    error: null,
+  };
+
+  public componentDidMount() {
+    this.fetch();
+  }
+
+  public fetch = async () => {
+    try {
+      const res = await Axios.get(
+        `${API_URL}/tabs/${this.props.match.params.slug}`,
+      );
+      this.setState({
+        loading: false,
+        label: res.data.data.label,
+        slug: res.data.data.slug,
+        page: res.data.data.page,
+      });
+    } catch (error) {
+      this.setState({ loading: false, error: error.response.data.message });
+    }
   }
 
   public handleInputChange = event => {
@@ -52,7 +70,7 @@ class SingleTab extends React.Component<any, any> {
       },
     )
       .then(() => this.props.history.push('/dashboard/tabs'))
-      .catch(err => this.setState({ error: err }));
+      .catch(error => this.setState({ error: error.response.data.message }));
   }
 
   public handleDelete = () => {
@@ -63,6 +81,16 @@ class SingleTab extends React.Component<any, any> {
   }
 
   public render() {
+    if (this.state.loading) {
+      return <Loading />;
+    }
+    if (this.state.error) {
+      return (
+        <Card>
+          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
+        </Card>
+      );
+    }
     return (
       <Card>
         <CardBody>
@@ -112,32 +140,5 @@ class SingleTab extends React.Component<any, any> {
         </CardBody>
       </Card>
     );
-  }
-}
-
-export class SingleTabPage extends React.Component<any, any> {
-  public state = {
-    loading: true,
-    error: null,
-    tab: {},
-  };
-  public componentDidMount() {
-    Axios.get(`${API_URL}/tabs/${this.props.match.params.slug}`)
-      .then(res => {
-        this.setState({
-          loading: false,
-          tab: res.data.data,
-        });
-      })
-      .catch(err => this.setState({ loading: false, error: err }));
-  }
-  public render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-    if (this.state.error) {
-      return <Error error={this.state.error} />;
-    }
-    return <SingleTab tab={this.state.tab} {...this.props} />;
   }
 }

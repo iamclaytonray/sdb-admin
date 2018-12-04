@@ -46,6 +46,7 @@ export class NewJewishPage extends React.Component<any, any> {
         description,
         featuredImage,
         link,
+        orderNumber: Math.round(Math.random() * 1000),
       },
       {
         headers: {
@@ -56,8 +57,8 @@ export class NewJewishPage extends React.Component<any, any> {
       .then(() => {
         this.props.history.push(`/dashboard/jewish`);
       })
-      .catch(err => {
-        this.setState({ error: err.response.data.error });
+      .catch(error => {
+        this.setState({ error: error.response.data.message });
         window.scroll(0, 0);
       });
   }

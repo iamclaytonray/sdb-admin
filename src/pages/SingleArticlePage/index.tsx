@@ -12,52 +12,46 @@ import {
   Label,
 } from 'reactstrap';
 import { API_URL } from '../../constants';
-import { handleDelete } from '../../utils/methods';
 
 export class SingleArticlePage extends React.Component<any, any> {
   public state = {
-    loading: true,
-    error: null,
-    article: {},
-  };
-  public componentDidMount() {
-    Axios.get(`${API_URL}/articles/${this.props.match.params.slug}`)
-      .then(res => {
-        this.setState({
-          loading: false,
-          article: res.data.data,
-        });
-      })
-      .catch(err => this.setState({ loading: false, error: err }));
-  }
-  public render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-    if (this.state.error) {
-      return <Error error={this.state.error} />;
-    }
+      title: '',
+      slug: '',
+      featuredImage: '',
+      category: '',
+      link: '',
+      content: '',
+      parts: [],
 
-    return <SingleArticle article={this.state.article} {...this.props} />;
-  }
-}
-
-class SingleArticle extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      title: props.article.title,
-      slug: props.article.slug,
-      featuredImage: props.article.featuredImage,
-      category: props.article.category,
-      link: props.article.link,
-      published: props.article.published,
-      content: props.article.content,
-      parts: props.article.parts,
-
+      loading: true,
       error: null,
     };
-  }
+
+    public componentDidMount() {
+      this.fetch();
+    }
+  
+    public fetch = async() => {
+      try {
+          const res = await Axios.get(
+            `${API_URL}/articles/${this.props.match.params.slug}`,
+          );
+      
+          this.setState({
+            loading: false,
+            
+            title: res.data.data.title,
+            slug: res.data.data.slug,
+            featuredImage: res.data.data.featuredImage,
+            category: res.data.data.category,
+            link: res.data.data.link,
+            content: res.data.data.content,
+            parts: res.data.data.parts,
+          });
+      } catch (error) {
+        this.setState({ loading: false, error: error.response.data.message });
+      }
+    }
 
   public onSelectChange = (e: any) => {
     console.log(e.target.selectedOptions);
@@ -75,7 +69,6 @@ class SingleArticle extends React.Component<any, any> {
       featuredImage,
       category,
       link,
-      published,
       content,
     } = this.state;
     Axios.put(
@@ -86,7 +79,6 @@ class SingleArticle extends React.Component<any, any> {
         featuredImage,
         category,
         link,
-        published,
         content,
       },
       {
@@ -96,13 +88,42 @@ class SingleArticle extends React.Component<any, any> {
       },
     )
       .then(() => this.props.history.push('/dashboard/articles'))
-      .catch(err => {
-        this.setState({ error: err.response.data.error });
+      .catch(error => {
+        console.log(error);
+        this.setState({ error: error.response.data.message });
         window.scroll(0, 0);
       });
   }
 
+  public handleDelete = async (e: any) => {
+    e.preventDefault();
+    const confirm = window.confirm('Are you sure?');
+    if (confirm) {
+      try {
+        await Axios.delete(
+          `${API_URL}/articles/${this.props.match.params.slug}`,
+        );
+        this.props.history.push(`/dashboard/articles`);
+      } catch (error) {
+        console.log(error);
+        this.setState({ error: error.response.data.message });
+      }
+      return;
+    }
+    return alert('Item not deleted');
+  }
+
   public render() {
+    if (this.state.loading) {
+      return <Loading />;
+    }
+    if (this.state.error) {
+      return (
+        <Card>
+          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
+        </Card>
+      );
+    }
     return (
       <Card>
         <CardBody>
@@ -178,16 +199,7 @@ class SingleArticle extends React.Component<any, any> {
               />
             </FormGroup>
 
-            <Button
-              color="danger"
-              onClick={() =>
-                handleDelete(
-                  'articles',
-                  this.props.match.params.slug,
-                  this.props.history,
-                )
-              }
-            >
+            <Button color="danger" onClick={(e: any) => this.handleDelete(e)}>
               Delete
             </Button>
             <Button color="primary" onClick={this.handleUpdate}>

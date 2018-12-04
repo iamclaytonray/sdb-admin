@@ -50,8 +50,8 @@ export class NewTabPage extends React.Component<any, any> {
       .then(() => {
         this.props.history.push(`/dashboard/tabs`);
       })
-      .catch(err => {
-        this.setState({ error: err.response.data.error });
+      .catch(error => {
+        this.setState({ error: error.response.data.message });
         window.scroll(0, 0);
       });
   }

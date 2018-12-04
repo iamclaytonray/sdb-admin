@@ -20,15 +20,17 @@ export class LoginPage extends React.Component<any, any> {
     error: null,
   };
 
-  public handleSubmit = (e): any => {
+  public handleSubmit = async (e): Promise<any> => {
     e.preventDefault();
     const { email, password } = this.state;
-    Axios.post(`${API_URL}/auth`, { email, password })
-      .then(res => {
-        localStorage.setItem('token', res.data.token);
-        this.props.history.push(`/dashboard`);
-      })
-      .catch(error => this.setState({ error: error.response.data.error }));
+    try {
+      const res = await Axios.post(`${API_URL}/auth`, { email, password });
+
+      localStorage.setItem('token', res.data.token);
+      this.props.history.push(`/dashboard`);
+    } catch (error) {
+      this.setState({ error: error.response.data.message });
+    }
   }
   public render() {
     return (
