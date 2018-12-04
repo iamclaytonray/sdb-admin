@@ -12,7 +12,6 @@ import {
   Label,
 } from 'reactstrap';
 import { API_URL } from '../../constants';
-import { handleDelete } from '../../utils/methods';
 
 export class SingleServicePage extends React.Component<any, any> {
   public state = {
@@ -99,6 +98,23 @@ export class SingleServicePage extends React.Component<any, any> {
       .catch(error => this.setState({ error: error.response.data.message }));
   }
 
+  public handleDelete = async (e: any) => {
+    e.preventDefault();
+    const confirm = window.confirm('Are you sure?');
+    if (confirm) {
+      try {
+        await Axios.delete(
+          `${API_URL}/services/${this.props.match.params.slug}`,
+        );
+        this.props.history.push(`/dashboard/services`);
+      } catch (error) {
+        this.setState({ error: error.response.data.message });
+      }
+      return;
+    }
+    return alert('Item not deleted');
+  }
+
   public render() {
     if (this.state.loading) {
       return <Loading />;
@@ -163,12 +179,7 @@ export class SingleServicePage extends React.Component<any, any> {
           </Form>
           <Button
             color="danger"
-            onClick={() =>
-              handleDelete(
-                'services',
-                this.props.match.params.slug,
-                this.props.history,
-              )
+            onClick={this.handleDelete
             }
           >
             Delete

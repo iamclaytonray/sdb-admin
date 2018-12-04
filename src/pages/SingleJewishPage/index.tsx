@@ -11,7 +11,6 @@ import {
   Label,
 } from 'reactstrap';
 import { API_URL } from '../../constants';
-import { handleDelete } from '../../utils/methods';
 
 export class SingleJewishPage extends React.Component<any, any> {
   public state = {
@@ -74,6 +73,23 @@ export class SingleJewishPage extends React.Component<any, any> {
     )
       .then(() => this.props.history.push('/dashboard/jewish'))
       .catch(error => this.setState({ error: error.response.data.message }));
+  }
+
+  public handleDelete = async (e: any) => {
+    e.preventDefault();
+    const confirm = window.confirm('Are you sure?');
+    if (confirm) {
+      try {
+        await Axios.delete(
+          `${API_URL}/services/${this.props.match.params.slug}`,
+        );
+        this.props.history.push(`/dashboard/services`);
+      } catch (error) {
+        this.setState({ error: error.response.data.message });
+      }
+      return;
+    }
+    return alert('Item not deleted');
   }
 
   public render() {
@@ -143,13 +159,7 @@ export class SingleJewishPage extends React.Component<any, any> {
 
             <Button
               color="danger"
-              onClick={() =>
-                handleDelete(
-                  'jewish',
-                  this.props.match.params.slug,
-                  this.props.history,
-                )
-              }
+              onClick={this.handleDelete}
             >
               Delete
             </Button>

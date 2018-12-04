@@ -199,7 +199,7 @@ export class SingleArticlePage extends React.Component<any, any> {
               />
             </FormGroup>
 
-            <Button color="danger" onClick={(e: any) => this.handleDelete(e)}>
+            <Button color="danger" onClick={this.handleDelete}>
               Delete
             </Button>
             <Button color="primary" onClick={this.handleUpdate}>

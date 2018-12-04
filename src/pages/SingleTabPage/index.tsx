@@ -53,31 +53,45 @@ export class SingleTabPage extends React.Component<any, any> {
     });
   }
 
-  public handleUpdate = (e: any) => {
+  public handleUpdate = async (e: any) => {
     e.preventDefault();
     const { label, slug, page } = this.state;
-    Axios.put(
-      `${API_URL}/tabs/${this.props.match.params.slug}`,
-      {
-        label,
-        slug,
-        page,
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('token'),
+    try {
+      await Axios.put(
+        `${API_URL}/tabs/${this.props.match.params.slug}`,
+        {
+          label,
+          slug,
+          page,
         },
-      },
-    )
-      .then(() => this.props.history.push('/dashboard/tabs'))
-      .catch(error => this.setState({ error: error.response.data.message }));
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      );
+      
+      this.props.history.push('/dashboard/tabs');
+    } catch (error) {
+      this.setState({ error: error.response.data.message });
+    }
   }
 
-  public handleDelete = () => {
-    alert('Are you sure?');
-    Axios.delete(`${API_URL}/tabs/${this.props.match.params.slug}`)
-      .then(() => this.props.history.push('/dashboard/tabs'))
-      .catch(err => console.log(err));
+  public handleDelete = async (e: any) => {
+    e.preventDefault();
+    const confirm = window.confirm('Are you sure?');
+    if (confirm) {
+      try {
+        await Axios.delete(
+          `${API_URL}/tabs/${this.props.match.params.slug}`,
+        );
+        this.props.history.push(`/dashboard/tabs`);
+      } catch (error) {
+        this.setState({ error: error.response.data.message });
+      }
+      return;
+    }
+    return alert('Item not deleted');
   }
 
   public render() {
