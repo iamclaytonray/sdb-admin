@@ -31,7 +31,7 @@ export class LoginPage extends React.Component<any, any> {
     } catch (error) {
       this.setState({ error: error.response.data.message });
     }
-  }
+  };
   public render() {
     return (
       <Card>

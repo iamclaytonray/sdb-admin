@@ -15,85 +15,79 @@ import { API_URL } from '../../constants';
 
 export class SingleArticlePage extends React.Component<any, any> {
   public state = {
-      title: '',
-      slug: '',
-      featuredImage: '',
-      category: '',
-      link: '',
-      content: '',
-      parts: [],
+    title: '',
+    slug: '',
+    featuredImage: '',
+    category: '',
+    link: '',
+    content: '',
+    parts: [],
 
-      loading: true,
-      error: null,
-    };
+    loading: true,
+    error: null,
+  };
 
-    public componentDidMount() {
-      this.fetch();
+  public componentDidMount() {
+    this.fetch();
+  }
+
+  public fetch = async () => {
+    try {
+      const res = await Axios.get(
+        `${API_URL}/articles/${this.props.match.params.slug}`,
+      );
+
+      this.setState({
+        loading: false,
+
+        title: res.data.data.title,
+        slug: res.data.data.slug,
+        featuredImage: res.data.data.featuredImage,
+        category: res.data.data.category,
+        link: res.data.data.link,
+        content: res.data.data.content,
+        parts: res.data.data.parts,
+      });
+    } catch (error) {
+      this.setState({ loading: false, error: error.response.data.message });
     }
-  
-    public fetch = async() => {
-      try {
-          const res = await Axios.get(
-            `${API_URL}/articles/${this.props.match.params.slug}`,
-          );
-      
-          this.setState({
-            loading: false,
-            
-            title: res.data.data.title,
-            slug: res.data.data.slug,
-            featuredImage: res.data.data.featuredImage,
-            category: res.data.data.category,
-            link: res.data.data.link,
-            content: res.data.data.content,
-            parts: res.data.data.parts,
-          });
-      } catch (error) {
-        this.setState({ loading: false, error: error.response.data.message });
-      }
-    }
+  };
 
   public onSelectChange = (e: any) => {
-    console.log(e.target.selectedOptions);
+    // console.log(e.target.selectedOptions);
     let value: any = Array.from(
       e.target.selectedOptions as HTMLOptionsCollection,
       option => option.value,
     );
     this.setState({ parts: value });
-  }
+  };
 
-  public handleUpdate = () => {
-    const {
-      title,
-      slug,
-      featuredImage,
-      category,
-      link,
-      content,
-    } = this.state;
-    Axios.put(
-      `${API_URL}/articles/${this.props.match.params.slug}`,
-      {
-        title,
-        slug,
-        featuredImage,
-        category,
-        link,
-        content,
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('token'),
+  public handleUpdate = async () => {
+    const { title, slug, featuredImage, category, link, content } = this.state;
+    try {
+      await Axios.put(
+        `${API_URL}/articles/${this.props.match.params.slug}`,
+        {
+          title,
+          slug,
+          featuredImage,
+          category,
+          link,
+          content,
         },
-      },
-    )
-      .then(() => this.props.history.push('/dashboard/articles'))
-      .catch(error => {
-        console.log(error);
-        this.setState({ error: error.response.data.message });
-        window.scroll(0, 0);
-      });
-  }
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      );
+      this.props.history.push('/dashboard/articles');
+    } catch (error) {
+      // console.log(error);
+      this.setState({ error: error.response.data.message });
+      window.scroll(0, 0);
+    }
+  };
 
   public handleDelete = async (e: any) => {
     e.preventDefault();
@@ -105,13 +99,13 @@ export class SingleArticlePage extends React.Component<any, any> {
         );
         this.props.history.push(`/dashboard/articles`);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         this.setState({ error: error.response.data.message });
       }
       return;
     }
     return alert('Item not deleted');
-  }
+  };
 
   public render() {
     if (this.state.loading) {

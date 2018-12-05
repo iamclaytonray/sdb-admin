@@ -1,4 +1,3 @@
-// import { TextEditor } from 'components/TextEditor';
 import Axios from 'axios';
 import { Error } from 'components/Error';
 import * as React from 'react';
@@ -24,8 +23,6 @@ export class NewEventPage extends React.Component<any, any> {
     error: null,
   };
 
-  public onEditorChange = editor => this.setState({ editor });
-
   public handleInputChange = event => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -34,35 +31,35 @@ export class NewEventPage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
   public handleSubmit = (e): any => {
     e.preventDefault();
     const { title, slug, featuredImage, content } = this.state;
 
-    Axios.post(
-      `${API_URL}/events`,
-      {
-        title,
-        slug,
-        featuredImage,
-        content,
-        orderNumber: Math.round(Math.random() * 1000),
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('token'),
+    try {
+      Axios.post(
+        `${API_URL}/events`,
+        {
+          title,
+          slug,
+          featuredImage,
+          content,
+          orderNumber: Math.round(Math.random() * 1000),
         },
-      },
-    )
-      .then(() => {
-        this.props.history.push(`/dashboard/events`);
-      })
-      .catch(error => {
-        this.setState({ error: error.response.data.message });
-        window.scroll(0, 0);
-      });
-  }
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      );
+
+      this.props.history.push(`/dashboard/events`);
+    } catch (error) {
+      this.setState({ error: error.response.data.message });
+      window.scroll(0, 0);
+    }
+  };
 
   public render() {
     return (

@@ -42,7 +42,7 @@ export class SingleJewishPage extends React.Component<any, any> {
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
-  }
+  };
 
   public handleInputChange = event => {
     const { target } = event;
@@ -52,28 +52,33 @@ export class SingleJewishPage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
-  public handleUpdate = (e: any) => {
+  public handleUpdate = async (e: any) => {
     e.preventDefault();
     const { title, slug, featuredImage, link } = this.state;
-    Axios.put(
-      `${API_URL}/jewish/${this.props.match.params.slug}`,
-      {
-        title,
-        slug,
-        featuredImage,
-        link,
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('token'),
+    try {
+      await Axios.put(
+        `${API_URL}/jewish/${this.props.match.params.slug}`,
+        {
+          title,
+          slug,
+          featuredImage,
+          link,
         },
-      },
-    )
-      .then(() => this.props.history.push('/dashboard/jewish'))
-      .catch(error => this.setState({ error: error.response.data.message }));
-  }
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      );
+
+      this.props.history.push('/dashboard/jewish');
+    } catch (error) {
+      this.setState({ error: error.response.data.message });
+      window.scrollTo(0, 0);
+    }
+  };
 
   public handleDelete = async (e: any) => {
     e.preventDefault();
@@ -86,11 +91,12 @@ export class SingleJewishPage extends React.Component<any, any> {
         this.props.history.push(`/dashboard/services`);
       } catch (error) {
         this.setState({ error: error.response.data.message });
+        window.scroll(0, 0);
       }
       return;
     }
     return alert('Item not deleted');
-  }
+  };
 
   public render() {
     if (this.state.loading) {
@@ -157,10 +163,7 @@ export class SingleJewishPage extends React.Component<any, any> {
               />
             </FormGroup>
 
-            <Button
-              color="danger"
-              onClick={this.handleDelete}
-            >
+            <Button color="danger" onClick={this.handleDelete}>
               Delete
             </Button>
             <Button color="primary" onClick={this.handleUpdate}>

@@ -44,7 +44,7 @@ export class SingleEventPage extends React.Component<any, any> {
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
-  }
+  };
 
   public handleInputChange = event => {
     const target = event.target;
@@ -54,43 +54,47 @@ export class SingleEventPage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
   public handleUpdate = (e: any) => {
     e.preventDefault();
     const { title, slug, featuredImage, content } = this.state;
-    Axios.put(
-      `${API_URL}/events/${this.props.match.params.slug}`,
-      {
-        title,
-        slug,
-        featuredImage,
-        content,
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      },
-    )
-      .then(() => this.props.history.push('/dashboard/events'))
-      .catch(error => {
-        this.setState({ error: error.response.data.message });
-        window.scroll(0, 0);
-      });
-  }
-
-  public handleDelete = async () => {
-    // const res = await window.confirm('Are you sure?');
     try {
-      await Axios.delete(`${API_URL}/events/${this.props.match.params.slug}`);
-
+      Axios.put(
+        `${API_URL}/events/${this.props.match.params.slug}`,
+        {
+          title,
+          slug,
+          featuredImage,
+          content,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      );
       this.props.history.push('/dashboard/events');
     } catch (error) {
       this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
     }
-  }
+  };
+
+  public handleDelete = async (e: any) => {
+    e.preventDefault();
+    const confirm = window.confirm('Are you sure?');
+    if (confirm) {
+      try {
+        await Axios.delete(`${API_URL}/events/${this.props.match.params.slug}`);
+        this.props.history.push(`/dashboard/events`);
+      } catch (error) {
+        this.setState({ error: error.response.data.message });
+        window.scroll(0, 0);
+      }
+      return;
+    }
+  };
 
   public render() {
     if (this.state.loading) {

@@ -1,7 +1,4 @@
-import { Error } from 'components/Error';
-import { Loading } from 'components/Loading';
-import { SharedTable } from 'components/SharedTable';
-// import { Toast } from 'components/Toast';
+import Axios from 'axios';
 import * as React from 'react';
 import {
   Card,
@@ -13,8 +10,12 @@ import {
   TabPane,
 } from 'reactstrap';
 
+import { Error } from 'components/Error';
+import { Loading } from 'components/Loading';
+import { SharedTable } from 'components/SharedTable';
+import { OrderItems } from 'pages/OrderItems';
+
 import { API_URL } from '../../constants';
-import { OrderItems } from '../OrderItems';
 
 export class All extends React.Component<any, any> {
   public state = {
@@ -26,9 +27,11 @@ export class All extends React.Component<any, any> {
 
     isToastOpen: false,
   };
+  
   public componentDidMount() {
     this.fetch();
   }
+
   public componentDidUpdate(prevProps: any) {
     if (prevProps.location.pathname !== this.props.location.pathname) {
       this.setState({ view: 'table', loading: true });
@@ -36,17 +39,16 @@ export class All extends React.Component<any, any> {
     }
   }
   public fetch = async () => {
-    fetch(`${API_URL}/${this.props.resource}/unfiltered`, {
-      method: 'get',
-      headers: {
-        Authorization: localStorage.getItem('token'),
-      } as any,
-    })
-      .then(res => res.json())
-      .then(res => {
-        this.setState({ loading: false, data: res.data });
-      })
-      .catch(error => this.setState({ loading: false, error: error }));
+    try {
+      const res = await Axios.get(`${API_URL}/${this.props.resource}/unfiltered`, {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        } as any,
+      });
+      this.setState({ loading: false, data: res.data.data });
+    } catch (error) {
+      this.setState({ loading: false, error: error });
+    }
   }
 
   public toggle = (tab: string) => {
@@ -65,10 +67,6 @@ export class All extends React.Component<any, any> {
     if (error) {
       return <Error error={error} />;
     }
-    // console.log('data', data);
-    // if (data.error) {
-    //   return <Error error={data.error} />;
-    // }
     return (
       <SharedTable
         data={data}

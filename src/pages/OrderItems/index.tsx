@@ -66,25 +66,26 @@ export class OrderItems extends React.Component<any, any> {
     }
   }
 
-  public fetchTabs = () => {
-    Axios.get(
-      `${API_URL}/tabs/${
-        this.props.resource === 'articles'
-          ? 'discoveries'
-          : this.props.resource === 'services'
-            ? 'services'
-            : null
-      }`,
-    )
-      .then(res => {
-        this.setState({
-          loading: false,
-          categories: res.data.data,
-          category: res.data.data[0].slug,
-        });
-        this.fetch();
-      })
-      .catch(err => this.setState({ loading: false, error: err }));
+  public fetchTabs = async () => {
+    try {
+      const res = await Axios.get(
+        `${API_URL}/tabs/${
+          this.props.resource === 'articles'
+            ? 'discoveries'
+            : this.props.resource === 'services'
+              ? 'services'
+              : null
+        }`,
+      );
+      this.setState({
+        loading: false,
+        categories: res.data.data,
+        category: res.data.data[0].slug,
+      });
+      this.fetch();
+    } catch (error) {
+      this.setState({ loading: false, error: error.response.data.error });
+    }
   }
 
   public fetch = async () => {
@@ -100,10 +101,10 @@ export class OrderItems extends React.Component<any, any> {
         loading: false,
         items: res.data.data,
       });
-    } catch (err) {
+    } catch (error) {
       this.setState({
         loading: false,
-        error: err.response.data.error,
+        error: error.response.data.error,
       });
     }
   }
@@ -125,27 +126,28 @@ export class OrderItems extends React.Component<any, any> {
     });
   }
 
-  public handleSave = () => {
-    this.state.items.map((item, i) => {
+  public handleSave = async () => {
+    this.state.items.map(async (item, i) => {
       // console.log({
       //   item: item,
       //   category: this.state.category + (i + 1)
       // });
-      Axios.put(
-        `${API_URL}/${this.props.resource}/${item.slug}`,
-        {
-          order: this.state.category + (i + 1),
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          } as any,
-        },
-      )
-        .then(res => {
-          console.log('RES: ', res);
-        })
-        .catch(err => console.log('ERR: ', err));
+      try {
+        const res = await Axios.put(
+          `${API_URL}/${this.props.resource}/${item.slug}`,
+          {
+            order: this.state.category + (i + 1),
+          },
+          {
+            headers: {
+              Authorization: localStorage.getItem('token'),
+            } as any,
+          },
+        );
+        console.log('RES: ', res);
+      } catch (error) {
+        console.log('ERR: ', error);
+      }
     });
     console.log('this.state.items: ', this.state.items);
   }
@@ -154,16 +156,19 @@ export class OrderItems extends React.Component<any, any> {
     await this.setState({
       category,
     });
-
-    Axios.get(
-      `${API_URL}/${this.props.resource}?category=${category}&page=1&size=100`,
-    )
-      .then(res => {
-        this.setState({
-          items: res.data.data,
-        });
-      })
-      .catch(error => this.setState({ error: error.response.data.message }));
+    try {
+      const res = await Axios.get(
+        `${API_URL}/${
+          this.props.resource
+        }?category=${category}&page=1&size=100`,
+      );
+      this.setState({
+        items: res.data.data,
+      });
+    } catch (error) {
+      this.setState({ error: error.response.data.message });
+      window.scrollTo(0, 0);
+    }
   }
 
   public render() {

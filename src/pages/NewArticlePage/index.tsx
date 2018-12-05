@@ -40,7 +40,7 @@ export class NewArticlePage extends React.Component<any, any> {
       // parts,
     } = this.state;
     try {
-      const res = await Axios.post(
+      await Axios.post(
         `${API_URL}/articles`,
         {
           title,

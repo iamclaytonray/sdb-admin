@@ -38,7 +38,7 @@ export class NewServicePage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
   public handleSubmit = (e): any => {
     e.preventDefault();
@@ -50,31 +50,32 @@ export class NewServicePage extends React.Component<any, any> {
       featuredImage,
       parts,
     } = this.state;
-    Axios.post(
-      `${API_URL}/services`,
-      {
-        title,
-        slug,
-        category,
-        description,
-        featuredImage,
-        parts,
-        order: category + Math.round(Math.random() * 1000),
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('token'),
+
+    try {
+      Axios.post(
+        `${API_URL}/services`,
+        {
+          title,
+          slug,
+          category,
+          description,
+          featuredImage,
+          parts,
+          order: category + Math.round(Math.random() * 1000),
         },
-      },
-    )
-      .then(() => {
-        this.props.history.push(`/dashboard/services`);
-      })
-      .catch(error => {
-        this.setState({ error: error.response.data.message });
-        window.scroll(0, 0);
-      });
-  }
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      );
+
+      this.props.history.push(`/dashboard/services`);
+    } catch (error) {
+      this.setState({ error: error.response.data.message });
+      window.scroll(0, 0);
+    }
+  };
 
   public onSelectChange = (e: any) => {
     let value: any = Array.from(
@@ -82,7 +83,7 @@ export class NewServicePage extends React.Component<any, any> {
       option => option.value,
     );
     this.setState({ parts: value });
-  }
+  };
 
   public render() {
     return (

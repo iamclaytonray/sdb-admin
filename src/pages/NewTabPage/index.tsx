@@ -31,29 +31,28 @@ export class NewTabPage extends React.Component<any, any> {
     });
   }
 
-  public handleSubmit = (e): any => {
+  public handleSubmit = async (e: any) => {
     e.preventDefault();
     const { label, slug, page } = this.state;
-    Axios.post(
-      `${API_URL}/tabs`,
-      {
-        label,
-        slug,
-        page,
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('token'),
+    try {
+      await Axios.post(
+        `${API_URL}/tabs`,
+        {
+          label,
+          slug,
+          page,
         },
-      },
-    )
-      .then(() => {
-        this.props.history.push(`/dashboard/tabs`);
-      })
-      .catch(error => {
-        this.setState({ error: error.response.data.message });
-        window.scroll(0, 0);
-      });
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      );
+      this.props.history.push(`/dashboard/tabs`);
+    } catch (error) {
+      this.setState({ error: error.response.data.message });
+      window.scroll(0, 0);
+    }
   }
   public render() {
     console.log(this.state);

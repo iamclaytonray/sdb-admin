@@ -32,36 +32,36 @@ export class NewJewishPage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
-  public handleSubmit = (e): any => {
+  public handleSubmit = async (e: any) => {
     e.preventDefault();
     const { title, slug, description, featuredImage, link } = this.state;
 
-    Axios.post(
-      `${API_URL}/jewish`,
-      {
-        title,
-        slug,
-        description,
-        featuredImage,
-        link,
-        orderNumber: Math.round(Math.random() * 1000),
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('token'),
+    try {
+      await Axios.post(
+        `${API_URL}/jewish`,
+        {
+          title,
+          slug,
+          description,
+          featuredImage,
+          link,
+          orderNumber: Math.round(Math.random() * 1000),
         },
-      },
-    )
-      .then(() => {
-        this.props.history.push(`/dashboard/jewish`);
-      })
-      .catch(error => {
-        this.setState({ error: error.response.data.message });
-        window.scroll(0, 0);
-      });
-  }
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      );
+
+      this.props.history.push(`/dashboard/jewish`);
+    } catch (error) {
+      this.setState({ error: error.response.data.message });
+      window.scroll(0, 0);
+    }
+  };
   public render() {
     return (
       <Card>

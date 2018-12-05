@@ -30,23 +30,25 @@ export class SingleServicePage extends React.Component<any, any> {
     this.fetch();
   }
 
-  public fetch = async() => {
+  public fetch = async () => {
     try {
-      const res = await Axios.get(`${API_URL}/services/${this.props.match.params.slug}`);
+      const res = await Axios.get(
+        `${API_URL}/services/${this.props.match.params.slug}`,
+      );
       this.setState({
-          loading: false,
+        loading: false,
 
-          title: res.data.data.title,
-          slug: res.data.data.slug,
-          featuredImage: res.data.data.featuredImage,
-          description: res.data.data.description,
-          category: res.data.data.category,
-          // parts: [],
-        });
+        title: res.data.data.title,
+        slug: res.data.data.slug,
+        featuredImage: res.data.data.featuredImage,
+        description: res.data.data.description,
+        category: res.data.data.category,
+        // parts: [],
+      });
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
-  }
+  };
 
   public handleInputChange = event => {
     const { target } = event;
@@ -56,7 +58,7 @@ export class SingleServicePage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
   public onSelectChange = (e: any) => {
     let value: any = Array.from(
@@ -66,7 +68,7 @@ export class SingleServicePage extends React.Component<any, any> {
     console.log(value);
     // let values = Array.from(e.target.value, (option: any) => option.value);
     this.setState({ parts: value });
-  }
+  };
 
   public handleUpdate = (e: any) => {
     e.preventDefault();
@@ -78,25 +80,28 @@ export class SingleServicePage extends React.Component<any, any> {
       category,
       parts,
     } = this.state;
-    Axios.put(
-      `${API_URL}/services/${this.props.match.params.slug}`,
-      {
-        title,
-        featuredImage,
-        description,
-        slug,
-        category,
-        parts,
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('token'),
+    try {
+      Axios.put(
+        `${API_URL}/services/${this.props.match.params.slug}`,
+        {
+          title,
+          featuredImage,
+          description,
+          slug,
+          category,
+          parts,
         },
-      },
-    )
-      .then(() => this.props.history.push('/dashboard/services'))
-      .catch(error => this.setState({ error: error.response.data.message }));
-  }
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      );
+      this.props.history.push('/dashboard/services');
+    } catch (error) {
+      this.setState({ error: error.response.data.message });
+    }
+  };
 
   public handleDelete = async (e: any) => {
     e.preventDefault();
@@ -113,7 +118,7 @@ export class SingleServicePage extends React.Component<any, any> {
       return;
     }
     return alert('Item not deleted');
-  }
+  };
 
   public render() {
     if (this.state.loading) {
@@ -177,11 +182,7 @@ export class SingleServicePage extends React.Component<any, any> {
             <Part />
             {/*  */}
           </Form>
-          <Button
-            color="danger"
-            onClick={this.handleDelete
-            }
-          >
+          <Button color="danger" onClick={this.handleDelete}>
             Delete
           </Button>
           <Button color="primary" onClick={this.handleUpdate}>
