@@ -48,7 +48,7 @@ export class SingleServicePage extends React.Component<any, any> {
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
-  };
+  }
 
   public handleInputChange = event => {
     const { target } = event;
@@ -58,17 +58,17 @@ export class SingleServicePage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  };
+  }
 
   public onSelectChange = (e: any) => {
-    let value: any = Array.from(
+    const value: any = Array.from(
       e.target.selectedOptions as HTMLOptionsCollection,
       option => option.value,
     );
     console.log(value);
     // let values = Array.from(e.target.value, (option: any) => option.value);
     this.setState({ parts: value });
-  };
+  }
 
   public handleUpdate = (e: any) => {
     e.preventDefault();
@@ -101,7 +101,7 @@ export class SingleServicePage extends React.Component<any, any> {
     } catch (error) {
       this.setState({ error: error.response.data.message });
     }
-  };
+  }
 
   public handleDelete = async (e: any) => {
     e.preventDefault();
@@ -118,7 +118,7 @@ export class SingleServicePage extends React.Component<any, any> {
       return;
     }
     return alert('Item not deleted');
-  };
+  }
 
   public render() {
     if (this.state.loading) {

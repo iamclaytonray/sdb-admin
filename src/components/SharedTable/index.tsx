@@ -21,10 +21,10 @@ export class SharedTable extends React.Component<any, any> {
               {prop.title
                 ? prop.title
                 : prop.label
-                  ? prop.label
-                  : prop.name
-                    ? prop.name
-                    : 'Undefined prop'}
+                ? prop.label
+                : prop.name
+                ? prop.name
+                : 'Undefined prop'}
             </Link>
           ),
           slug: prop.slug ? prop.slug : prop._id,

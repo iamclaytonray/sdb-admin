@@ -32,7 +32,7 @@ export class NewJewishPage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  };
+  }
 
   public handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -61,7 +61,7 @@ export class NewJewishPage extends React.Component<any, any> {
       this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
     }
-  };
+  }
   public render() {
     return (
       <Card>

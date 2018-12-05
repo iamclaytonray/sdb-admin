@@ -51,16 +51,16 @@ export class SingleArticlePage extends React.Component<any, any> {
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
-  };
+  }
 
   public onSelectChange = (e: any) => {
     // console.log(e.target.selectedOptions);
-    let value: any = Array.from(
+    const value: any = Array.from(
       e.target.selectedOptions as HTMLOptionsCollection,
       option => option.value,
     );
     this.setState({ parts: value });
-  };
+  }
 
   public handleUpdate = async () => {
     const { title, slug, featuredImage, category, link, content } = this.state;
@@ -87,7 +87,7 @@ export class SingleArticlePage extends React.Component<any, any> {
       this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
     }
-  };
+  }
 
   public handleDelete = async (e: any) => {
     e.preventDefault();
@@ -105,7 +105,7 @@ export class SingleArticlePage extends React.Component<any, any> {
       return;
     }
     return alert('Item not deleted');
-  };
+  }
 
   public render() {
     if (this.state.loading) {

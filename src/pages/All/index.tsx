@@ -27,7 +27,7 @@ export class All extends React.Component<any, any> {
 
     isToastOpen: false,
   };
-  
+
   public componentDidMount() {
     this.fetch();
   }
@@ -40,14 +40,17 @@ export class All extends React.Component<any, any> {
   }
   public fetch = async () => {
     try {
-      const res = await Axios.get(`${API_URL}/${this.props.resource}/unfiltered`, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        } as any,
-      });
+      const res = await Axios.get(
+        `${API_URL}/${this.props.resource}/unfiltered`,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          } as any,
+        },
+      );
       this.setState({ loading: false, data: res.data.data });
     } catch (error) {
-      this.setState({ loading: false, error: error });
+      this.setState({ loading: false, error });
     }
   }
 

@@ -73,8 +73,8 @@ export class OrderItems extends React.Component<any, any> {
           this.props.resource === 'articles'
             ? 'discoveries'
             : this.props.resource === 'services'
-              ? 'services'
-              : null
+            ? 'services'
+            : null
         }`,
       );
       this.setState({
@@ -220,8 +220,8 @@ export class OrderItems extends React.Component<any, any> {
                         {this.props.resource === 'tabs'
                           ? item.label
                           : this.props.resource === 'products'
-                            ? item.name
-                            : item.title}
+                          ? item.name
+                          : item.title}
                         <br />
                         <p>{item.order}</p>
                       </div>

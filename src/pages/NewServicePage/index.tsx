@@ -38,7 +38,7 @@ export class NewServicePage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  };
+  }
 
   public handleSubmit = (e): any => {
     e.preventDefault();
@@ -75,15 +75,15 @@ export class NewServicePage extends React.Component<any, any> {
       this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
     }
-  };
+  }
 
   public onSelectChange = (e: any) => {
-    let value: any = Array.from(
+    const value: any = Array.from(
       e.target.selectedOptions as HTMLOptionsCollection,
       option => option.value,
     );
     this.setState({ parts: value });
-  };
+  }
 
   public render() {
     return (

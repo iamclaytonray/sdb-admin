@@ -4,7 +4,7 @@
   "singleQuote": true,
   "trailingComma": "all",
   "jsxBracketSameLine": false,
-  "parser": "babylon",
+  "parser": "typescript",
   "semi": true,
   "proseWrap": "never"
 }
