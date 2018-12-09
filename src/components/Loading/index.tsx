@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-export const Loading = () => {
-  return (
-    <div>
-      <h1>Loading...</h1>
-    </div>
-  );
-};
+import './loading.scss';
+
+export const Loading = () => (
+  <div className="padding-50 centered">
+    <div className="loader" />
+  </div>
+);

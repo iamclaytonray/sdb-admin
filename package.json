@@ -6,9 +6,9 @@
     "start": "NODE_PATH=src BROWSER=none PORT=8081 node scripts/start.js",
     "build": "NODE_PATH=src node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "deploy": "aws --profile shoreshdavidbrandon s3 cp build s3://admin.shoreshdavidbrandon.com --recursive",
     "prettier:tsx": "npx prettier --write 'src/**/*.tsx'",
-    "prettier:scss": "npx prettier --write 'src/**/*.scss'"
+    "prettier:scss": "npx prettier --write 'src/**/*.scss'",
+    "tslint-check": "tslint-config-prettier-check ./tslint.json"
   },
   "dependencies": {
     "axios": "0.18.0",
