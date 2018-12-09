@@ -86,9 +86,14 @@ export class SingleJewishPage extends React.Component<any, any> {
     if (confirm) {
       try {
         await Axios.delete(
-          `${API_URL}/services/${this.props.match.params.slug}`,
+          `${API_URL}/jewish/${this.props.match.params.slug}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem('token'),
+            },
+          },
         );
-        this.props.history.push(`/dashboard/services`);
+        this.props.history.push(`/dashboard/jewish`);
       } catch (error) {
         this.setState({ error: error.response.data.message });
         window.scroll(0, 0);

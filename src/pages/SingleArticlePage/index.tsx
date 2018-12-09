@@ -1,7 +1,6 @@
 import Axios from 'axios';
-import { Error } from 'components/Error';
-import { Loading } from 'components/Loading';
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   Button,
   Card,
@@ -13,7 +12,13 @@ import {
 } from 'reactstrap';
 import { API_URL } from '../../constants';
 
-export class SingleArticlePage extends React.Component<any, any> {
+import { ColorSwatch } from 'components/ColorSwatch';
+import { Error } from 'components/Error';
+import { Loading } from 'components/Loading';
+import { PartsForm } from 'components/PartForm';
+import { Toast } from 'components/Toast';
+
+export class SingleArticle extends React.Component<any, any> {
   public state = {
     title: '',
     slug: '',
@@ -21,10 +26,13 @@ export class SingleArticlePage extends React.Component<any, any> {
     category: '',
     link: '',
     content: '',
+    color: '',
     parts: [],
 
     loading: true,
     error: null,
+
+    isToastOpen: false,
   };
 
   public componentDidMount() {
@@ -37,6 +45,8 @@ export class SingleArticlePage extends React.Component<any, any> {
         `${API_URL}/articles/${this.props.match.params.slug}`,
       );
 
+      console.log(res.data);
+
       this.setState({
         loading: false,
 
@@ -47,23 +57,24 @@ export class SingleArticlePage extends React.Component<any, any> {
         link: res.data.data.link,
         content: res.data.data.content,
         parts: res.data.data.parts,
+        color: res.data.data.color,
       });
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
   }
 
-  public onSelectChange = (e: any) => {
-    // console.log(e.target.selectedOptions);
-    const value: any = Array.from(
-      e.target.selectedOptions as HTMLOptionsCollection,
-      option => option.value,
-    );
-    this.setState({ parts: value });
-  }
-
   public handleUpdate = async () => {
-    const { title, slug, featuredImage, category, link, content } = this.state;
+    // this.toast();
+    const {
+      title,
+      slug,
+      featuredImage,
+      category,
+      link,
+      content,
+      color,
+    } = this.state;
     try {
       await Axios.put(
         `${API_URL}/articles/${this.props.match.params.slug}`,
@@ -74,6 +85,8 @@ export class SingleArticlePage extends React.Component<any, any> {
           category,
           link,
           content,
+          color,
+          parts: this.props.formState.partsForm.values.parts,
         },
         {
           headers: {
@@ -89,13 +102,26 @@ export class SingleArticlePage extends React.Component<any, any> {
     }
   }
 
+  public toast = async () => {
+    this.setState({ isToastOpen: true });
+    setTimeout(() => {
+      this.setState({ isToastOpen: false });
+    },         2000);
+  }
+
   public handleDelete = async (e: any) => {
     e.preventDefault();
+    // this.toast();
     const confirm = window.confirm('Are you sure?');
     if (confirm) {
       try {
         await Axios.delete(
           `${API_URL}/articles/${this.props.match.params.slug}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem('token'),
+            },
+          },
         );
         this.props.history.push(`/dashboard/articles`);
       } catch (error) {
@@ -120,6 +146,7 @@ export class SingleArticlePage extends React.Component<any, any> {
     }
     return (
       <Card>
+        <Toast isOpen={this.state.isToastOpen} type="danger" />
         <CardBody>
           {this.state.error && <Error error={this.state.error} />}
           <Form>
@@ -183,6 +210,21 @@ export class SingleArticlePage extends React.Component<any, any> {
               />
             </FormGroup>
 
+            <ColorSwatch color={this.state.color} />
+
+            <select
+              name="color"
+              value={this.state.color}
+              onChange={(e: any) => this.setState({ color: e.target.value })}
+              className="form-control"
+            >
+              <option value="#5A17C7">Purple</option>
+              <option value="#031AF7">Dark Blue</option>
+              <option value="#08D316">Green</option>
+              <option value="#00ADFF">Light Blue</option>
+              <option value="#FF4600">Orange</option>
+            </select>
+
             <FormGroup>
               <Label>Content</Label>
               <textarea
@@ -192,6 +234,8 @@ export class SingleArticlePage extends React.Component<any, any> {
                 rows={10}
               />
             </FormGroup>
+
+            <PartsForm parts={this.state.parts} />
 
             <Button color="danger" onClick={this.handleDelete}>
               Delete
@@ -205,3 +249,9 @@ export class SingleArticlePage extends React.Component<any, any> {
     );
   }
 }
+
+const mapStateToProps = (state: any) => ({
+  formState: state.form,
+});
+
+export const SingleArticlePage = connect(mapStateToProps)(SingleArticle);

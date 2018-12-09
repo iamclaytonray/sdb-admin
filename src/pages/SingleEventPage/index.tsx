@@ -86,7 +86,14 @@ export class SingleEventPage extends React.Component<any, any> {
     const confirm = window.confirm('Are you sure?');
     if (confirm) {
       try {
-        await Axios.delete(`${API_URL}/events/${this.props.match.params.slug}`);
+        await Axios.delete(
+          `${API_URL}/events/${this.props.match.params.slug}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem('token'),
+            },
+          },
+        );
         this.props.history.push(`/dashboard/events`);
       } catch (error) {
         this.setState({ error: error.response.data.message });

@@ -13,6 +13,8 @@ import {
 } from 'reactstrap';
 import { API_URL } from '../../constants';
 
+import { ColorSwatch } from 'components/ColorSwatch';
+
 export class NewJewishPage extends React.Component<any, any> {
   public state = {
     title: '',
@@ -20,6 +22,7 @@ export class NewJewishPage extends React.Component<any, any> {
     description: '',
     featuredImage: '',
     link: '',
+    color: '',
 
     error: null,
   };
@@ -36,7 +39,7 @@ export class NewJewishPage extends React.Component<any, any> {
 
   public handleSubmit = async (e: any) => {
     e.preventDefault();
-    const { title, slug, description, featuredImage, link } = this.state;
+    const { title, slug, description, featuredImage, link, color } = this.state;
 
     try {
       await Axios.post(
@@ -48,6 +51,7 @@ export class NewJewishPage extends React.Component<any, any> {
           featuredImage,
           link,
           orderNumber: Math.round(Math.random() * 1000),
+          color,
         },
         {
           headers: {
@@ -131,6 +135,21 @@ export class NewJewishPage extends React.Component<any, any> {
                 onChange={this.handleInputChange}
               />
             </FormGroup>
+
+            <ColorSwatch color={this.state.color} />
+
+            <select
+              name="color"
+              value={this.state.color}
+              onChange={this.handleInputChange}
+              className="form-control"
+            >
+              <option value="#5A17C7">Purple</option>
+              <option value="#031AF7">Dark Blue</option>
+              <option value="#08D316">Green</option>
+              <option value="#00ADFF">Light Blue</option>
+              <option value="#FF4600">Orange</option>
+            </select>
 
             <Button color="primary" type="submit">
               Create

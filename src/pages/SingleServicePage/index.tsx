@@ -1,7 +1,6 @@
 import Axios from 'axios';
-import { Loading } from 'components/Loading';
-import { Part } from 'components/Part';
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   Button,
   Card,
@@ -13,13 +12,18 @@ import {
 } from 'reactstrap';
 import { API_URL } from '../../constants';
 
-export class SingleServicePage extends React.Component<any, any> {
+import { ColorSwatch } from 'components/ColorSwatch';
+import { Loading } from 'components/Loading';
+import { PartsForm } from 'components/PartForm';
+
+export class SingleService extends React.Component<any, any> {
   public state = {
     title: '',
     slug: '',
     featuredImage: '',
     description: '',
     category: '',
+    color: '',
     parts: [],
 
     loading: true,
@@ -35,6 +39,7 @@ export class SingleServicePage extends React.Component<any, any> {
       const res = await Axios.get(
         `${API_URL}/services/${this.props.match.params.slug}`,
       );
+      console.log(res);
       this.setState({
         loading: false,
 
@@ -43,7 +48,8 @@ export class SingleServicePage extends React.Component<any, any> {
         featuredImage: res.data.data.featuredImage,
         description: res.data.data.description,
         category: res.data.data.category,
-        // parts: [],
+        color: res.data.data.color,
+        parts: res.data.data.parts,
       });
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
@@ -60,26 +66,10 @@ export class SingleServicePage extends React.Component<any, any> {
     });
   }
 
-  public onSelectChange = (e: any) => {
-    const value: any = Array.from(
-      e.target.selectedOptions as HTMLOptionsCollection,
-      option => option.value,
-    );
-    console.log(value);
-    // let values = Array.from(e.target.value, (option: any) => option.value);
-    this.setState({ parts: value });
-  }
-
   public handleUpdate = (e: any) => {
     e.preventDefault();
-    const {
-      title,
-      featuredImage,
-      description,
-      slug,
-      category,
-      parts,
-    } = this.state;
+
+    const { title, featuredImage, description, slug, category } = this.state;
     try {
       Axios.put(
         `${API_URL}/services/${this.props.match.params.slug}`,
@@ -89,7 +79,7 @@ export class SingleServicePage extends React.Component<any, any> {
           description,
           slug,
           category,
-          parts,
+          parts: this.props.formState.partsForm.values.parts,
         },
         {
           headers: {
@@ -110,6 +100,11 @@ export class SingleServicePage extends React.Component<any, any> {
       try {
         await Axios.delete(
           `${API_URL}/services/${this.props.match.params.slug}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem('token'),
+            },
+          },
         );
         this.props.history.push(`/dashboard/services`);
       } catch (error) {
@@ -178,10 +173,25 @@ export class SingleServicePage extends React.Component<any, any> {
                 className="form-control"
               />
             </FormGroup>
-            {/*  */}
-            <Part />
-            {/*  */}
+
+            <ColorSwatch color={this.state.color} />
+
+            <select
+              name="color"
+              value={this.state.color}
+              onChange={(e: any) => this.setState({ color: e.target.value })}
+              className="form-control"
+            >
+              <option value="#5A17C7">Purple</option>
+              <option value="#031AF7">Dark Blue</option>
+              <option value="#08D316">Green</option>
+              <option value="#00ADFF">Light Blue</option>
+              <option value="#FF4600">Orange</option>
+            </select>
           </Form>
+          {/*  */}
+          <PartsForm parts={this.state.parts} />
+          {/*  */}
           <Button color="danger" onClick={this.handleDelete}>
             Delete
           </Button>
@@ -193,3 +203,9 @@ export class SingleServicePage extends React.Component<any, any> {
     );
   }
 }
+
+const mapStateToProps = (state: any) => ({
+  formState: state.form,
+});
+
+export const SingleServicePage = connect(mapStateToProps)(SingleService);

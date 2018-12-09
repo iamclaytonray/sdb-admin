@@ -2,8 +2,10 @@ import Axios from 'axios';
 import { Loading } from 'components/Loading';
 import * as React from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { Button, Nav, NavItem, NavLink } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { API_URL } from '../../constants';
+
+import { Error } from 'components/Error';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -38,64 +40,27 @@ export class OrderItems extends React.Component<any, any> {
     items: [] as any,
     loading: true,
     error: null,
-    categories: [] as any,
-    category: '',
   };
 
   public componentDidMount() {
-    if (
-      this.props.resource === 'articles' ||
-      this.props.resource === 'services'
-    ) {
-      this.fetchTabs();
-    }
     this.fetch();
   }
 
   public async componentDidUpdate(prevProps: any) {
     if (prevProps.resource !== this.props.resource) {
-      if (
-        this.props.resource === 'articles' ||
-        this.props.resource === 'services'
-      ) {
-        this.fetchTabs();
-      }
-
-      this.setState({ categories: [] });
       this.fetch();
-    }
-  }
-
-  public fetchTabs = async () => {
-    try {
-      const res = await Axios.get(
-        `${API_URL}/tabs/${
-          this.props.resource === 'articles'
-            ? 'discoveries'
-            : this.props.resource === 'services'
-            ? 'services'
-            : null
-        }`,
-      );
-      this.setState({
-        loading: false,
-        categories: res.data.data,
-        category: res.data.data[0].slug,
-      });
-      this.fetch();
-    } catch (error) {
-      this.setState({ loading: false, error: error.response.data.error });
     }
   }
 
   public fetch = async () => {
-    const { category } = this.state;
-
     try {
       const res = await Axios.get(
-        `${API_URL}/${
-          this.props.resource
-        }?category=${category}&page=1&size=100`,
+        `${API_URL}/${this.props.resource}/unfiltered?page=1&size=200`,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
       );
       this.setState({
         loading: false,
@@ -104,7 +69,7 @@ export class OrderItems extends React.Component<any, any> {
     } catch (error) {
       this.setState({
         loading: false,
-        error: error.response.data.error,
+        error: error.response.data.message,
       });
     }
   }
@@ -128,15 +93,11 @@ export class OrderItems extends React.Component<any, any> {
 
   public handleSave = async () => {
     this.state.items.map(async (item, i) => {
-      // console.log({
-      //   item: item,
-      //   category: this.state.category + (i + 1)
-      // });
       try {
         const res = await Axios.put(
           `${API_URL}/${this.props.resource}/${item.slug}`,
           {
-            order: this.state.category + (i + 1),
+            order: i + 1,
           },
           {
             headers: {
@@ -147,56 +108,21 @@ export class OrderItems extends React.Component<any, any> {
         console.log('RES: ', res);
       } catch (error) {
         console.log('ERR: ', error);
+        return;
       }
     });
     console.log('this.state.items: ', this.state.items);
-  }
-
-  public toggle = async category => {
-    await this.setState({
-      category,
-    });
-    try {
-      const res = await Axios.get(
-        `${API_URL}/${
-          this.props.resource
-        }?category=${category}&page=1&size=100`,
-      );
-      this.setState({
-        items: res.data.data,
-      });
-    } catch (error) {
-      this.setState({ error: error.response.data.message });
-      window.scrollTo(0, 0);
-    }
   }
 
   public render() {
     if (this.state.loading) {
       return <Loading />;
     }
+    if (this.state.error) {
+      return <Error error={this.state.error} />;
+    }
     return (
       <React.Fragment>
-        {/*  */}
-        <Nav tabs className="nav-pills-primary nav-pills">
-          {this.state.categories &&
-            this.state.categories.map((category: any, i: number) => (
-              <NavItem key={i}>
-                <NavLink
-                  onClick={() => {
-                    this.toggle(category.slug);
-                  }}
-                  className={
-                    this.state.category === category.slug ? 'active' : ''
-                  }
-                  style={{ border: 'none' }}
-                >
-                  {category.label}
-                </NavLink>
-              </NavItem>
-            ))}
-        </Nav>
-        {/*  */}
         <DragDropContext onDragEnd={this.onDragEnd}>
           <Droppable droppableId="droppable">
             {(provided, snapshot) => (
@@ -224,6 +150,8 @@ export class OrderItems extends React.Component<any, any> {
                           : item.title}
                         <br />
                         <p>{item.order}</p>
+                        <p>{item.category}</p>
+                        <p>{item.page}</p>
                       </div>
                     )}
                   </Draggable>

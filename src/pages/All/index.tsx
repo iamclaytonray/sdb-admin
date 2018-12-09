@@ -50,7 +50,7 @@ export class All extends React.Component<any, any> {
       );
       this.setState({ loading: false, data: res.data.data });
     } catch (error) {
-      this.setState({ loading: false, error });
+      this.setState({ loading: false, error: error.response.data.message });
     }
   }
 
@@ -82,6 +82,9 @@ export class All extends React.Component<any, any> {
     );
   }
   public render() {
+    if (this.state.error) {
+      return <Error error={this.state.error} />;
+    }
     return (
       <Card>
         <CardBody>

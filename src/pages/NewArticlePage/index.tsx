@@ -1,10 +1,14 @@
 import Axios from 'axios';
-import { Error } from 'components/Error';
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { Card, CardBody, CardTitle } from 'reactstrap';
 import { API_URL } from '../../constants';
 
-export class NewArticlePage extends React.Component<any, any> {
+import { ColorSwatch } from 'components/ColorSwatch';
+import { Error } from 'components/Error';
+import { PartsForm } from 'components/PartForm';
+
+export class NewArticle extends React.Component<any, any> {
   public state = {
     title: '',
     slug: '',
@@ -13,6 +17,7 @@ export class NewArticlePage extends React.Component<any, any> {
     link: '',
     featuredImage: '',
     parts: [] as any,
+    color: '',
 
     error: null,
     loading: true,
@@ -30,15 +35,7 @@ export class NewArticlePage extends React.Component<any, any> {
 
   public handleSubmit = async (e: any): Promise<any> => {
     e.preventDefault();
-    const {
-      title,
-      slug,
-      featuredImage,
-      category,
-      link,
-      content,
-      // parts,
-    } = this.state;
+    const { title, slug, featuredImage, category, link, content } = this.state;
     try {
       await Axios.post(
         `${API_URL}/articles`,
@@ -49,8 +46,7 @@ export class NewArticlePage extends React.Component<any, any> {
           category,
           link,
           content,
-          parts: [],
-          order: category + Math.round(Math.random() * 1000),
+          parts: this.props.formState.partsForm.values.parts,
         },
         {
           headers: {
@@ -153,6 +149,23 @@ export class NewArticlePage extends React.Component<any, any> {
               />
             </div>
 
+            <ColorSwatch color={this.state.color} />
+
+            <select
+              name="color"
+              value={this.state.color}
+              onChange={this.handleInputChange}
+              className="form-control"
+            >
+              <option value="#5A17C7">Purple</option>
+              <option value="#031AF7">Dark Blue</option>
+              <option value="#08D316">Green</option>
+              <option value="#00ADFF">Light Blue</option>
+              <option value="#FF4600">Orange</option>
+            </select>
+
+            <PartsForm />
+
             <button type="submit" className="btn btn-primary">
               Create
             </button>
@@ -162,3 +175,9 @@ export class NewArticlePage extends React.Component<any, any> {
     );
   }
 }
+
+const mapStateToProps = (state: any) => ({
+  formState: state.form,
+});
+
+export const NewArticlePage = connect(mapStateToProps)(NewArticle);

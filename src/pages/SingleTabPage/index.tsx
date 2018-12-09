@@ -82,7 +82,11 @@ export class SingleTabPage extends React.Component<any, any> {
     const confirm = window.confirm('Are you sure?');
     if (confirm) {
       try {
-        await Axios.delete(`${API_URL}/tabs/${this.props.match.params.slug}`);
+        await Axios.delete(`${API_URL}/tabs/${this.props.match.params.slug}`, {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        });
         this.props.history.push(`/dashboard/tabs`);
       } catch (error) {
         this.setState({ error: error.response.data.message });
