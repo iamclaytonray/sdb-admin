@@ -187,12 +187,21 @@ export class SingleJewishPage extends React.Component<any, any> {
               <option value="#FF4600">Orange</option>
             </select>
 
-            <Button color="danger" onClick={this.handleDelete}>
-              Delete All
-            </Button>
-            <Button color="primary" onClick={this.handleUpdate}>
-              Update
-            </Button>
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Button color="primary" onClick={this.handleUpdate}>
+                Update
+              </Button>
+              <Button color="danger" onClick={this.handleDelete}>
+                Delete All
+              </Button>
+            </div>
           </Form>
         </CardBody>
       </Card>

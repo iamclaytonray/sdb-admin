@@ -14,17 +14,34 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
   </div>
 );
 
+const handleRemovePart = async (index: number, fields: any) => {
+  const res = await window.confirm('Are you sure?');
+  if (!res) {
+    return;
+  }
+  fields.remove(index);
+};
+
 const renderMembers = ({ fields, meta: { touched, error, submitFailed } }) => (
   <ul style={{ listStyle: 'none', padding: 0 }}>
     <li>{(touched || submitFailed) && error && <span>{error}</span>}</li>
     {fields.map((part, index) => (
       <li key={index}>
-        {/* <button
-          type="button"
-          title="Remove Member"
-          onClick={() => fields.remove(index)}
-        /> */}
-        <h4>Part #{index + 1}</h4>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <h4>Part #{index + 1}</h4>
+
+          <i
+            className="fa fa-trash fa-lg"
+            style={{ color: '#ff3636' }}
+            onClick={() => handleRemovePart(index, fields)}
+          />
+        </div>
         <Field
           name={`${part}.title`}
           type="text"
@@ -36,6 +53,7 @@ const renderMembers = ({ fields, meta: { touched, error, submitFailed } }) => (
           type="text"
           component={renderField}
           label="Part Number"
+          defaultValue={index + 1}
         />
         <Field
           name={`${part}.youtubeLink`}

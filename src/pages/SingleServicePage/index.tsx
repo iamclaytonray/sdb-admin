@@ -200,12 +200,22 @@ export class SingleService extends React.Component<any, any> {
           {/*  */}
           <PartsForm parts={this.state.parts} />
           {/*  */}
-          <Button color="danger" onClick={this.handleDelete}>
-            Delete All
-          </Button>
-          <Button color="primary" onClick={this.handleUpdate}>
-            Update
-          </Button>
+
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Button color="primary" onClick={this.handleUpdate}>
+              Update
+            </Button>
+            <Button color="danger" onClick={this.handleDelete}>
+              Delete All
+            </Button>
+          </div>
         </CardBody>
       </Card>
     );
