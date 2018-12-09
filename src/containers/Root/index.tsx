@@ -35,8 +35,8 @@ export const Root = () => (
           <DashboardWrapper>
             <All
               resource="articles"
-              title="Articles"
-              buttonText="Article"
+              title="Discoveries"
+              buttonText="Discovery"
               {...props}
             />
           </DashboardWrapper>
@@ -167,8 +167,8 @@ export const Root = () => (
           <DashboardWrapper>
             <All
               resource="services"
-              title="Services"
-              buttonText="Service"
+              title="Teachings"
+              buttonText="Teaching"
               {...props}
             />
           </DashboardWrapper>

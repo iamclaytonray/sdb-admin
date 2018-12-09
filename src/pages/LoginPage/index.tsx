@@ -1,17 +1,7 @@
 import Axios from 'axios';
 import * as React from 'react';
-import { Button, Card, CardBody, CardTitle, Form, Input } from 'reactstrap';
+import { Button, Card, CardBody, CardTitle, Form } from 'reactstrap';
 import { API_URL } from '../../constants';
-
-// interface Props {
-//   history: any;
-//   onSubmit: () => void;
-// }
-
-// interface State {
-//   email: string;
-//   password: string;
-// }
 
 export class LoginPage extends React.Component<any, any> {
   public state = {
@@ -39,19 +29,23 @@ export class LoginPage extends React.Component<any, any> {
           <CardTitle>Login</CardTitle>
           {this.state.error && <p>{JSON.stringify(this.state.error)}</p>}
           <Form onSubmit={e => this.handleSubmit(e)}>
-            <Input
+            <input
               className="form-control"
               name="email"
               placeholder="Email"
+              type="email"
+              required
+              autoComplete="email"
               value={this.state.email}
               onChange={e => this.setState({ email: e.target.value })}
             />
             <br />
-            <Input
+            <input
               className="form-control"
               name="password"
               placeholder="Password"
               value={this.state.password}
+              type="password"
               onChange={e => this.setState({ password: e.target.value })}
             />
             <Button className="btn btn-primary" type="submit">

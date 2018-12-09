@@ -114,11 +114,6 @@ export class All extends React.Component<any, any> {
             <TabPane tabId="table">{this.renderTableView()}</TabPane>
             <TabPane tabId="order">{this.renderOrderView()}</TabPane>
           </TabContent>
-          {/* <Toast type="danger" isOpen={false} />
-          <Toast
-            type="danger"
-            visible={this.state.isOpen}
-          /> */}
         </CardBody>
       </Card>
     );

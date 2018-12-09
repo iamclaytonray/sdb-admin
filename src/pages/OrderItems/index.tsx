@@ -1,11 +1,12 @@
 import Axios from 'axios';
-import { Loading } from 'components/Loading';
 import * as React from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { Button } from 'reactstrap';
-import { API_URL } from '../../constants';
 
 import { Error } from 'components/Error';
+import { Loading } from 'components/Loading';
+
+import { API_URL } from '../../constants';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -19,13 +20,18 @@ const grid = 8;
 
 const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: 'none',
-  padding: grid * 2,
+  padding: 25,
   margin: `0 0 ${grid}px 0`,
   color: 'white',
   fontWeight: '700',
   letterSpacing: 1.2,
 
   background: isDragging ? 'lightgreen' : 'grey',
+
+  display: 'flex',
+  flex: 1,
+  justifyContent: 'space-between',
+  alignItems: 'center',
 
   ...draggableStyle,
 });
@@ -148,10 +154,8 @@ export class OrderItems extends React.Component<any, any> {
                           : this.props.resource === 'products'
                           ? item.name
                           : item.title}
-                        <br />
-                        <p>{item.order}</p>
-                        <p>{item.category}</p>
-                        <p>{item.page}</p>
+                        {item.category ? <span>{item.category}</span> : null}
+                        {item.page ? <span>{item.page}</span> : null}
                       </div>
                     )}
                   </Draggable>

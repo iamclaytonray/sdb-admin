@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { ColorSwatch } from 'components/ColorSwatch';
 import { Loading } from 'components/Loading';
 import * as React from 'react';
 import {
@@ -18,6 +19,7 @@ export class SingleJewishPage extends React.Component<any, any> {
     slug: '',
     featuredImage: '',
     link: '',
+    color: '',
 
     error: null,
     loading: true,
@@ -38,6 +40,7 @@ export class SingleJewishPage extends React.Component<any, any> {
         slug: res.data.data.slug,
         featuredImage: res.data.data.featuredImage,
         link: res.data.data.link,
+        color: res.data.data.color,
       });
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
@@ -56,7 +59,7 @@ export class SingleJewishPage extends React.Component<any, any> {
 
   public handleUpdate = async (e: any) => {
     e.preventDefault();
-    const { title, slug, featuredImage, link } = this.state;
+    const { title, slug, featuredImage, link, color } = this.state;
     try {
       await Axios.put(
         `${API_URL}/jewish/${this.props.match.params.slug}`,
@@ -65,6 +68,7 @@ export class SingleJewishPage extends React.Component<any, any> {
           slug,
           featuredImage,
           link,
+          color,
         },
         {
           headers: {
@@ -168,8 +172,23 @@ export class SingleJewishPage extends React.Component<any, any> {
               />
             </FormGroup>
 
+            <ColorSwatch color={this.state.color} />
+
+            <select
+              name="color"
+              value={this.state.color}
+              onChange={(e: any) => this.setState({ color: e.target.value })}
+              className="form-control"
+            >
+              <option value="#5A17C7">Purple</option>
+              <option value="#031AF7">Dark Blue</option>
+              <option value="#08D316">Green</option>
+              <option value="#00ADFF">Light Blue</option>
+              <option value="#FF4600">Orange</option>
+            </select>
+
             <Button color="danger" onClick={this.handleDelete}>
-              Delete
+              Delete All
             </Button>
             <Button color="primary" onClick={this.handleUpdate}>
               Update

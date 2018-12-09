@@ -23,7 +23,7 @@ export class SingleService extends React.Component<any, any> {
     featuredImage: '',
     description: '',
     category: '',
-    color: '',
+    color: '#5A17C7',
     parts: [],
 
     loading: true,
@@ -69,7 +69,14 @@ export class SingleService extends React.Component<any, any> {
   public handleUpdate = (e: any) => {
     e.preventDefault();
 
-    const { title, featuredImage, description, slug, category } = this.state;
+    const {
+      title,
+      featuredImage,
+      description,
+      slug,
+      category,
+      color,
+    } = this.state;
     try {
       Axios.put(
         `${API_URL}/services/${this.props.match.params.slug}`,
@@ -79,6 +86,7 @@ export class SingleService extends React.Component<any, any> {
           description,
           slug,
           category,
+          color,
           parts: this.props.formState.partsForm.values.parts,
         },
         {
@@ -193,7 +201,7 @@ export class SingleService extends React.Component<any, any> {
           <PartsForm parts={this.state.parts} />
           {/*  */}
           <Button color="danger" onClick={this.handleDelete}>
-            Delete
+            Delete All
           </Button>
           <Button color="primary" onClick={this.handleUpdate}>
             Update

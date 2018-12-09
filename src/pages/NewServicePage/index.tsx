@@ -90,7 +90,7 @@ export class NewService extends React.Component<any, any> {
     return (
       <Card>
         <CardBody>
-          <CardTitle>New Service</CardTitle>
+          <CardTitle>New Teaching</CardTitle>
           {this.state.error && <Error error={this.state.error} />}
 
           <Form onSubmit={e => this.handleSubmit(e)}>

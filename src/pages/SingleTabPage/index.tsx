@@ -148,7 +148,7 @@ export class SingleTabPage extends React.Component<any, any> {
             </FormGroup>
           </Form>
           <Button color="danger" onClick={this.handleDelete}>
-            Delete
+            Delete All
           </Button>
           <Button color="primary" onClick={this.handleUpdate}>
             Update

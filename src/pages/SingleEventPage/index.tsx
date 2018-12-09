@@ -174,7 +174,7 @@ export class SingleEventPage extends React.Component<any, any> {
             </FormGroup>
 
             <Button color="danger" onClick={this.handleDelete}>
-              Delete
+              Delete All
             </Button>
 
             <Button color="primary" onClick={this.handleUpdate}>

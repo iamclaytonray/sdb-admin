@@ -238,7 +238,7 @@ export class SingleArticle extends React.Component<any, any> {
             <PartsForm parts={this.state.parts} />
 
             <Button color="danger" onClick={this.handleDelete}>
-              Delete
+              Delete All
             </Button>
             <Button color="primary" onClick={this.handleUpdate}>
               Update
