@@ -157,6 +157,7 @@ export class NewArticle extends React.Component<any, any> {
               onChange={this.handleInputChange}
               className="form-control"
             >
+              <option value="#B56FEA">Light Purple</option>
               <option value="#5A17C7">Purple</option>
               <option value="#031AF7">Dark Blue</option>
               <option value="#08D316">Green</option>
