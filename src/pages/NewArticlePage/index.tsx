@@ -19,9 +19,20 @@ export class NewArticle extends React.Component<any, any> {
     parts: [] as any,
     color: '',
 
+    categories: [],
+
     error: null,
     loading: true,
   };
+
+  public componentDidMount() {
+    this.fetch();
+  }
+
+  public fetch = async () => {
+    const res = await Axios.get(`${API_URL}/tabs/?pageType=Discoveries`);
+    this.setState({ categories: res.data.data });
+  }
 
   public handleInputChange = event => {
     const target = event.target;
@@ -113,17 +124,26 @@ export class NewArticle extends React.Component<any, any> {
               />
             </div>
 
-            <div className="form-group">
-              <label>Category</label>
-              <input
-                type="text"
-                name="category"
-                placeholder="Category"
-                value={this.state.category}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
+            <select
+              name="category"
+              value={this.state.category}
+              onChange={this.handleInputChange}
+              className="form-control"
+            >
+              {this.state.categories.length > 0 ? (
+                this.state.categories.map((category: any, i: number) => (
+                  <option key={i} value={category.slug}>
+                    {category.label}
+                  </option>
+                ))
+              ) : (
+                <React.Fragment>
+                  Something went wrong trying to fetch the categories. If you
+                  see this message, please refresh or try again later. Also, let
+                  Clayton know.
+                </React.Fragment>
+              )}
+            </select>
 
             <div className="form-group">
               <label>Link</label>

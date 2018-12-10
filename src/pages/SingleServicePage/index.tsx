@@ -26,6 +26,8 @@ export class SingleService extends React.Component<any, any> {
     color: '#5A17C7',
     parts: [],
 
+    categories: [],
+
     loading: true,
     error: null,
   };
@@ -39,7 +41,11 @@ export class SingleService extends React.Component<any, any> {
       const res = await Axios.get(
         `${API_URL}/services/${this.props.match.params.slug}`,
       );
-      console.log(res);
+
+      const categoryRes = await Axios.get(
+        `${API_URL}/tabs/?pageType=Teachings`,
+      );
+
       this.setState({
         loading: false,
 
@@ -50,6 +56,8 @@ export class SingleService extends React.Component<any, any> {
         category: res.data.data.category,
         color: res.data.data.color,
         parts: res.data.data.parts,
+
+        categories: categoryRes.data.data,
       });
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
@@ -171,16 +179,26 @@ export class SingleService extends React.Component<any, any> {
               />
             </FormGroup>
 
-            <FormGroup>
-              <Label>Category</Label>
-              <Input
-                type="text"
-                name="category"
-                value={this.state.category}
-                onChange={this.handleInputChange}
-                className="form-control"
-              />
-            </FormGroup>
+            <select
+              name="category"
+              value={this.state.category}
+              onChange={this.handleInputChange}
+              className="form-control"
+            >
+              {this.state.categories.length > 0 ? (
+                this.state.categories.map((category: any, i: number) => (
+                  <option key={i} value={category.slug}>
+                    {category.label}
+                  </option>
+                ))
+              ) : (
+                <div>
+                  Something went wrong trying to fetch the categories. If you
+                  see this message, please refresh or try again later. Also, let
+                  Clayton know.
+                </div>
+              )}
+            </select>
 
             <ColorSwatch color={this.state.color} />
 

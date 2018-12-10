@@ -29,6 +29,8 @@ export class SingleArticle extends React.Component<any, any> {
     color: '',
     parts: [],
 
+    categories: [],
+
     loading: true,
     error: null,
 
@@ -45,7 +47,9 @@ export class SingleArticle extends React.Component<any, any> {
         `${API_URL}/articles/${this.props.match.params.slug}`,
       );
 
-      console.log(res.data);
+      const categoryRes = await Axios.get(
+        `${API_URL}/tabs/?pageType=Discoveries`,
+      );
 
       this.setState({
         loading: false,
@@ -58,6 +62,8 @@ export class SingleArticle extends React.Component<any, any> {
         content: res.data.data.content,
         parts: res.data.data.parts,
         color: res.data.data.color,
+
+        categories: categoryRes.data.data,
       });
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
@@ -188,16 +194,24 @@ export class SingleArticle extends React.Component<any, any> {
               />
             </FormGroup>
 
-            <FormGroup>
-              <Label>Category</Label>
-              <Input
-                name="category"
-                type="text"
-                value={this.state.category}
-                onChange={e => this.setState({ category: e.target.value })}
-                className="form-control"
-              />
-            </FormGroup>
+            <select
+              name="category"
+              value={this.state.category}
+              onChange={(e: any) => this.setState({ category: e.target.value })}
+              className="form-control"
+            >
+              {this.state.categories.length > 0 ? (
+                this.state.categories.map((category: any, i: number) => (
+                  <option value={category.slug}>{category.label}</option>
+                ))
+              ) : (
+                <div>
+                  Something went wrong trying to fetch the categories. If you
+                  see this message, please refresh or try again later. Also, let
+                  Clayton know.
+                </div>
+              )}
+            </select>
 
             <FormGroup>
               <Label>Link</Label>
