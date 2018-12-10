@@ -20,20 +20,7 @@
 @import 'now/mixins';
 
 // Plugins CSS
-@import 'now/plugins/plugin-animate-bootstrap-notify';
-@import 'now/plugins/plugin-bootstrap-switch';
-@import 'now/plugins/plugin-card-wizard';
-@import 'now/plugins/plugin-datatables.net';
-@import 'now/plugins/plugin-nouislider';
-@import 'now/plugins/plugin-perfect-scrollbar';
-@import 'now/plugins/plugin-react-big-calendar';
-@import 'now/plugins/plugin-react-bootstrap-sweetalert';
-@import 'now/plugins/plugin-react-bootstrap-switch';
-@import 'now/plugins/plugin-react-datetime';
-@import 'now/plugins/plugin-react-select';
-@import 'now/plugins/plugin-react-simple-maps';
 @import 'now/plugins/plugin-react-table';
-@import 'now/plugins/plugin-react-tagsinput';
 
 // Core CSS
 @import 'now/buttons';
@@ -48,25 +35,14 @@
 @import 'now/pills';
 
 // components
-@import 'now/fileupload';
-@import 'now/social-buttons';
 @import 'now/tabs';
 @import 'now/navbar';
 @import 'now/dropdown';
-@import 'now/alerts';
 @import 'now/images';
-@import 'now/popups';
-@import 'now/nucleo-outline';
-@import 'now/modals';
-@import 'now/carousel';
 @import 'now/tables';
 @import 'now/sidebar-and-main-panel';
 @import 'now/cards';
 @import 'now/footers';
-@import 'now/timeline';
-@import 'now/fixed-plugin';
 
-// example sections
-@import 'now/sections';
 
 @import 'now/responsive';
