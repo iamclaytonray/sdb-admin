@@ -1,16 +1,7 @@
 import Axios from 'axios';
 import { Error } from 'components/Error';
 import * as React from 'react';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardTitle,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from 'reactstrap';
+
 import { API_URL } from '../../constants';
 
 import { ColorSwatch } from 'components/ColorSwatch';
@@ -68,17 +59,17 @@ export class NewJewishPage extends React.Component<any, any> {
   }
   public render() {
     return (
-      <Card>
-        <CardBody>
-          <CardTitle>New Jewish</CardTitle>
+      <div className="card">
+        <div className="card-body">
+          <h5 className="card-title">New Jewish</h5>
           {this.state.error && (
             <Error error={JSON.stringify(this.state.error)} />
           )}
 
-          <Form onSubmit={e => this.handleSubmit(e)}>
-            <FormGroup>
-              <Label>Title</Label>
-              <Input
+          <form onSubmit={e => this.handleSubmit(e)}>
+            <div className="form-group">
+              <label>Title</label>
+              <input
                 type="text"
                 name="title"
                 placeholder="Title"
@@ -86,11 +77,11 @@ export class NewJewishPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Slug</Label>
-              <Input
+            <div className="form-group">
+              <label>Slug</label>
+              <input
                 type="text"
                 name="slug"
                 placeholder="Slug"
@@ -98,11 +89,11 @@ export class NewJewishPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Description</Label>
-              <Input
+            <div className="form-group">
+              <label>Description</label>
+              <input
                 type="text"
                 name="description"
                 placeholder="Description"
@@ -110,11 +101,11 @@ export class NewJewishPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Featured Image</Label>
-              <Input
+            <div className="form-group">
+              <label>Featured Image</label>
+              <input
                 type="text"
                 name="featuredImage"
                 placeholder="Featured Image"
@@ -122,11 +113,11 @@ export class NewJewishPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Link</Label>
-              <Input
+            <div className="form-group">
+              <label>Link</label>
+              <input
                 type="text"
                 name="link"
                 placeholder="Link"
@@ -134,7 +125,7 @@ export class NewJewishPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
             <ColorSwatch color={this.state.color} />
             <label>Color</label>
@@ -152,12 +143,12 @@ export class NewJewishPage extends React.Component<any, any> {
               <option value="#FF4600">Orange</option>
             </select>
 
-            <Button color="primary" type="submit">
+            <button className="btn btn-primary" type="submit">
               Create
-            </Button>
-          </Form>
-        </CardBody>
-      </Card>
+            </button>
+          </form>
+        </div>
+      </div>
     );
   }
 }

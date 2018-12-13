@@ -1,9 +1,5 @@
 import * as React from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
-import { Button, Nav } from 'reactstrap';
-
-const logo =
-  'https://yt3.ggpht.com/-R26L2yuqZno/AAAAAAAAAAI/AAAAAAAAAAA/ItklyVrs2gw/s288-mo-c-c0xffffffff-rj-k-no/photo.jpg';
 
 const NavItem = ({ name, location, pathName }) => (
   <li className={pathName.includes(location) ? 'active' : ''}>
@@ -22,27 +18,29 @@ const SidebarComponent = ({ location }) => (
     <div className="logo">
       <Link to="/dashboard" className="simple-text logo-mini">
         <div className="logo-img">
-          <img src={logo} alt="react-logo" />
+          <img
+            src="http://sdb.netlify.com/static/media/sdb-logo-md.b45ce98a.png"
+            alt="SDB logo"
+          />
         </div>
       </Link>
-      <Link
-        to="https://shoreshdavidbrandon.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="simple-text logo-normal"
-      >
-        SDB
+      <Link to="/" className="simple-text logo-normal">
+        Login
       </Link>
       <div className="navbar-minimize">
-        <Button id="minimizeSidebar" onClick={minimizeSidebar} color="primary">
+        <button
+          id="minimizeSidebar"
+          onClick={minimizeSidebar}
+          className="btn btn-primary"
+        >
           <i className="now-ui-icons text_align-center visible-on-sidebar-regular" />
           <i className="now-ui-icons design_bullet-list-67 visible-on-sidebar-mini" />
-        </Button>
+        </button>
       </div>
     </div>
 
     <div className="sidebar-wrapper">
-      <Nav>
+      <ul className="nav">
         <NavItem
           name="Discoveries"
           location="/dashboard/articles"
@@ -68,7 +66,7 @@ const SidebarComponent = ({ location }) => (
           location="/dashboard/services"
           pathName={location.pathname}
         />
-      </Nav>
+      </ul>
     </div>
   </div>
 );

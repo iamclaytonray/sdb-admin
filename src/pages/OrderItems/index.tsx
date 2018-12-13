@@ -1,7 +1,6 @@
 import Axios from 'axios';
 import * as React from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { Button } from 'reactstrap';
 
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
@@ -165,9 +164,9 @@ export class OrderItems extends React.Component<any, any> {
             )}
           </Droppable>
         </DragDropContext>
-        <Button onClick={this.handleSave} color="primary">
+        <button onClick={this.handleSave} className="btn btn-primary">
           Save
-        </Button>
+        </button>
       </React.Fragment>
     );
   }

@@ -1,12 +1,14 @@
 import Axios from 'axios';
 import * as React from 'react';
+import ReactQuill from 'react-quill';
 import { connect } from 'react-redux';
-import { Card, CardBody, CardTitle } from 'reactstrap';
-import { API_URL } from '../../constants';
 
 import { ColorSwatch } from 'components/ColorSwatch';
 import { Error } from 'components/Error';
 import { PartsForm } from 'components/PartForm';
+
+import 'react-quill/dist/quill.snow.css';
+import { API_URL } from '../../constants';
 
 export class NewArticle extends React.Component<any, any> {
   public state = {
@@ -24,6 +26,35 @@ export class NewArticle extends React.Component<any, any> {
     error: null,
     loading: true,
   };
+
+  public modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  };
+
+  public formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+  ];
 
   public componentDidMount() {
     this.fetch();
@@ -44,6 +75,10 @@ export class NewArticle extends React.Component<any, any> {
     });
   }
 
+  public handleQullChange = (value: string) => {
+    this.setState({ content: value });
+  }
+
   public handleSubmit = async (e: any): Promise<any> => {
     e.preventDefault();
     const {
@@ -55,12 +90,6 @@ export class NewArticle extends React.Component<any, any> {
       content,
       color,
     } = this.state;
-    // if (!title || !slug || !category) {
-    //   this.setState({
-    //     error: 'Please fill in the following fields: Title, Slug, and Category',
-    //   });
-    //   return;
-    // }
     try {
       await Axios.post(
         `${API_URL}/articles`,
@@ -98,10 +127,10 @@ export class NewArticle extends React.Component<any, any> {
     //   );
     // }
     return (
-      <Card>
-        <CardBody>
+      <div className="card">
+        <div className="card-body">
           {this.state.error && <Error error={this.state.error} />}
-          <CardTitle>New Discovery</CardTitle>
+          <h5 className="card-title">New Discovery</h5>
           <form onSubmit={e => this.handleSubmit(e)}>
             <div className="form-group">
               <label>Title</label>
@@ -177,32 +206,33 @@ export class NewArticle extends React.Component<any, any> {
 
             <div className="form-group">
               <label>Content</label>
-              <textarea
-                name="content"
+              <ReactQuill
+                modules={this.modules}
+                formats={this.formats}
                 value={this.state.content}
-                placeholder="Content"
-                className="form-control"
-                rows={10}
-                onChange={this.handleInputChange}
+                onChange={this.handleQullChange}
+                style={{ height: 500, marginBottom: 100 }}
               />
             </div>
 
             <ColorSwatch color={this.state.color} />
-            <label>Color</label>
-            <select
-              name="color"
-              value={this.state.color}
-              onChange={this.handleInputChange}
-              className="form-control"
-              required
-            >
-              <option value="#B56FEA">Light Purple</option>
-              <option value="#5A17C7">Purple</option>
-              <option value="#031AF7">Dark Blue</option>
-              <option value="#08D316">Green</option>
-              <option value="#00ADFF">Light Blue</option>
-              <option value="#FF4600">Orange</option>
-            </select>
+            <div className="form-group">
+              <label>Color</label>
+              <select
+                name="color"
+                value={this.state.color}
+                onChange={this.handleInputChange}
+                className="form-control"
+                required
+              >
+                <option value="#B56FEA">Light Purple</option>
+                <option value="#5A17C7">Purple</option>
+                <option value="#031AF7">Dark Blue</option>
+                <option value="#08D316">Green</option>
+                <option value="#00ADFF">Light Blue</option>
+                <option value="#FF4600">Orange</option>
+              </select>
+            </div>
 
             <PartsForm />
 
@@ -210,8 +240,8 @@ export class NewArticle extends React.Component<any, any> {
               Create
             </button>
           </form>
-        </CardBody>
-      </Card>
+        </div>
+      </div>
     );
   }
 }

@@ -1,15 +1,8 @@
 import Axios from 'axios';
 import * as React from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { connect } from 'react-redux';
-import {
-  Button,
-  Card,
-  CardBody,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from 'reactstrap';
 import { API_URL } from '../../constants';
 
 import { ColorSwatch } from 'components/ColorSwatch';
@@ -36,6 +29,41 @@ export class SingleArticle extends React.Component<any, any> {
 
     isToastOpen: false,
   };
+
+  public modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image'],
+      ['clean'],
+      ['table'],
+    ],
+  };
+
+  public formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+    'table',
+  ];
+
+  public handleQullChange = (value: string) => {
+    this.setState({ content: value });
+  }
 
   public componentDidMount() {
     this.fetch();
@@ -145,46 +173,40 @@ export class SingleArticle extends React.Component<any, any> {
     }
     if (this.state.error) {
       return (
-        <Card>
-          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
-        </Card>
+        <div className="card">
+          <div className="card-body">{JSON.stringify(this.state.error)}</div>
+        </div>
       );
     }
     return (
-      <Card>
+      <div className="card">
         <Toast isOpen={this.state.isToastOpen} type="danger" />
-        <CardBody>
+        <div className="card-body">
           {this.state.error && <Error error={this.state.error} />}
-          <Form>
-            <FormGroup>
-              <Label>Title</Label>
-              <Input
+          <form>
+            <div className="form-group">
+              <label>Title</label>
+              <input
                 type="text"
                 value={this.state.title}
                 onChange={e => this.setState({ title: e.target.value })}
                 className="form-control"
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Slug</Label>
-              <Input
+            <div className="form-group">
+              <label>Slug</label>
+              <input
                 type="text"
                 value={this.state.slug}
                 onChange={e => this.setState({ slug: e.target.value })}
                 className="form-control"
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Featured Image</Label>
-              <br />
-              <img
-                src={this.state.featuredImage}
-                style={{ height: 100, width: 'auto' }}
-              />
-              <p />
-              <Input
+            <div className="form-group">
+              <label>Featured Image</label>
+              <input
                 name="featuredImage"
                 placeholder="Featured Image"
                 type="text"
@@ -192,7 +214,7 @@ export class SingleArticle extends React.Component<any, any> {
                 onChange={e => this.setState({ featuredImage: e.target.value })}
                 className="form-control"
               />
-            </FormGroup>
+            </div>
 
             <label>Category</label>
             <select
@@ -214,16 +236,16 @@ export class SingleArticle extends React.Component<any, any> {
               )}
             </select>
 
-            <FormGroup>
-              <Label>Link</Label>
-              <Input
+            <div className="form-group">
+              <label>Link</label>
+              <input
                 name="link"
                 type="text"
                 value={this.state.link}
                 onChange={e => this.setState({ link: e.target.value })}
                 className="form-control"
               />
-            </FormGroup>
+            </div>
 
             <ColorSwatch color={this.state.color} />
 
@@ -242,15 +264,16 @@ export class SingleArticle extends React.Component<any, any> {
               <option value="#FF4600">Orange</option>
             </select>
 
-            <FormGroup>
-              <Label>Content</Label>
-              <textarea
+            <div className="form-group">
+              <label>Content</label>
+              <ReactQuill
+                modules={this.modules}
+                formats={this.formats}
                 value={this.state.content}
-                onChange={e => this.setState({ content: e.target.value })}
-                className="form-control"
-                rows={10}
+                onChange={this.handleQullChange}
+                style={{ height: 500, marginBottom: 100 }}
               />
-            </FormGroup>
+            </div>
 
             <PartsForm parts={this.state.parts} />
 
@@ -262,16 +285,16 @@ export class SingleArticle extends React.Component<any, any> {
                 alignItems: 'center',
               }}
             >
-              <Button color="primary" onClick={this.handleUpdate}>
+              <button className="btn btn-primary" onClick={this.handleUpdate}>
                 Update
-              </Button>
-              <Button color="danger" onClick={this.handleDelete}>
+              </button>
+              <button className="btn btn-danger" onClick={this.handleDelete}>
                 Delete All
-              </Button>
+              </button>
             </div>
-          </Form>
-        </CardBody>
-      </Card>
+          </form>
+        </div>
+      </div>
     );
   }
 }

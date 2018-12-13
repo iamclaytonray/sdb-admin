@@ -1,15 +1,8 @@
 import Axios from 'axios';
 import * as React from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { connect } from 'react-redux';
-import {
-  Button,
-  Card,
-  CardBody,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from 'reactstrap';
 import { API_URL } from '../../constants';
 
 import { ColorSwatch } from 'components/ColorSwatch';
@@ -25,12 +18,46 @@ export class SingleService extends React.Component<any, any> {
     category: '',
     color: '#5A17C7',
     parts: [],
+    content: '',
 
     categories: [],
 
     loading: true,
     error: null,
   };
+
+  public modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  };
+
+  public formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+  ];
+
+  public handleQullChange = (value: string) => {
+    this.setState({ content: value });
+  }
 
   public componentDidMount() {
     this.fetch();
@@ -137,47 +164,47 @@ export class SingleService extends React.Component<any, any> {
     }
     if (this.state.error) {
       return (
-        <Card>
-          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
-        </Card>
+        <div className="card">
+          <div className="card-body">{JSON.stringify(this.state.error)}</div>
+        </div>
       );
     }
     return (
-      <Card>
-        <CardBody>
-          <Form>
-            <FormGroup>
-              <Label>Title</Label>
-              <Input
+      <div className="card">
+        <div className="card-body">
+          <form>
+            <div className="form-group">
+              <label>Title</label>
+              <input
                 type="text"
                 name="title"
                 value={this.state.title}
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Slug</Label>
-              <Input
+            <div className="form-group">
+              <label>Slug</label>
+              <input
                 type="text"
                 name="slug"
                 value={this.state.slug}
                 onChange={this.handleInputChange}
                 className="form-control"
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Featured Image</Label>
-              <Input
+            <div className="form-group">
+              <label>Featured Image</label>
+              <input
                 type="text"
                 name="featuredImage"
                 value={this.state.featuredImage}
                 onChange={this.handleInputChange}
                 className="form-control"
               />
-            </FormGroup>
+            </div>
 
             <label>Category</label>
             <select
@@ -217,7 +244,19 @@ export class SingleService extends React.Component<any, any> {
               <option value="#00ADFF">Light Blue</option>
               <option value="#FF4600">Orange</option>
             </select>
-          </Form>
+            {/*  */}
+            <div className="form-group">
+              <label>Content</label>
+              <ReactQuill
+                modules={this.modules}
+                formats={this.formats}
+                value={this.state.content}
+                onChange={this.handleQullChange}
+                style={{ height: 500, marginBottom: 100 }}
+              />
+            </div>
+          </form>
+
           {/*  */}
           <PartsForm parts={this.state.parts} />
           {/*  */}
@@ -230,15 +269,15 @@ export class SingleService extends React.Component<any, any> {
               alignItems: 'center',
             }}
           >
-            <Button color="primary" onClick={this.handleUpdate}>
+            <button className="btn btn-primary" onClick={this.handleUpdate}>
               Update
-            </Button>
-            <Button color="danger" onClick={this.handleDelete}>
+            </button>
+            <button className="btn btn-danger" onClick={this.handleDelete}>
               Delete All
-            </Button>
+            </button>
           </div>
-        </CardBody>
-      </Card>
+        </div>
+      </div>
     );
   }
 }

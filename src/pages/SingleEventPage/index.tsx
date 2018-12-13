@@ -1,17 +1,10 @@
 import Axios from 'axios';
+import * as React from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import * as React from 'react';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardTitle,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from 'reactstrap';
 import { API_URL } from '../../constants';
 
 export class SingleEventPage extends React.Component<any, any> {
@@ -24,6 +17,39 @@ export class SingleEventPage extends React.Component<any, any> {
     loading: true,
     error: null,
   };
+
+  public modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  };
+
+  public formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+  ];
+
+  public handleQullChange = (value: string) => {
+    this.setState({ content: value });
+  }
 
   public componentDidMount() {
     this.fetch();
@@ -107,71 +133,68 @@ export class SingleEventPage extends React.Component<any, any> {
     if (this.state.loading) {
       return <Loading />;
     }
+
     if (this.state.error) {
       return (
-        <Card>
-          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
-        </Card>
+        <div className="card">
+          <div className="card-body">{JSON.stringify(this.state.error)}</div>
+        </div>
       );
     }
     return (
-      <Card>
-        <CardBody>
-          <CardTitle>Update Event</CardTitle>
+      <div className="card">
+        <div className="card-body">
+          <h5 className="card-title">Update Event</h5>
           {this.state.error && (
             <Error error={JSON.stringify(this.state.error)} />
           )}
-          <Form>
-            <FormGroup>
-              <Label>Title</Label>
-              <Input
+          <form>
+            <div className="form-group">
+              <label>Title</label>
+              <input
                 type="text"
                 name="title"
                 placeholder="Title"
+                className="form-control"
                 value={this.state.title}
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Slug</Label>
-              <Input
+            <div className="form-group">
+              <label>Slug</label>
+              <input
                 type="text"
                 name="slug"
                 placeholder="Slug"
+                className="form-control"
                 value={this.state.slug}
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Featured Image</Label>
-              <br />
-              <img
-                src={this.state.featuredImage}
-                style={{ height: 100, width: 'auto' }}
-              />
-              <p />
-              <Input
+            <div className="form-group">
+              <label>Featured Image</label>
+              <input
                 name="featuredImage"
                 type="text"
                 placeholder="Featured Image"
+                className="form-control"
                 value={this.state.featuredImage}
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Content</Label>
-              <textarea
-                name="content"
-                placeholder="Content"
+            <div className="form-group">
+              <label>Content</label>
+              <ReactQuill
+                modules={this.modules}
+                formats={this.formats}
                 value={this.state.content}
-                onChange={this.handleInputChange}
-                className="form-control"
-                rows={10}
+                onChange={this.handleQullChange}
+                style={{ height: 500, marginBottom: 100 }}
               />
-            </FormGroup>
+            </div>
 
             <div
               style={{
@@ -181,16 +204,16 @@ export class SingleEventPage extends React.Component<any, any> {
                 alignItems: 'center',
               }}
             >
-              <Button color="primary" onClick={this.handleUpdate}>
+              <button className="btn btn-primary" onClick={this.handleUpdate}>
                 Update
-              </Button>
-              <Button color="danger" onClick={this.handleDelete}>
+              </button>
+              <button className="btn btn-danger" onClick={this.handleDelete}>
                 Delete All
-              </Button>
+              </button>
             </div>
-          </Form>
-        </CardBody>
-      </Card>
+          </form>
+        </div>
+      </div>
     );
   }
 }

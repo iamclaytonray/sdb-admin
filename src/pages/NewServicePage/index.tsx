@@ -1,16 +1,8 @@
 import Axios from 'axios';
 import * as React from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { connect } from 'react-redux';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardTitle,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from 'reactstrap';
 
 import { ColorSwatch } from 'components/ColorSwatch';
 import { Error } from 'components/Error';
@@ -25,6 +17,7 @@ export class NewService extends React.Component<any, any> {
     category: '',
     description: '',
     featuredImage: '',
+    content: '',
     color: '#B56FEA',
     parts: [],
 
@@ -32,6 +25,39 @@ export class NewService extends React.Component<any, any> {
 
     error: null,
   };
+
+  public modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  };
+
+  public formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+  ];
+
+  public handleQullChange = (value: string) => {
+    this.setState({ content: value });
+  }
 
   public componentDidMount() {
     this.fetch();
@@ -99,15 +125,15 @@ export class NewService extends React.Component<any, any> {
 
   public render() {
     return (
-      <Card>
-        <CardBody>
-          <CardTitle>New Teaching</CardTitle>
+      <div className="card">
+        <div className="card-body">
+          <h5 className="card-title">New Teaching</h5>
           {this.state.error && <Error error={this.state.error} />}
 
-          <Form onSubmit={e => this.handleSubmit(e)}>
-            <FormGroup>
-              <Label>Title</Label>
-              <Input
+          <form onSubmit={e => this.handleSubmit(e)}>
+            <div className="form-group">
+              <label>Title</label>
+              <input
                 type="text"
                 name="title"
                 placeholder="Title"
@@ -115,11 +141,11 @@ export class NewService extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Slug</Label>
-              <Input
+            <div className="form-group">
+              <label>Slug</label>
+              <input
                 type="text"
                 name="slug"
                 placeholder="Slug"
@@ -127,11 +153,11 @@ export class NewService extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Featured Image</Label>
-              <Input
+            <div className="form-group">
+              <label>Featured Image</label>
+              <input
                 type="text"
                 name="featuredImage"
                 placeholder="Featured Image"
@@ -139,11 +165,11 @@ export class NewService extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Description</Label>
-              <Input
+            <div className="form-group">
+              <label>Description</label>
+              <input
                 type="text"
                 name="description"
                 placeholder="Description"
@@ -151,7 +177,7 @@ export class NewService extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
             <label>Category</label>
             <select
@@ -192,14 +218,25 @@ export class NewService extends React.Component<any, any> {
               <option value="#FF4600">Orange</option>
             </select>
 
+            <div className="form-group">
+              <label>Content</label>
+              <ReactQuill
+                modules={this.modules}
+                formats={this.formats}
+                value={this.state.content}
+                onChange={this.handleQullChange}
+                style={{ height: 500, marginBottom: 100 }}
+              />
+            </div>
+
             <PartsForm />
 
-            <Button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary">
               Create
-            </Button>
-          </Form>
-        </CardBody>
-      </Card>
+            </button>
+          </form>
+        </div>
+      </div>
     );
   }
 }

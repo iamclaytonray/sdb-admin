@@ -1,16 +1,8 @@
 import Axios from 'axios';
+import * as React from 'react';
+
 import { ColorSwatch } from 'components/ColorSwatch';
 import { Loading } from 'components/Loading';
-import * as React from 'react';
-import {
-  Button,
-  Card,
-  CardBody,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from 'reactstrap';
 import { API_URL } from '../../constants';
 
 export class SingleJewishPage extends React.Component<any, any> {
@@ -47,7 +39,7 @@ export class SingleJewishPage extends React.Component<any, any> {
     }
   }
 
-  public handleInputChange = event => {
+  public handleinputChange = event => {
     const { target } = event;
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -113,64 +105,58 @@ export class SingleJewishPage extends React.Component<any, any> {
     }
     if (this.state.error) {
       return (
-        <Card>
-          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
-        </Card>
+        <div className="card">
+          <div className="card-body">{JSON.stringify(this.state.error)}</div>
+        </div>
       );
     }
     return (
-      <Card>
-        <CardBody>
-          <Form>
-            <FormGroup>
-              <Label>Title</Label>
-              <Input
+      <div className="card">
+        <div className="card-body">
+          <form>
+            <div className="form-group">
+              <label>Title</label>
+              <input
                 type="text"
                 name="title"
                 value={this.state.title}
-                onChange={this.handleInputChange}
+                onChange={this.handleinputChange}
                 className="form-control"
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Slug</Label>
-              <Input
+            <div className="form-group">
+              <label>Slug</label>
+              <input
                 type="text"
                 name="slug"
                 value={this.state.slug}
-                onChange={this.handleInputChange}
+                onChange={this.handleinputChange}
                 className="form-control"
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Featured Image</Label>
-              <br />
-              <img
-                src={this.state.featuredImage}
-                style={{ height: 100, width: 'auto' }}
-              />
-              <p />
-              <Input
+            <div className="form-group">
+              <label>Featured Image</label>
+              <input
                 name="featuredImage"
                 type="text"
                 value={this.state.featuredImage}
-                onChange={this.handleInputChange}
+                onChange={this.handleinputChange}
                 className="form-control"
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Link</Label>
-              <Input
+            <div className="form-group">
+              <label>Link</label>
+              <input
                 name="link"
                 type="text"
                 value={this.state.link}
-                onChange={this.handleInputChange}
+                onChange={this.handleinputChange}
                 className="form-control"
               />
-            </FormGroup>
+            </div>
 
             <ColorSwatch color={this.state.color} />
 
@@ -197,16 +183,16 @@ export class SingleJewishPage extends React.Component<any, any> {
                 alignItems: 'center',
               }}
             >
-              <Button color="primary" onClick={this.handleUpdate}>
+              <button className="btn btn-primary" onClick={this.handleUpdate}>
                 Update
-              </Button>
-              <Button color="danger" onClick={this.handleDelete}>
+              </button>
+              <button className="btn btn-danger" onClick={this.handleDelete}>
                 Delete All
-              </Button>
+              </button>
             </div>
-          </Form>
-        </CardBody>
-      </Card>
+          </form>
+        </div>
+      </div>
     );
   }
 }

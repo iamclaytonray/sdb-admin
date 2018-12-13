@@ -1,14 +1,5 @@
 import Axios from 'axios';
 import * as React from 'react';
-import {
-  Card,
-  CardBody,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane,
-} from 'reactstrap';
 
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
@@ -86,36 +77,52 @@ export class All extends React.Component<any, any> {
       return <Error error={this.state.error} />;
     }
     return (
-      <Card>
-        <CardBody>
-          <Nav tabs className="nav-pills-primary nav-pills">
-            <NavItem>
-              <NavLink
+      <div className="card">
+        <div className="card-body">
+          <ul className="nav-pills-primary nav-pills nav nav-tabs">
+            <li className="nav-item">
+              <a
                 onClick={() => {
                   this.toggle('table');
                 }}
-                className={this.state.view === 'table' ? 'active' : ''}
+                className={
+                  this.state.view === 'table' ? 'nav-link active' : 'nav-link'
+                }
                 style={{ border: 'none' }}
               >
                 Table View
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
                 onClick={() => this.toggle('order')}
-                className={this.state.view === 'order' ? 'active' : ''}
+                className={
+                  this.state.view === 'order' ? 'nav-link active' : 'nav-link'
+                }
                 style={{ border: 'none' }}
               >
                 Order View
-              </NavLink>
-            </NavItem>
-          </Nav>
-          <TabContent activeTab={this.state.view}>
-            <TabPane tabId="table">{this.renderTableView()}</TabPane>
-            <TabPane tabId="order">{this.renderOrderView()}</TabPane>
-          </TabContent>
-        </CardBody>
-      </Card>
+              </a>
+            </li>
+          </ul>
+          <div className="tab-content">
+            <div
+              className={
+                this.state.view === 'table' ? 'tab-pane active' : 'tab-pane'
+              }
+            >
+              {this.renderTableView()}
+            </div>
+            <div
+              className={
+                this.state.view === 'order' ? 'tab-pane active' : 'tab-pane'
+              }
+            >
+              {this.renderOrderView()}
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 }

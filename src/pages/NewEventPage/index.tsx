@@ -1,16 +1,11 @@
-import Axios from 'axios';
-import { Error } from 'components/Error';
 import * as React from 'react';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardTitle,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from 'reactstrap';
+
+import Axios from 'axios';
+import ReactQuill from 'react-quill';
+
+import { Error } from 'components/Error';
+
+import 'react-quill/dist/quill.snow.css';
 import { API_URL } from '../../constants';
 
 export class NewEventPage extends React.Component<any, any> {
@@ -22,6 +17,39 @@ export class NewEventPage extends React.Component<any, any> {
 
     error: null,
   };
+
+  public modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  };
+
+  public formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+  ];
+
+  public handleQullChange = (value: string) => {
+    this.setState({ content: value });
+  }
 
   public handleInputChange = event => {
     const target = event.target;
@@ -63,16 +91,16 @@ export class NewEventPage extends React.Component<any, any> {
 
   public render() {
     return (
-      <Card>
-        <CardBody>
-          <CardTitle>New Event</CardTitle>
+      <div className="card">
+        <div className="card-body">
+          <h5>New Event</h5>
           {this.state.error && (
             <Error error={JSON.stringify(this.state.error)} />
           )}
-          <Form onSubmit={e => this.handleSubmit(e)}>
-            <FormGroup>
-              <Label>Title</Label>
-              <Input
+          <form onSubmit={e => this.handleSubmit(e)}>
+            <div className="form-group">
+              <label>Title</label>
+              <input
                 type="text"
                 name="title"
                 placeholder="Title"
@@ -80,11 +108,11 @@ export class NewEventPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Slug</Label>
-              <Input
+            <div className="form-group">
+              <label>Slug</label>
+              <input
                 type="text"
                 name="slug"
                 placeholder="Slug"
@@ -92,11 +120,11 @@ export class NewEventPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Featured Image</Label>
-              <Input
+            <div className="form-group">
+              <label>Featured Image</label>
+              <input
                 type="text"
                 name="featuredImage"
                 placeholder="Featured Image"
@@ -104,26 +132,25 @@ export class NewEventPage extends React.Component<any, any> {
                 className="form-control"
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Content</Label>
-              <Input
-                type="text"
-                name="content"
-                placeholder="Content"
+            <div className="form-group">
+              <label>Content</label>
+              <ReactQuill
+                modules={this.modules}
+                formats={this.formats}
                 value={this.state.content}
-                className="form-control"
-                onChange={this.handleInputChange}
+                onChange={this.handleQullChange}
+                style={{ height: 500, marginBottom: 100 }}
               />
-            </FormGroup>
+            </div>
 
-            <Button color="primary" type="submit">
+            <button className="btn btn-primary" type="submit">
               Create
-            </Button>
-          </Form>
-        </CardBody>
-      </Card>
+            </button>
+          </form>
+        </div>
+      </div>
     );
   }
 }

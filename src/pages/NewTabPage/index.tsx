@@ -1,16 +1,6 @@
 import Axios from 'axios';
 import { Error } from 'components/Error';
 import * as React from 'react';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardTitle,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from 'reactstrap';
 import { API_URL } from '../../constants';
 
 export class NewTabPage extends React.Component<any, any> {
@@ -55,39 +45,38 @@ export class NewTabPage extends React.Component<any, any> {
     }
   }
   public render() {
-    console.log(this.state);
     return (
-      <Card>
-        <CardBody>
-          <CardTitle>New Menu Item</CardTitle>
+      <div className="card">
+        <div className="card-body">
+          <h5 className="card-title">New Menu Item</h5>
           {this.state.error && <Error error={this.state.error} />}
 
-          <Form onSubmit={e => this.handleSubmit(e)}>
-            <FormGroup>
-              <Label>Label</Label>
-              <Input
+          <form onSubmit={e => this.handleSubmit(e)}>
+            <div className="form-group">
+              <label>label</label>
+              <input
                 type="text"
                 name="label"
-                placeholder="Label"
+                placeholder="label"
                 value={this.state.label}
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Slug</Label>
-              <Input
+            <div className="form-group">
+              <label>Slug</label>
+              <input
                 type="text"
                 name="slug"
                 placeholder="Slug"
                 value={this.state.slug}
                 onChange={this.handleInputChange}
               />
-            </FormGroup>
+            </div>
 
-            <FormGroup>
-              <Label>Page</Label>
-              <Input
+            <div className="form-group">
+              <label>Page</label>
+              <input
                 type="select"
                 name="page"
                 value={this.state.page}
@@ -95,15 +84,15 @@ export class NewTabPage extends React.Component<any, any> {
               >
                 <option>Discoveries</option>
                 <option>Teachings</option>
-              </Input>
-            </FormGroup>
+              </input>
+            </div>
 
-            <Button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary">
               Create
-            </Button>
-          </Form>
-        </CardBody>
-      </Card>
+            </button>
+          </form>
+        </div>
+      </div>
     );
   }
 }

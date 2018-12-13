@@ -3,13 +3,12 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import ReactTable from 'react-table';
-import { CardBody, CardHeader, CardTitle, Col, Row } from 'reactstrap';
 
 export class SharedTable extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      data: props.data.map((prop, key) => {
+      data: props.data.map((prop: any) => {
         return {
           // id: key,
           label: (
@@ -38,17 +37,17 @@ export class SharedTable extends React.Component<any, any> {
   public render() {
     return (
       <div>
-        <Row>
-          <Col xs={12} md={12}>
-            <CardHeader>
-              <CardTitle style={{ textAlign: 'right' }}>
+        <div className="row">
+          <div className="col-xs-12 col-md-12 col-lg-12">
+            <div className="card-header">
+              <h5 className="card-title" style={{ textAlign: 'right' }}>
                 {this.props.title}
-              </CardTitle>
+              </h5>
               <NewButton location={this.props.newLink}>
                 {this.props.children}
               </NewButton>
-            </CardHeader>
-            <CardBody>
+            </div>
+            <div className="card-body">
               <ReactTable
                 data={this.state.data}
                 filterable
@@ -75,9 +74,9 @@ export class SharedTable extends React.Component<any, any> {
                 showPaginationBottom={true}
                 className="-striped -highlight"
               />
-            </CardBody>
-          </Col>
-        </Row>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
