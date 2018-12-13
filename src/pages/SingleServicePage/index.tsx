@@ -15,7 +15,7 @@ export class SingleService extends React.Component<any, any> {
     slug: '',
     featuredImage: '',
     description: '',
-    category: '',
+    category: 'rabbi-don',
     color: '#5A17C7',
     parts: [],
     content: '',
@@ -36,7 +36,7 @@ export class SingleService extends React.Component<any, any> {
         { indent: '-1' },
         { indent: '+1' },
       ],
-      ['link', 'image'],
+      ['link', 'image', 'video'],
       ['clean'],
     ],
   };
@@ -53,6 +53,7 @@ export class SingleService extends React.Component<any, any> {
     'indent',
     'link',
     'image',
+    'video',
   ];
 
   public handleQullChange = (value: string) => {
@@ -73,16 +74,29 @@ export class SingleService extends React.Component<any, any> {
         `${API_URL}/tabs/?pageType=Teachings`,
       );
 
+      const {
+        content,
+        title,
+        slug,
+        featuredImage,
+        category,
+        parts,
+        description,
+        color,
+      } = res.data.data;
+      const setContent = (await content) ? content : '';
+
       this.setState({
         loading: false,
 
-        title: res.data.data.title,
-        slug: res.data.data.slug,
-        featuredImage: res.data.data.featuredImage,
-        description: res.data.data.description,
-        category: res.data.data.category,
-        color: res.data.data.color,
-        parts: res.data.data.parts,
+        title,
+        slug,
+        featuredImage,
+        description,
+        category,
+        color,
+        parts,
+        content: setContent,
 
         categories: categoryRes.data.data,
       });
@@ -101,7 +115,7 @@ export class SingleService extends React.Component<any, any> {
     });
   }
 
-  public handleUpdate = (e: any) => {
+  public handleUpdate = async (e: any) => {
     e.preventDefault();
 
     const {
@@ -111,9 +125,10 @@ export class SingleService extends React.Component<any, any> {
       slug,
       category,
       color,
+      content,
     } = this.state;
     try {
-      Axios.put(
+      await Axios.put(
         `${API_URL}/services/${this.props.match.params.slug}`,
         {
           title,
@@ -122,6 +137,7 @@ export class SingleService extends React.Component<any, any> {
           slug,
           category,
           color,
+          content,
           parts: this.props.formState.partsForm.values.parts,
         },
         {

@@ -41,7 +41,7 @@ export class NewJewishPage extends React.Component<any, any> {
           description,
           featuredImage,
           link,
-          orderNumber: Math.round(Math.random() * 1000),
+          order: Math.round(Math.random() * 1000),
           color,
         },
         {

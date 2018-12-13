@@ -51,7 +51,7 @@ export class NewEventPage extends React.Component<any, any> {
     this.setState({ content: value });
   }
 
-  public handleInputChange = event => {
+  public handleInputChange = (event: any) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
@@ -61,19 +61,19 @@ export class NewEventPage extends React.Component<any, any> {
     });
   }
 
-  public handleSubmit = (e): any => {
+  public handleSubmit = async (e: any) => {
     e.preventDefault();
     const { title, slug, featuredImage, content } = this.state;
 
     try {
-      Axios.post(
+      await Axios.post(
         `${API_URL}/events`,
         {
           title,
           slug,
           featuredImage,
           content,
-          orderNumber: Math.round(Math.random() * 1000),
+          order: Math.round(Math.random() * 1000),
         },
         {
           headers: {

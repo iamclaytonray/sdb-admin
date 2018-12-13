@@ -36,7 +36,7 @@ export class NewService extends React.Component<any, any> {
         { indent: '-1' },
         { indent: '+1' },
       ],
-      ['link', 'image'],
+      ['link', 'image', 'video'],
       ['clean'],
     ],
   };
@@ -53,6 +53,7 @@ export class NewService extends React.Component<any, any> {
     'indent',
     'link',
     'image',
+    'video',
   ];
 
   public handleQullChange = (value: string) => {
@@ -64,11 +65,15 @@ export class NewService extends React.Component<any, any> {
   }
 
   public fetch = async () => {
-    const res = await Axios.get(`${API_URL}/tabs/?pageType=Teachings`);
-    this.setState({ categories: res.data.data });
+    try {
+      const res = await Axios.get(`${API_URL}/tabs/?pageType=Teachings`);
+      this.setState({ categories: res.data.data });
+    } catch (error) {
+      this.setState({ error });
+    }
   }
 
-  public handleInputChange = event => {
+  public handleInputChange = (event: any) => {
     const { target } = event;
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -78,7 +83,7 @@ export class NewService extends React.Component<any, any> {
     });
   }
 
-  public handleSubmit = (e): any => {
+  public handleSubmit = async (e: any) => {
     e.preventDefault();
     const {
       title,
@@ -87,10 +92,11 @@ export class NewService extends React.Component<any, any> {
       description,
       featuredImage,
       color,
+      content,
     } = this.state;
 
     try {
-      Axios.post(
+      await Axios.post(
         `${API_URL}/services`,
         {
           title,
@@ -99,6 +105,7 @@ export class NewService extends React.Component<any, any> {
           description,
           featuredImage,
           color,
+          content,
           parts: this.props.formState.partsForm.values.parts,
         },
         {
