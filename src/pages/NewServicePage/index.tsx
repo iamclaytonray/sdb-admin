@@ -25,7 +25,7 @@ export class NewService extends React.Component<any, any> {
     category: '',
     description: '',
     featuredImage: '',
-    color: '',
+    color: '#B56FEA',
     parts: [],
 
     categories: [],
@@ -153,6 +153,7 @@ export class NewService extends React.Component<any, any> {
               />
             </FormGroup>
 
+            <label>Category</label>
             <select
               name="category"
               value={this.state.category}
@@ -176,6 +177,7 @@ export class NewService extends React.Component<any, any> {
 
             <ColorSwatch color={this.state.color} />
 
+            <label>Color</label>
             <select
               name="color"
               value={this.state.color}

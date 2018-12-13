@@ -22,7 +22,7 @@ export class NewJewishPage extends React.Component<any, any> {
     description: '',
     featuredImage: '',
     link: '',
-    color: '',
+    color: '#B56FEA',
 
     error: null,
   };
@@ -137,7 +137,7 @@ export class NewJewishPage extends React.Component<any, any> {
             </FormGroup>
 
             <ColorSwatch color={this.state.color} />
-
+            <label>Color</label>
             <select
               name="color"
               value={this.state.color}

@@ -19,7 +19,7 @@ export class SingleJewishPage extends React.Component<any, any> {
     slug: '',
     featuredImage: '',
     link: '',
-    color: '',
+    color: '#B56FEA',
 
     error: null,
     loading: true,
@@ -174,6 +174,7 @@ export class SingleJewishPage extends React.Component<any, any> {
 
             <ColorSwatch color={this.state.color} />
 
+            <label>Color</label>
             <select
               name="color"
               value={this.state.color}

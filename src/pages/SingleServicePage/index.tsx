@@ -179,6 +179,7 @@ export class SingleService extends React.Component<any, any> {
               />
             </FormGroup>
 
+            <label>Category</label>
             <select
               name="category"
               value={this.state.category}
@@ -202,6 +203,7 @@ export class SingleService extends React.Component<any, any> {
 
             <ColorSwatch color={this.state.color} />
 
+            <label>Color</label>
             <select
               name="color"
               value={this.state.color}

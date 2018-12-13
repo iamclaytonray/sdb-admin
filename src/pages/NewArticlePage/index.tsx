@@ -17,7 +17,7 @@ export class NewArticle extends React.Component<any, any> {
     link: '',
     featuredImage: '',
     parts: [] as any,
-    color: '',
+    color: '#00ADFF',
 
     categories: [],
 
@@ -46,7 +46,21 @@ export class NewArticle extends React.Component<any, any> {
 
   public handleSubmit = async (e: any): Promise<any> => {
     e.preventDefault();
-    const { title, slug, featuredImage, category, link, content } = this.state;
+    const {
+      title,
+      slug,
+      featuredImage,
+      category,
+      link,
+      content,
+      color,
+    } = this.state;
+    // if (!title || !slug || !category) {
+    //   this.setState({
+    //     error: 'Please fill in the following fields: Title, Slug, and Category',
+    //   });
+    //   return;
+    // }
     try {
       await Axios.post(
         `${API_URL}/articles`,
@@ -57,6 +71,7 @@ export class NewArticle extends React.Component<any, any> {
           category,
           link,
           content,
+          color,
           parts: this.props.formState.partsForm.values.parts,
         },
         {
@@ -68,20 +83,20 @@ export class NewArticle extends React.Component<any, any> {
       this.props.history.push(`/dashboard/articles`);
     } catch (error) {
       this.setState({
-        error: error.response ? error.response.data.error : error,
+        error: error.response.data.message,
       });
       window.scrollTo(0, 0);
     }
   }
 
   public render() {
-    if (this.state.error) {
-      return (
-        <Card>
-          <CardBody>{JSON.stringify(this.state.error)}</CardBody>
-        </Card>
-      );
-    }
+    // if (this.state.error) {
+    //   return (
+    //     <Card>
+    //       <CardBody>{this.state.error}</CardBody>
+    //     </Card>
+    //   );
+    // }
     return (
       <Card>
         <CardBody>
@@ -95,6 +110,7 @@ export class NewArticle extends React.Component<any, any> {
                 name="title"
                 placeholder="Title"
                 value={this.state.title}
+                required
                 className="form-control"
                 onChange={this.handleInputChange}
               />
@@ -107,6 +123,7 @@ export class NewArticle extends React.Component<any, any> {
                 name="slug"
                 placeholder="Slug"
                 value={this.state.slug}
+                required
                 className="form-control"
                 onChange={this.handleInputChange}
               />
@@ -124,6 +141,7 @@ export class NewArticle extends React.Component<any, any> {
               />
             </div>
 
+            <label>Category</label>
             <select
               name="category"
               value={this.state.category}
@@ -170,12 +188,13 @@ export class NewArticle extends React.Component<any, any> {
             </div>
 
             <ColorSwatch color={this.state.color} />
-
+            <label>Color</label>
             <select
               name="color"
               value={this.state.color}
               onChange={this.handleInputChange}
               className="form-control"
+              required
             >
               <option value="#B56FEA">Light Purple</option>
               <option value="#5A17C7">Purple</option>
