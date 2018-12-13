@@ -56,9 +56,9 @@ export class SingleService extends React.Component<any, any> {
     'video',
   ];
 
-  public handleQullChange = (value: string) => {
+  public handleQuillChange = (value: string) => {
     this.setState({ content: value });
-  }
+  };
 
   public componentDidMount() {
     this.fetch();
@@ -103,7 +103,7 @@ export class SingleService extends React.Component<any, any> {
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
-  }
+  };
 
   public handleInputChange = event => {
     const { target } = event;
@@ -113,7 +113,7 @@ export class SingleService extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
   public handleUpdate = async (e: any) => {
     e.preventDefault();
@@ -150,7 +150,7 @@ export class SingleService extends React.Component<any, any> {
     } catch (error) {
       this.setState({ error: error.response.data.message });
     }
-  }
+  };
 
   public handleDelete = async (e: any) => {
     e.preventDefault();
@@ -172,7 +172,7 @@ export class SingleService extends React.Component<any, any> {
       return;
     }
     return alert('Item not deleted');
-  }
+  };
 
   public render() {
     if (this.state.loading) {
@@ -267,7 +267,7 @@ export class SingleService extends React.Component<any, any> {
                 modules={this.modules}
                 formats={this.formats}
                 value={this.state.content}
-                onChange={this.handleQullChange}
+                onChange={this.handleQuillChange}
                 style={{ height: 500, marginBottom: 100 }}
               />
             </div>

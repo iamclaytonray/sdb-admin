@@ -42,7 +42,6 @@ export class SingleArticle extends React.Component<any, any> {
       ],
       ['link', 'image', 'video'],
       ['clean'],
-      ['table'],
     ],
   };
 
@@ -58,12 +57,12 @@ export class SingleArticle extends React.Component<any, any> {
     'indent',
     'link',
     'image',
-    'table',
+    'video',
   ];
 
-  public handleQullChange = (value: string) => {
+  public handleQuillChange = (value: string) => {
     this.setState({ content: value });
-  }
+  };
 
   public componentDidMount() {
     this.fetch();
@@ -96,7 +95,7 @@ export class SingleArticle extends React.Component<any, any> {
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
-  }
+  };
 
   public handleUpdate = async () => {
     // this.toast();
@@ -134,14 +133,14 @@ export class SingleArticle extends React.Component<any, any> {
       this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
     }
-  }
+  };
 
   public toast = async () => {
     this.setState({ isToastOpen: true });
     setTimeout(() => {
       this.setState({ isToastOpen: false });
-    },         2000);
-  }
+    }, 2000);
+  };
 
   public handleDelete = async (e: any) => {
     e.preventDefault();
@@ -165,7 +164,7 @@ export class SingleArticle extends React.Component<any, any> {
       return;
     }
     return alert('Item not deleted');
-  }
+  };
 
   public render() {
     if (this.state.loading) {
@@ -225,7 +224,9 @@ export class SingleArticle extends React.Component<any, any> {
             >
               {this.state.categories.length > 0 ? (
                 this.state.categories.map((category: any, i: number) => (
-                  <option value={category.slug}>{category.label}</option>
+                  <option key={i} value={category.slug}>
+                    {category.label}
+                  </option>
                 ))
               ) : (
                 <div>
@@ -270,7 +271,7 @@ export class SingleArticle extends React.Component<any, any> {
                 modules={this.modules}
                 formats={this.formats}
                 value={this.state.content}
-                onChange={this.handleQullChange}
+                onChange={this.handleQuillChange}
                 style={{ height: 500, marginBottom: 100 }}
               />
             </div>

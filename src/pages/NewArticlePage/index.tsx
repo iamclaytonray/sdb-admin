@@ -54,6 +54,7 @@ export class NewArticle extends React.Component<any, any> {
     'indent',
     'link',
     'image',
+    'video',
   ];
 
   public componentDidMount() {
@@ -63,7 +64,7 @@ export class NewArticle extends React.Component<any, any> {
   public fetch = async () => {
     const res = await Axios.get(`${API_URL}/tabs/?pageType=Discoveries`);
     this.setState({ categories: res.data.data });
-  }
+  };
 
   public handleInputChange = event => {
     const target = event.target;
@@ -73,11 +74,11 @@ export class NewArticle extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
-  public handleQullChange = (value: string) => {
+  public handleQuillChange = (value: string) => {
     this.setState({ content: value });
-  }
+  };
 
   public handleSubmit = async (e: any): Promise<any> => {
     e.preventDefault();
@@ -116,7 +117,7 @@ export class NewArticle extends React.Component<any, any> {
       });
       window.scrollTo(0, 0);
     }
-  }
+  };
 
   public render() {
     // if (this.state.error) {
@@ -210,7 +211,7 @@ export class NewArticle extends React.Component<any, any> {
                 modules={this.modules}
                 formats={this.formats}
                 value={this.state.content}
-                onChange={this.handleQullChange}
+                onChange={this.handleQuillChange}
                 style={{ height: 500, marginBottom: 100 }}
               />
             </div>
