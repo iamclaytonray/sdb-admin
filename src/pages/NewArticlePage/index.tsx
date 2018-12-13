@@ -37,7 +37,7 @@ export class NewArticle extends React.Component<any, any> {
         { indent: '-1' },
         { indent: '+1' },
       ],
-      ['link', 'image'],
+      ['link', 'image', 'video'],
       ['clean'],
     ],
   };
