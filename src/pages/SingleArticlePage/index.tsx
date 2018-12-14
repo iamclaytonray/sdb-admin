@@ -9,7 +9,7 @@ import { ColorSwatch } from 'components/ColorSwatch';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
 import { PartsForm } from 'components/PartForm';
-import { Toast } from 'components/Toast';
+// import { Toast } from 'components/Toast';
 
 export class SingleArticle extends React.Component<any, any> {
   public state = {
@@ -62,7 +62,7 @@ export class SingleArticle extends React.Component<any, any> {
 
   public handleQuillChange = (value: string) => {
     this.setState({ content: value });
-  };
+  }
 
   public componentDidMount() {
     this.fetch();
@@ -95,7 +95,7 @@ export class SingleArticle extends React.Component<any, any> {
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
-  };
+  }
 
   public handleUpdate = async () => {
     // this.toast();
@@ -119,7 +119,7 @@ export class SingleArticle extends React.Component<any, any> {
           link,
           content,
           color,
-          parts: this.props.formState.partsForm.values.parts,
+          // parts: this.props.formState.partsForm.values.parts,
         },
         {
           headers: {
@@ -133,14 +133,14 @@ export class SingleArticle extends React.Component<any, any> {
       this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
     }
-  };
+  }
 
   public toast = async () => {
     this.setState({ isToastOpen: true });
     setTimeout(() => {
       this.setState({ isToastOpen: false });
-    }, 2000);
-  };
+    },         2000);
+  }
 
   public handleDelete = async (e: any) => {
     e.preventDefault();
@@ -164,7 +164,7 @@ export class SingleArticle extends React.Component<any, any> {
       return;
     }
     return alert('Item not deleted');
-  };
+  }
 
   public render() {
     if (this.state.loading) {
@@ -179,7 +179,7 @@ export class SingleArticle extends React.Component<any, any> {
     }
     return (
       <div className="card">
-        <Toast isOpen={this.state.isToastOpen} type="danger" />
+        {/* <Toast isOpen={this.state.isToastOpen} type="danger" /> */}
         <div className="card-body">
           {this.state.error && <Error error={this.state.error} />}
           <form>
