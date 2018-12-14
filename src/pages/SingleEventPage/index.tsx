@@ -66,7 +66,7 @@ export class SingleEventPage extends React.Component<any, any> {
         title: res.data.data.title,
         slug: res.data.data.slug,
         featuredImage: res.data.data.featuredImage,
-        content: res.data.data.content,
+        content: res.data.data.content || '',
       });
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });

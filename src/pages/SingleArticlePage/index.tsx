@@ -86,7 +86,7 @@ export class SingleArticle extends React.Component<any, any> {
         featuredImage: res.data.data.featuredImage,
         category: res.data.data.category,
         link: res.data.data.link,
-        content: res.data.data.content,
+        content: res.data.data.content || '',
         parts: res.data.data.parts,
         color: res.data.data.color,
 
