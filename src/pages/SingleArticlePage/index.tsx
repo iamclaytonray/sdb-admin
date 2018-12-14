@@ -98,7 +98,8 @@ export class SingleArticle extends React.Component<any, any> {
     }
   }
 
-  public handleUpdate = async () => {
+  public handleUpdate = async (e: any) => {
+    e.preventDefault();
     // this.toast();
     const {
       title,
