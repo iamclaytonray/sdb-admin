@@ -19,7 +19,6 @@ const reducer = combineReducers({
   form: reduxFormReducer,
 });
 
-// const store = createStore(reducer);
 const w: any = window;
 const store = createStore(
   reducer,

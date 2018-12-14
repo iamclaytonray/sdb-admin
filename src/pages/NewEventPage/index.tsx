@@ -74,7 +74,6 @@ export class NewEventPage extends React.Component<any, any> {
           slug,
           featuredImage,
           content,
-          order: Math.round(Math.random() * 1000),
         },
         {
           headers: {

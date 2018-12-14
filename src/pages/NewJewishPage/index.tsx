@@ -1,10 +1,12 @@
 import Axios from 'axios';
-import { Error } from 'components/Error';
 import * as React from 'react';
-
-import { API_URL } from '../../constants';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 import { ColorSwatch } from 'components/ColorSwatch';
+import { Error } from 'components/Error';
+
+import { API_URL } from '../../constants';
 
 export class NewJewishPage extends React.Component<any, any> {
   public state = {
@@ -14,9 +16,44 @@ export class NewJewishPage extends React.Component<any, any> {
     featuredImage: '',
     link: '',
     color: '#B56FEA',
+    content: '',
 
     error: null,
   };
+
+  public modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image', 'video'],
+      ['clean'],
+    ],
+  };
+
+  public formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+    'video',
+  ];
+
+  public handleQuillChange = (value: string) => {
+    this.setState({ content: value });
+  }
 
   public handleInputChange = event => {
     const target = event.target;
@@ -30,7 +67,15 @@ export class NewJewishPage extends React.Component<any, any> {
 
   public handleSubmit = async (e: any) => {
     e.preventDefault();
-    const { title, slug, description, featuredImage, link, color } = this.state;
+    const {
+      title,
+      slug,
+      description,
+      featuredImage,
+      link,
+      color,
+      content,
+    } = this.state;
 
     try {
       await Axios.post(
@@ -41,7 +86,7 @@ export class NewJewishPage extends React.Component<any, any> {
           description,
           featuredImage,
           link,
-          order: Math.round(Math.random() * 1000),
+          content,
           color,
         },
         {
@@ -142,6 +187,17 @@ export class NewJewishPage extends React.Component<any, any> {
               <option value="#00ADFF">Light Blue</option>
               <option value="#FF4600">Orange</option>
             </select>
+
+            <div className="form-group">
+              <label>Content</label>
+              <ReactQuill
+                modules={this.modules}
+                formats={this.formats}
+                value={this.state.content}
+                onChange={this.handleQuillChange}
+                style={{ height: 500, marginBottom: 100 }}
+              />
+            </div>
 
             <button className="btn btn-primary" type="submit">
               Create

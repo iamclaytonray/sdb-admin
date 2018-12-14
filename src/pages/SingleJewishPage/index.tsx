@@ -1,5 +1,7 @@
 import Axios from 'axios';
 import * as React from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 import { ColorSwatch } from 'components/ColorSwatch';
 import { Loading } from 'components/Loading';
@@ -12,10 +14,45 @@ export class SingleJewishPage extends React.Component<any, any> {
     featuredImage: '',
     link: '',
     color: '#B56FEA',
+    content: '',
 
     error: null,
     loading: true,
   };
+
+  public modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image', 'video'],
+      ['clean'],
+    ],
+  };
+
+  public formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+    'video',
+  ];
+
+  public handleQuillChange = (value: string) => {
+    this.setState({ content: value });
+  }
 
   public componentDidMount() {
     this.fetch();
@@ -33,6 +70,7 @@ export class SingleJewishPage extends React.Component<any, any> {
         featuredImage: res.data.data.featuredImage,
         link: res.data.data.link,
         color: res.data.data.color,
+        content: res.data.data.content || '',
       });
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
@@ -51,7 +89,7 @@ export class SingleJewishPage extends React.Component<any, any> {
 
   public handleUpdate = async (e: any) => {
     e.preventDefault();
-    const { title, slug, featuredImage, link, color } = this.state;
+    const { title, slug, featuredImage, link, color, content } = this.state;
     try {
       await Axios.put(
         `${API_URL}/jewish/${this.props.match.params.slug}`,
@@ -61,6 +99,7 @@ export class SingleJewishPage extends React.Component<any, any> {
           featuredImage,
           link,
           color,
+          content,
         },
         {
           headers: {
@@ -174,6 +213,17 @@ export class SingleJewishPage extends React.Component<any, any> {
               <option value="#00ADFF">Light Blue</option>
               <option value="#FF4600">Orange</option>
             </select>
+
+            <div className="form-group">
+              <label>Content</label>
+              <ReactQuill
+                modules={this.modules}
+                formats={this.formats}
+                value={this.state.content}
+                onChange={this.handleQuillChange}
+                style={{ height: 500, marginBottom: 100 }}
+              />
+            </div>
 
             <div
               style={{
