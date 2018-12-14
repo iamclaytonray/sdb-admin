@@ -64,7 +64,7 @@ export class NewArticle extends React.Component<any, any> {
   public fetch = async () => {
     const res = await Axios.get(`${API_URL}/tabs/?pageType=Discoveries`);
     this.setState({ categories: res.data.data });
-  };
+  }
 
   public handleInputChange = event => {
     const target = event.target;
@@ -74,11 +74,11 @@ export class NewArticle extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  };
+  }
 
   public handleQuillChange = (value: string) => {
     this.setState({ content: value });
-  };
+  }
 
   public handleSubmit = async (e: any): Promise<any> => {
     e.preventDefault();
@@ -117,7 +117,7 @@ export class NewArticle extends React.Component<any, any> {
       });
       window.scrollTo(0, 0);
     }
-  };
+  }
 
   public render() {
     // if (this.state.error) {

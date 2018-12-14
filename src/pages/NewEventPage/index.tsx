@@ -50,7 +50,7 @@ export class NewEventPage extends React.Component<any, any> {
 
   public handleQuillChange = (value: string) => {
     this.setState({ content: value });
-  };
+  }
 
   public handleInputChange = (event: any) => {
     const target = event.target;
@@ -60,7 +60,7 @@ export class NewEventPage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  };
+  }
 
   public handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -88,7 +88,7 @@ export class NewEventPage extends React.Component<any, any> {
       this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
     }
-  };
+  }
 
   public render() {
     return (

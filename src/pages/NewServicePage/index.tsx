@@ -58,7 +58,7 @@ export class NewService extends React.Component<any, any> {
 
   public handleQuillChange = (value: string) => {
     this.setState({ content: value });
-  };
+  }
 
   public componentDidMount() {
     this.fetch();
@@ -71,7 +71,7 @@ export class NewService extends React.Component<any, any> {
     } catch (error) {
       this.setState({ error });
     }
-  };
+  }
 
   public handleInputChange = (event: any) => {
     const { target } = event;
@@ -81,7 +81,7 @@ export class NewService extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  };
+  }
 
   public handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -120,7 +120,7 @@ export class NewService extends React.Component<any, any> {
       this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
     }
-  };
+  }
 
   public onSelectChange = (e: any) => {
     const value: any = Array.from(
@@ -128,7 +128,7 @@ export class NewService extends React.Component<any, any> {
       option => option.value,
     );
     this.setState({ parts: value });
-  };
+  }
 
   public render() {
     return (

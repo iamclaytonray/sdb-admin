@@ -50,7 +50,7 @@ export class SingleEventPage extends React.Component<any, any> {
 
   public handleQuillChange = (value: string) => {
     this.setState({ content: value });
-  };
+  }
 
   public componentDidMount() {
     this.fetch();
@@ -71,7 +71,7 @@ export class SingleEventPage extends React.Component<any, any> {
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
-  };
+  }
 
   public handleInputChange = event => {
     const target = event.target;
@@ -81,7 +81,7 @@ export class SingleEventPage extends React.Component<any, any> {
     this.setState({
       [name]: value,
     });
-  };
+  }
 
   public handleUpdate = (e: any) => {
     e.preventDefault();
@@ -106,7 +106,7 @@ export class SingleEventPage extends React.Component<any, any> {
       this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
     }
-  };
+  }
 
   public handleDelete = async (e: any) => {
     e.preventDefault();
@@ -128,7 +128,7 @@ export class SingleEventPage extends React.Component<any, any> {
       }
       return;
     }
-  };
+  }
 
   public render() {
     if (this.state.loading) {
