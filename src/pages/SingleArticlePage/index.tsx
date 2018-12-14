@@ -93,6 +93,7 @@ export class SingleArticle extends React.Component<any, any> {
         categories: categoryRes.data.data,
       });
     } catch (error) {
+      console.log(error);
       this.setState({ loading: false, error: error.response.data.message });
     }
   }
@@ -129,18 +130,18 @@ export class SingleArticle extends React.Component<any, any> {
       );
       this.props.history.push('/dashboard/articles');
     } catch (error) {
-      // console.log(error);
-      this.setState({ error: error.response.data.message });
+      console.log(error);
       window.scroll(0, 0);
+      this.setState({ error: error.response.data.message });
     }
   }
 
-  public toast = async () => {
-    this.setState({ isToastOpen: true });
-    setTimeout(() => {
-      this.setState({ isToastOpen: false });
-    },         2000);
-  }
+  // public toast = async () => {
+  //   this.setState({ isToastOpen: true });
+  //   setTimeout(() => {
+  //     this.setState({ isToastOpen: false });
+  //   },         2000);
+  // }
 
   public handleDelete = async (e: any) => {
     e.preventDefault();
