@@ -53,11 +53,12 @@ export class NewTabPage extends React.Component<any, any> {
 
           <form onSubmit={e => this.handleSubmit(e)}>
             <div className="form-group">
-              <label>label</label>
+              <label>Label</label>
               <input
                 type="text"
                 name="label"
-                placeholder="label"
+                placeholder="Label"
+                className="form-control"
                 value={this.state.label}
                 onChange={this.handleInputChange}
               />
@@ -69,6 +70,7 @@ export class NewTabPage extends React.Component<any, any> {
                 type="text"
                 name="slug"
                 placeholder="Slug"
+                className="form-control"
                 value={this.state.slug}
                 onChange={this.handleInputChange}
               />
@@ -76,15 +78,16 @@ export class NewTabPage extends React.Component<any, any> {
 
             <div className="form-group">
               <label>Page</label>
-              <input
-                type="select"
+              <select
+                // type="select"
                 name="page"
+                className="form-control"
                 value={this.state.page}
                 onChange={this.handleInputChange}
               >
-                <option>Discoveries</option>
-                <option>Teachings</option>
-              </input>
+                <option value="Discoveries">Discoveries</option>
+                <option value="Teachings">Teachings</option>
+              </select>
             </div>
 
             <button type="submit" className="btn btn-primary">
