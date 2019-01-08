@@ -25,7 +25,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   fontWeight: '700',
   letterSpacing: 1.2,
 
-  background: isDragging ? 'lightgreen' : 'grey',
+  background: isDragging ? 'darkgreen' : 'rgba(0,0,0,.7',
 
   display: 'flex',
   flex: 1,
