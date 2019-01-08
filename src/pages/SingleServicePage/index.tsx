@@ -7,7 +7,6 @@ import { API_URL } from '../../constants';
 
 import { ColorSwatch } from 'components/ColorSwatch';
 import { Loading } from 'components/Loading';
-import { PartsForm } from 'components/PartForm';
 
 export class SingleService extends React.Component<any, any> {
   public state = {
@@ -272,10 +271,6 @@ export class SingleService extends React.Component<any, any> {
               />
             </div>
           </form>
-
-          {/*  */}
-          <PartsForm parts={this.state.parts} />
-          {/*  */}
 
           <div
             style={{

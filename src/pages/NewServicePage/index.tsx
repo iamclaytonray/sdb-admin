@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 
 import { ColorSwatch } from 'components/ColorSwatch';
 import { Error } from 'components/Error';
-import { PartsForm } from 'components/PartForm';
 
 import { API_URL } from '../../constants';
 
@@ -235,8 +234,6 @@ export class NewService extends React.Component<any, any> {
                 style={{ height: 500, marginBottom: 100 }}
               />
             </div>
-
-            <PartsForm />
 
             <button type="submit" className="btn btn-primary">
               Create

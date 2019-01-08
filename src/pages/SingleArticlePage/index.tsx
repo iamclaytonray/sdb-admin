@@ -8,8 +8,6 @@ import { API_URL } from '../../constants';
 import { ColorSwatch } from 'components/ColorSwatch';
 import { Error } from 'components/Error';
 import { Loading } from 'components/Loading';
-import { PartsForm } from 'components/PartForm';
-// import { Toast } from 'components/Toast';
 
 export class SingleArticle extends React.Component<any, any> {
   public state = {
@@ -277,8 +275,6 @@ export class SingleArticle extends React.Component<any, any> {
                 style={{ height: 500, marginBottom: 100 }}
               />
             </div>
-
-            <PartsForm parts={this.state.parts} />
 
             <div
               style={{

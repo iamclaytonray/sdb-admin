@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 import { ColorSwatch } from 'components/ColorSwatch';
 import { Error } from 'components/Error';
-import { PartsForm } from 'components/PartForm';
 
 import 'react-quill/dist/quill.snow.css';
 import { API_URL } from '../../constants';
@@ -234,8 +233,6 @@ export class NewArticle extends React.Component<any, any> {
                 <option value="#FF4600">Orange</option>
               </select>
             </div>
-
-            <PartsForm />
 
             <button type="submit" className="btn btn-primary">
               Create
