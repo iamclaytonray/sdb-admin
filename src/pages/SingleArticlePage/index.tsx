@@ -18,7 +18,6 @@ export class SingleArticle extends React.Component<any, any> {
     link: '',
     content: '',
     color: '#B56FEA',
-    parts: [],
 
     categories: [],
 
@@ -85,13 +84,11 @@ export class SingleArticle extends React.Component<any, any> {
         category: res.data.data.category,
         link: res.data.data.link,
         content: res.data.data.content || '',
-        parts: res.data.data.parts,
         color: res.data.data.color,
 
         categories: categoryRes.data.data,
       });
     } catch (error) {
-      console.log(error);
       this.setState({ loading: false, error: error.response.data.message });
     }
   }
@@ -119,7 +116,6 @@ export class SingleArticle extends React.Component<any, any> {
           link,
           content,
           color,
-          // parts: this.props.formState.partsForm.values.parts,
         },
         {
           headers: {
@@ -129,7 +125,6 @@ export class SingleArticle extends React.Component<any, any> {
       );
       this.props.history.push('/dashboard/articles');
     } catch (error) {
-      console.log(error);
       window.scroll(0, 0);
       this.setState({ error: error.response.data.message });
     }

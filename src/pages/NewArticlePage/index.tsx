@@ -17,7 +17,6 @@ export class NewArticle extends React.Component<any, any> {
     content: '',
     link: '',
     featuredImage: '',
-    parts: [] as any,
     color: '#00ADFF',
 
     categories: [],
@@ -101,7 +100,6 @@ export class NewArticle extends React.Component<any, any> {
           link,
           content,
           color,
-          parts: this.props.formState.partsForm.values.parts,
         },
         {
           headers: {

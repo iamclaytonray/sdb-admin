@@ -16,7 +16,6 @@ export class SingleService extends React.Component<any, any> {
     description: '',
     category: 'rabbi-don',
     color: '#5A17C7',
-    parts: [],
     content: '',
 
     categories: [],
@@ -79,7 +78,6 @@ export class SingleService extends React.Component<any, any> {
         slug,
         featuredImage,
         category,
-        parts,
         description,
         color,
       } = res.data.data;
@@ -94,7 +92,6 @@ export class SingleService extends React.Component<any, any> {
         description,
         category,
         color,
-        parts,
         content: setContent,
 
         categories: categoryRes.data.data,
@@ -137,7 +134,6 @@ export class SingleService extends React.Component<any, any> {
           category,
           color,
           content,
-          parts: this.props.formState.partsForm.values.parts,
         },
         {
           headers: {

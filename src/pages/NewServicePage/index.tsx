@@ -18,7 +18,6 @@ export class NewService extends React.Component<any, any> {
     featuredImage: '',
     content: '',
     color: '#B56FEA',
-    parts: [],
 
     categories: [],
 
@@ -105,7 +104,6 @@ export class NewService extends React.Component<any, any> {
           featuredImage,
           color,
           content,
-          parts: this.props.formState.partsForm.values.parts,
         },
         {
           headers: {
@@ -119,14 +117,6 @@ export class NewService extends React.Component<any, any> {
       this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
     }
-  }
-
-  public onSelectChange = (e: any) => {
-    const value: any = Array.from(
-      e.target.selectedOptions as HTMLOptionsCollection,
-      option => option.value,
-    );
-    this.setState({ parts: value });
   }
 
   public render() {
