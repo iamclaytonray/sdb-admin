@@ -80,7 +80,7 @@ export class SingleService extends React.Component<any, any> {
         category,
         description,
         color,
-      } = res.data.data;
+      } = res.data;
       const setContent = (await content) ? content : '';
 
       this.setState({
