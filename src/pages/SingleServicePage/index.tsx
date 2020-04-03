@@ -101,7 +101,7 @@ export class SingleService extends React.Component<any, any> {
     }
   }
 
-  public handleInputChange = event => {
+  public handleInputChange = (event) => {
     const { target } = event;
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -201,6 +201,17 @@ export class SingleService extends React.Component<any, any> {
                 type="text"
                 name="slug"
                 value={this.state.slug}
+                onChange={this.handleInputChange}
+                className="form-control"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Description</label>
+              <input
+                type="text"
+                name="description"
+                value={this.state.description}
                 onChange={this.handleInputChange}
                 className="form-control"
               />
