@@ -1,12 +1,13 @@
+import { Button } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
 import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { connect } from 'react-redux';
 
-import { ColorSwatch } from 'components/ColorSwatch';
-import { Error } from 'components/Error';
-
-import 'react-quill/dist/quill.snow.css';
+import { ColorSwatch } from '../../components/ColorSwatch';
+import { Error } from '../../components/Error';
+import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 
 export class NewArticle extends React.Component<any, any> {
@@ -64,7 +65,7 @@ export class NewArticle extends React.Component<any, any> {
     this.setState({ categories: res.data.data });
   }
 
-  public handleInputChange = event => {
+  public handleInputChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
@@ -129,44 +130,31 @@ export class NewArticle extends React.Component<any, any> {
         <div className="card-body">
           {this.state.error && <Error error={this.state.error} />}
           <h5 className="card-title">New Discovery</h5>
-          <form onSubmit={e => this.handleSubmit(e)}>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                name="title"
-                placeholder="Title"
-                value={this.state.title}
-                required
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Slug</label>
-              <input
-                type="text"
-                name="slug"
-                placeholder="Slug"
-                value={this.state.slug}
-                required
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Featured Image</label>
-              <input
-                type="text"
-                name="featuredImage"
-                placeholder="Featured Image"
-                value={this.state.featuredImage}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
+          <form onSubmit={(e) => this.handleSubmit(e)}>
+            <SharedInput
+              type="text"
+              name="title"
+              label="Title"
+              value={this.state.title}
+              required
+              onChange={this.handleInputChange}
+            />
+            <SharedInput
+              type="text"
+              name="slug"
+              label="Slug"
+              value={this.state.slug}
+              required
+              onChange={this.handleInputChange}
+            />
+            <SharedInput
+              type="text"
+              name="featuredImage"
+              label="Featured Image (thumbnail)"
+              value={this.state.featuredImage}
+              required
+              onChange={this.handleInputChange}
+            />
 
             <label>Category</label>
             <select
@@ -232,9 +220,9 @@ export class NewArticle extends React.Component<any, any> {
               </select>
             </div>
 
-            <button type="submit" className="btn btn-primary">
+            <Button color="primary" variant="contained" type="submit">
               Create
-            </button>
+            </Button>
           </form>
         </div>
       </div>

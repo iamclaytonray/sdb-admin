@@ -1,6 +1,7 @@
 import Axios from 'axios';
-import { Error } from 'components/Error';
 import * as React from 'react';
+
+import { Error } from '../../components/Error';
 import { API_URL } from '../../constants';
 
 export class NewTabPage extends React.Component<any, any> {
@@ -11,7 +12,7 @@ export class NewTabPage extends React.Component<any, any> {
     error: null,
   };
 
-  public handleInputChange = event => {
+  public handleInputChange = (event) => {
     const { target } = event;
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -51,7 +52,7 @@ export class NewTabPage extends React.Component<any, any> {
           <h5 className="card-title">New Menu Item</h5>
           {this.state.error && <Error error={this.state.error} />}
 
-          <form onSubmit={e => this.handleSubmit(e)}>
+          <form onSubmit={(e) => this.handleSubmit(e)}>
             <div className="form-group">
               <label>Label</label>
               <input

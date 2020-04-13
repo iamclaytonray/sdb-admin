@@ -1,6 +1,7 @@
 import Axios from 'axios';
-import { Loading } from 'components/Loading';
 import * as React from 'react';
+
+import { Loading } from '../../components/Loading';
 import { API_URL } from '../../constants';
 
 export class SingleTabPage extends React.Component<any, any> {

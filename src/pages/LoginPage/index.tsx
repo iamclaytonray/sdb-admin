@@ -1,56 +1,56 @@
+import { Button } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
+import { useHistory } from 'react-router-dom';
+
+import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 
-export class LoginPage extends React.Component<any, any> {
-  public state = {
+export const LoginPage = () => {
+  const history = useHistory();
+  const [state, setState] = React.useState({
     email: '',
     password: '',
     error: null,
-  };
+  });
 
-  public handleSubmit = async (e): Promise<any> => {
+  const handleSubmit = async (e): Promise<any> => {
     e.preventDefault();
-    const { email, password } = this.state;
+    const { email, password } = state;
     try {
       const res = await Axios.post(`${API_URL}/auth`, { email, password });
 
       localStorage.setItem('token', res.data.token);
-      this.props.history.push(`/dashboard`);
+      history.push(`/dashboard`);
     } catch (error) {
-      this.setState({ error: error.response.data.message });
+      setState({ ...state, error: error.response.data.message });
     }
-  }
-  public render() {
-    return (
-      <div className="container-fluid">
-        <h1>Login</h1>
-        {this.state.error && <p>{JSON.stringify(this.state.error)}</p>}
-        <form onSubmit={e => this.handleSubmit(e)}>
-          <input
-            className="form-control"
-            name="email"
-            placeholder="Email"
-            type="email"
-            required
-            autoComplete="email"
-            value={this.state.email}
-            onChange={e => this.setState({ email: e.target.value })}
-          />
-          <br />
-          <input
-            className="form-control"
-            name="password"
-            placeholder="Password"
-            value={this.state.password}
-            type="password"
-            onChange={e => this.setState({ password: e.target.value })}
-          />
-          <button className="btn btn-primary" type="submit">
-            Login
-          </button>
-        </form>
-      </div>
-    );
-  }
-}
+  };
+
+  return (
+    <div className="container-fluid">
+      <h1>Login</h1>
+      {state.error && <p>{JSON.stringify(state.error)}</p>}
+      <form onSubmit={(e) => handleSubmit(e)}>
+        <SharedInput
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          value={state.email}
+          onChange={(e) => setState({ ...state, email: e.target.value })}
+        />
+        <SharedInput
+          name="password"
+          placeholder="Password"
+          value={state.password}
+          type="password"
+          onChange={(e) => setState({ ...state, password: e.target.value })}
+        />
+        <Button color="primary" variant="contained" type="submit">
+          Login
+        </Button>
+      </form>
+    </div>
+  );
+};

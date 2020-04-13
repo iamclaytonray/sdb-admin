@@ -3,6 +3,7 @@
 # Build
 build/
 dist/
+.cache/
 
 ### ElasticBeanstalk ###
 .elasticbeanstalk/

@@ -4,9 +4,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { connect } from 'react-redux';
 
-import { ColorSwatch } from 'components/ColorSwatch';
-import { Error } from 'components/Error';
-
+import { ColorSwatch } from '../../components/ColorSwatch';
+import { Error } from '../../components/Error';
 import { API_URL } from '../../constants';
 
 export class NewService extends React.Component<any, any> {
@@ -126,7 +125,7 @@ export class NewService extends React.Component<any, any> {
           <h5 className="card-title">New Teaching</h5>
           {this.state.error && <Error error={this.state.error} />}
 
-          <form onSubmit={e => this.handleSubmit(e)}>
+          <form onSubmit={(e) => this.handleSubmit(e)}>
             <div className="form-group">
               <label>Title</label>
               <input

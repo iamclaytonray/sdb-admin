@@ -1,15 +1,21 @@
-import { DashboardWrapper } from 'components/DashboardWrapper';
 import * as React from 'react';
 import { Redirect, Route } from 'react-router-dom';
+
+import { Layout } from '../../components/Layout';
 
 export const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
-      localStorage.getItem('token') !== null ? (
-        <DashboardWrapper>
+    render={(props) => {
+      // TODO(clayton): fixme
+      const title =
+        props.match.params && props.location.pathname.includes('services')
+          ? 'Single Sermon'
+          : 'Unknown';
+      return localStorage.getItem('token') !== null ? (
+        <Layout title={title}>
           <Component {...props} />
-        </DashboardWrapper>
+        </Layout>
       ) : (
         <Redirect
           to={{
@@ -17,7 +23,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
             state: { from: props.location },
           }}
         />
-      )
-    }
+      );
+    }}
   />
 );

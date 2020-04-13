@@ -3,8 +3,8 @@ import * as React from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import { ColorSwatch } from 'components/ColorSwatch';
-import { Loading } from 'components/Loading';
+import { ColorSwatch } from '../../components/ColorSwatch';
+import { Loading } from '../../components/Loading';
 import { API_URL } from '../../constants';
 
 export class SingleJewishPage extends React.Component<any, any> {
@@ -77,7 +77,7 @@ export class SingleJewishPage extends React.Component<any, any> {
     }
   }
 
-  public handleinputChange = event => {
+  public handleinputChange = (event) => {
     const { target } = event;
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;

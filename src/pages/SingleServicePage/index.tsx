@@ -1,15 +1,29 @@
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { connect } from 'react-redux';
+import { Col, Container, Row } from 'react-grid-system';
+import { useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+
+import { ColorSwatch } from '../../components/ColorSwatch';
+import { Loading } from '../../components/Loading';
+import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 
-import { ColorSwatch } from 'components/ColorSwatch';
-import { Loading } from 'components/Loading';
-
-export class SingleService extends React.Component<any, any> {
-  public state = {
+export const SingleServicePage = () => {
+  const history = useHistory();
+  const { slug } = useParams();
+  const { selectedSermonId } = useSelector((s: any) => s.sermons);
+  const selectedSermon = useSelector(
+    (s: any) => s.sermons.allSermons[selectedSermonId],
+  );
+  const [state, setState] = React.useState({
     title: '',
     slug: '',
     featuredImage: '',
@@ -20,112 +34,47 @@ export class SingleService extends React.Component<any, any> {
 
     categories: [],
 
-    loading: true,
+    loading: false,
     error: null,
+  });
+
+  React.useEffect(() => {
+    initData();
+  },              [selectedSermonId]);
+
+  const initData = () => {
+    setState({
+      ...state,
+      ...selectedSermon,
+    });
   };
 
-  public modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [
-        { list: 'ordered' },
-        { list: 'bullet' },
-        { indent: '-1' },
-        { indent: '+1' },
-      ],
-      ['link', 'image', 'video'],
-      ['clean'],
-    ],
-  };
-
-  public formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'indent',
-    'link',
-    'image',
-    'video',
-  ];
-
-  public handleQuillChange = (value: string) => {
-    this.setState({ content: value });
-  }
-
-  public componentDidMount() {
-    this.fetch();
-  }
-
-  public fetch = async () => {
-    try {
-      const res = await Axios.get(
-        `${API_URL}/services/${this.props.match.params.slug}`,
-      );
-
-      const categoryRes = await Axios.get(
-        `${API_URL}/tabs/?pageType=Teachings`,
-      );
-
-      const {
-        content,
-        title,
-        slug,
-        featuredImage,
-        category,
-        description,
-        color,
-      } = res.data;
-      const setContent = (await content) ? content : '';
-
-      this.setState({
-        loading: false,
-
-        title,
-        slug,
-        featuredImage,
-        description,
-        category,
-        color,
-        content: setContent,
-
-        categories: categoryRes.data.data,
-      });
-    } catch (error) {
-      this.setState({ loading: false, error: error.response.data.message });
-    }
-  }
-
-  public handleInputChange = (event) => {
+  const handleInputChange = (event) => {
     const { target } = event;
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
 
-    this.setState({
+    setState({
+      ...state,
       [name]: value,
     });
-  }
+  };
 
-  public handleUpdate = async (e: any) => {
+  const handleUpdate = async (e: any) => {
     e.preventDefault();
 
     const {
       title,
       featuredImage,
       description,
-      slug,
+      // slug,
       category,
       color,
       content,
-    } = this.state;
+    } = state;
     try {
       await Axios.put(
-        `${API_URL}/services/${this.props.match.params.slug}`,
+        `${API_URL}/services/${slug}`,
         {
           title,
           featuredImage,
@@ -141,167 +90,145 @@ export class SingleService extends React.Component<any, any> {
           },
         },
       );
-      this.props.history.push('/dashboard/services');
+      history.push('/dashboard/services');
     } catch (error) {
-      this.setState({ error: error.response.data.message });
+      setState({ ...state, error: error.response.data.message });
     }
-  }
+  };
 
-  public handleDelete = async (e: any) => {
+  const handleDelete = async (e: any) => {
     e.preventDefault();
     const confirm = window.confirm('Are you sure?');
     if (confirm) {
       try {
-        await Axios.delete(
-          `${API_URL}/services/${this.props.match.params.slug}`,
-          {
-            headers: {
-              Authorization: localStorage.getItem('token'),
-            },
+        await Axios.delete(`${API_URL}/services/${slug}`, {
+          headers: {
+            Authorization: localStorage.getItem('token'),
           },
-        );
-        this.props.history.push(`/dashboard/services`);
+        });
+        history.push(`/dashboard/services`);
       } catch (error) {
-        this.setState({ error: error.response.data.message });
+        setState({ ...state, error: error.response.data.message });
       }
       return;
     }
     return alert('Item not deleted');
+  };
+
+  if (state.loading) {
+    return <Loading />;
   }
 
-  public render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-    if (this.state.error) {
-      return (
-        <div className="card">
-          <div className="card-body">{JSON.stringify(this.state.error)}</div>
-        </div>
-      );
-    }
+  if (state.error) {
     return (
       <div className="card">
-        <div className="card-body">
-          <form>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                name="title"
-                value={this.state.title}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Slug</label>
-              <input
-                type="text"
-                name="slug"
-                value={this.state.slug}
-                onChange={this.handleInputChange}
-                className="form-control"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Description</label>
-              <input
-                type="text"
-                name="description"
-                value={this.state.description}
-                onChange={this.handleInputChange}
-                className="form-control"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Featured Image</label>
-              <input
-                type="text"
-                name="featuredImage"
-                value={this.state.featuredImage}
-                onChange={this.handleInputChange}
-                className="form-control"
-              />
-            </div>
-
-            <label>Category</label>
-            <select
-              name="category"
-              value={this.state.category}
-              onChange={this.handleInputChange}
-              className="form-control"
-            >
-              {this.state.categories.length > 0 ? (
-                this.state.categories.map((category: any, i: number) => (
-                  <option key={i} value={category.slug}>
-                    {category.label}
-                  </option>
-                ))
-              ) : (
-                <div>
-                  Something went wrong trying to fetch the categories. If you
-                  see this message, please refresh or try again later. Also, let
-                  Clayton know.
-                </div>
-              )}
-            </select>
-
-            <ColorSwatch color={this.state.color} />
-
-            <label>Color</label>
-            <select
-              name="color"
-              value={this.state.color}
-              onChange={(e: any) => this.setState({ color: e.target.value })}
-              className="form-control"
-            >
-              <option value="#B56FEA">Light Purple</option>
-              <option value="#5A17C7">Purple</option>
-              <option value="#031AF7">Dark Blue</option>
-              <option value="#08D316">Green</option>
-              <option value="#00ADFF">Light Blue</option>
-              <option value="#FF4600">Orange</option>
-            </select>
-            {/*  */}
-            <div className="form-group">
-              <label>Content</label>
-              <ReactQuill
-                modules={this.modules}
-                formats={this.formats}
-                value={this.state.content}
-                onChange={this.handleQuillChange}
-                style={{ height: 500, marginBottom: 100 }}
-              />
-            </div>
-          </form>
-
-          <div
-            style={{
-              display: 'flex',
-              flex: 1,
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <button className="btn btn-primary" onClick={this.handleUpdate}>
-              Update
-            </button>
-            <button className="btn btn-danger" onClick={this.handleDelete}>
-              Delete All
-            </button>
-          </div>
-        </div>
+        <div className="card-body">{JSON.stringify(state.error)}</div>
       </div>
     );
   }
-}
 
-const mapStateToProps = (state: any) => ({
-  formState: state.form,
-});
+  return (
+    <Container fluid>
+      <Row align="center" justify="center">
+        <Col xs={12} sm={12} md={8} lg={8}>
+          <form style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+            <SharedInput
+              type="text"
+              name="title"
+              label="Title"
+              value={state.title}
+              onChange={handleInputChange}
+            />
 
-export const SingleServicePage = connect(mapStateToProps)(SingleService);
+            <SharedInput
+              type="text"
+              name="slug"
+              label="Slug"
+              value={state.slug}
+              onChange={handleInputChange}
+            />
+
+            <SharedInput
+              type="text"
+              name="description"
+              label="Description"
+              value={state.description}
+              onChange={handleInputChange}
+            />
+
+            <SharedInput
+              type="text"
+              name="featuredImage"
+              label="Featured Image (thumbnail)"
+              value={state.featuredImage}
+              onChange={handleInputChange}
+            />
+
+            {/* <FormControl variant="outlined" margin="normal">
+              <InputLabel id="demo-simple-select-outlined-label">
+                Category
+              </InputLabel>
+              <Select
+                labelId="category-label"
+                id="category-input"
+                label="Category"
+                value={state.category}
+                // onChange={handleChange}
+              >
+                {state.categories.map((category: any) => (
+                  <MenuItem value={category._id}>{category.label}</MenuItem>
+                ))}
+              </Select>
+            </FormControl> */}
+
+            <ColorSwatch color={state.color} />
+
+            <FormControl variant="outlined" margin="normal">
+              <InputLabel id="demo-simple-select-outlined-label">
+                Color
+              </InputLabel>
+              <Select
+                labelId="color-label"
+                id="color-input"
+                label="Color"
+                value={state.color}
+                // onChange={handleChange}
+              >
+                <MenuItem value="#B56FEA">Light Purple</MenuItem>
+                <MenuItem value="#5A17C7">Purple</MenuItem>
+                <MenuItem value="#031AF7">Dark Blue</MenuItem>
+                <MenuItem value="#08D316">Green</MenuItem>
+                <MenuItem value="#00ADFF">Light Blue</MenuItem>
+                <MenuItem value="#FF4600">Orange</MenuItem>
+              </Select>
+            </FormControl>
+
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handleUpdate}
+              >
+                Update
+              </Button>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={handleDelete}
+              >
+                Delete All
+              </Button>
+            </div>
+          </form>
+        </Col>
+      </Row>
+    </Container>
+  );
+};

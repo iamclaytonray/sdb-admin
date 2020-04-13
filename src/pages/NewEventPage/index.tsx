@@ -1,11 +1,9 @@
-import * as React from 'react';
-
 import Axios from 'axios';
+import * as React from 'react';
 import ReactQuill from 'react-quill';
-
-import { Error } from 'components/Error';
-
 import 'react-quill/dist/quill.snow.css';
+
+import { Error } from '../../components/Error';
 import { API_URL } from '../../constants';
 
 export class NewEventPage extends React.Component<any, any> {
@@ -97,7 +95,7 @@ export class NewEventPage extends React.Component<any, any> {
           {this.state.error && (
             <Error error={JSON.stringify(this.state.error)} />
           )}
-          <form onSubmit={e => this.handleSubmit(e)}>
+          <form onSubmit={(e) => this.handleSubmit(e)}>
             <div className="form-group">
               <label>Title</label>
               <input

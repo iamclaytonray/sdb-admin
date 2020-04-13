@@ -15,14 +15,7 @@
     "noImplicitAny": false,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "baseUrl": ".",
-    "paths": {
-      "*": ["./*"],
-      "components/*": ["src/components/*"],
-      "containers/*": ["src/containers/*"],
-      "pages/*": ["src/pages/*"],
-    }
+    "noUnusedLocals": true
   },
   "exclude": [
     "node_modules",

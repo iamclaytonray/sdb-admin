@@ -12,6 +12,7 @@ export const ColorSwatch = ({ color }: Props) => (
       height: 50,
       marginTop: 20,
       marginBottom: 20,
+      borderRadius: 4,
     }}
   />
 );

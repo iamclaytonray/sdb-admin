@@ -3,11 +3,11 @@ import * as React from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { connect } from 'react-redux';
-import { API_URL } from '../../constants';
 
-import { ColorSwatch } from 'components/ColorSwatch';
-import { Error } from 'components/Error';
-import { Loading } from 'components/Loading';
+import { ColorSwatch } from '../../components/ColorSwatch';
+import { Error } from '../../components/Error';
+import { Loading } from '../../components/Loading';
+import { API_URL } from '../../constants';
 
 export class SingleArticle extends React.Component<any, any> {
   public state = {
@@ -23,8 +23,6 @@ export class SingleArticle extends React.Component<any, any> {
 
     loading: true,
     error: null,
-
-    isToastOpen: false,
   };
 
   public modules = {
@@ -130,16 +128,8 @@ export class SingleArticle extends React.Component<any, any> {
     }
   }
 
-  // public toast = async () => {
-  //   this.setState({ isToastOpen: true });
-  //   setTimeout(() => {
-  //     this.setState({ isToastOpen: false });
-  //   },         2000);
-  // }
-
   public handleDelete = async (e: any) => {
     e.preventDefault();
-    // this.toast();
     const confirm = window.confirm('Are you sure?');
     if (confirm) {
       try {
@@ -174,7 +164,6 @@ export class SingleArticle extends React.Component<any, any> {
     }
     return (
       <div className="card">
-        {/* <Toast isOpen={this.state.isToastOpen} type="danger" /> */}
         <div className="card-body">
           {this.state.error && <Error error={this.state.error} />}
           <form>
@@ -183,7 +172,7 @@ export class SingleArticle extends React.Component<any, any> {
               <input
                 type="text"
                 value={this.state.title}
-                onChange={e => this.setState({ title: e.target.value })}
+                onChange={(e) => this.setState({ title: e.target.value })}
                 className="form-control"
               />
             </div>
@@ -193,7 +182,7 @@ export class SingleArticle extends React.Component<any, any> {
               <input
                 type="text"
                 value={this.state.slug}
-                onChange={e => this.setState({ slug: e.target.value })}
+                onChange={(e) => this.setState({ slug: e.target.value })}
                 className="form-control"
               />
             </div>
@@ -205,7 +194,9 @@ export class SingleArticle extends React.Component<any, any> {
                 placeholder="Featured Image"
                 type="text"
                 value={this.state.featuredImage}
-                onChange={e => this.setState({ featuredImage: e.target.value })}
+                onChange={(e) =>
+                  this.setState({ featuredImage: e.target.value })
+                }
                 className="form-control"
               />
             </div>
@@ -238,7 +229,7 @@ export class SingleArticle extends React.Component<any, any> {
                 name="link"
                 type="text"
                 value={this.state.link}
-                onChange={e => this.setState({ link: e.target.value })}
+                onChange={(e) => this.setState({ link: e.target.value })}
                 className="form-control"
               />
             </div>

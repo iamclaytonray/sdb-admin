@@ -3,8 +3,8 @@ import * as React from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import { Error } from 'components/Error';
-import { Loading } from 'components/Loading';
+import { Error } from '../../components/Error';
+import { Loading } from '../../components/Loading';
 import { API_URL } from '../../constants';
 
 export class SingleEventPage extends React.Component<any, any> {
@@ -73,7 +73,7 @@ export class SingleEventPage extends React.Component<any, any> {
     }
   }
 
-  public handleInputChange = event => {
+  public handleInputChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;

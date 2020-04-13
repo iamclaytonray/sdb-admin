@@ -3,9 +3,8 @@ import * as React from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import { ColorSwatch } from 'components/ColorSwatch';
-import { Error } from 'components/Error';
-
+import { ColorSwatch } from '../../components/ColorSwatch';
+import { Error } from '../../components/Error';
 import { API_URL } from '../../constants';
 
 export class NewJewishPage extends React.Component<any, any> {
@@ -55,7 +54,7 @@ export class NewJewishPage extends React.Component<any, any> {
     this.setState({ content: value });
   }
 
-  public handleInputChange = event => {
+  public handleInputChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
@@ -111,7 +110,7 @@ export class NewJewishPage extends React.Component<any, any> {
             <Error error={JSON.stringify(this.state.error)} />
           )}
 
-          <form onSubmit={e => this.handleSubmit(e)}>
+          <form onSubmit={(e) => this.handleSubmit(e)}>
             <div className="form-group">
               <label>Title</label>
               <input
