@@ -31,15 +31,18 @@ export const LoginPage = () => {
 
   return (
     <Container fluid>
-      <Row justify="center">
+      <Row justify="center" align="center">
         <Col lg={4} style={{ marginTop: 24 }}>
           {state.error && <p>{JSON.stringify(state.error)}</p>}
-          <img src={logo} alt="" />
+          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+            <img src={logo} alt="" style={{ height: 200 }} />
+          </div>
           <form
             onSubmit={(e) => handleSubmit(e)}
             style={{ display: 'flex', flexDirection: 'column' }}
           >
             <SharedInput
+              label="Email"
               name="email"
               type="email"
               required
@@ -48,6 +51,7 @@ export const LoginPage = () => {
               onChange={(e) => setState({ ...state, email: e.target.value })}
             />
             <SharedInput
+              label="Password"
               name="password"
               placeholder="Password"
               value={state.password}
