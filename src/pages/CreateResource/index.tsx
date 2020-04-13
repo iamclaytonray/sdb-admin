@@ -4,20 +4,20 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
-import { Loading } from '../../components/Loading';
+import { Error } from '../../components/Error';
 import { API_URL } from '../../constants';
 
-export class SingleJewishPage extends React.Component<any, any> {
+export class CreateResourcePage extends React.Component<any, any> {
   public state = {
     title: '',
     slug: '',
+    description: '',
     featuredImage: '',
     link: '',
     color: '#B56FEA',
     content: '',
 
     error: null,
-    loading: true,
   };
 
   public modules = {
@@ -54,52 +54,39 @@ export class SingleJewishPage extends React.Component<any, any> {
     this.setState({ content: value });
   }
 
-  public componentDidMount() {
-    this.fetch();
-  }
-
-  public fetch = async () => {
-    try {
-      const res = await Axios.get(
-        `${API_URL}/jewish/${this.props.match.params.slug}`,
-      );
-      this.setState({
-        loading: false,
-        title: res.data.data.title,
-        slug: res.data.data.slug,
-        featuredImage: res.data.data.featuredImage,
-        link: res.data.data.link,
-        color: res.data.data.color,
-        content: res.data.data.content || '',
-      });
-    } catch (error) {
-      this.setState({ loading: false, error: error.response.data.message });
-    }
-  }
-
-  public handleinputChange = (event) => {
-    const { target } = event;
-    const { name } = target;
+  public handleInputChange = (event) => {
+    const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
 
     this.setState({
       [name]: value,
     });
   }
 
-  public handleUpdate = async (e: any) => {
+  public handleSubmit = async (e: any) => {
     e.preventDefault();
-    const { title, slug, featuredImage, link, color, content } = this.state;
+    const {
+      title,
+      slug,
+      description,
+      featuredImage,
+      link,
+      color,
+      content,
+    } = this.state;
+
     try {
-      await Axios.put(
-        `${API_URL}/jewish/${this.props.match.params.slug}`,
+      await Axios.post(
+        `${API_URL}/jewish`,
         {
           title,
           slug,
+          description,
           featuredImage,
           link,
-          color,
           content,
+          color,
         },
         {
           headers: {
@@ -108,59 +95,31 @@ export class SingleJewishPage extends React.Component<any, any> {
         },
       );
 
-      this.props.history.push('/dashboard/jewish');
+      this.props.history.push(`/dashboard/jewish`);
     } catch (error) {
       this.setState({ error: error.response.data.message });
-      window.scrollTo(0, 0);
+      window.scroll(0, 0);
     }
   }
-
-  public handleDelete = async (e: any) => {
-    e.preventDefault();
-    const confirm = window.confirm('Are you sure?');
-    if (confirm) {
-      try {
-        await Axios.delete(
-          `${API_URL}/jewish/${this.props.match.params.slug}`,
-          {
-            headers: {
-              Authorization: localStorage.getItem('token'),
-            },
-          },
-        );
-        this.props.history.push(`/dashboard/jewish`);
-      } catch (error) {
-        this.setState({ error: error.response.data.message });
-        window.scroll(0, 0);
-      }
-      return;
-    }
-    return alert('Item not deleted');
-  }
-
   public render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-    if (this.state.error) {
-      return (
-        <div className="card">
-          <div className="card-body">{JSON.stringify(this.state.error)}</div>
-        </div>
-      );
-    }
     return (
       <div className="card">
         <div className="card-body">
-          <form>
+          <h5 className="card-title">New Jewish</h5>
+          {this.state.error && (
+            <Error error={JSON.stringify(this.state.error)} />
+          )}
+
+          <form onSubmit={(e) => this.handleSubmit(e)}>
             <div className="form-group">
               <label>Title</label>
               <input
                 type="text"
                 name="title"
+                placeholder="Title"
                 value={this.state.title}
-                onChange={this.handleinputChange}
                 className="form-control"
+                onChange={this.handleInputChange}
               />
             </div>
 
@@ -169,41 +128,55 @@ export class SingleJewishPage extends React.Component<any, any> {
               <input
                 type="text"
                 name="slug"
+                placeholder="Slug"
                 value={this.state.slug}
-                onChange={this.handleinputChange}
                 className="form-control"
+                onChange={this.handleInputChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Description</label>
+              <input
+                type="text"
+                name="description"
+                placeholder="Description"
+                value={this.state.description}
+                className="form-control"
+                onChange={this.handleInputChange}
               />
             </div>
 
             <div className="form-group">
               <label>Featured Image</label>
               <input
-                name="featuredImage"
                 type="text"
+                name="featuredImage"
+                placeholder="Featured Image"
                 value={this.state.featuredImage}
-                onChange={this.handleinputChange}
                 className="form-control"
+                onChange={this.handleInputChange}
               />
             </div>
 
             <div className="form-group">
               <label>Link</label>
               <input
-                name="link"
                 type="text"
+                name="link"
+                placeholder="Link"
                 value={this.state.link}
-                onChange={this.handleinputChange}
                 className="form-control"
+                onChange={this.handleInputChange}
               />
             </div>
 
             <ColorSwatch color={this.state.color} />
-
             <label>Color</label>
             <select
               name="color"
               value={this.state.color}
-              onChange={(e: any) => this.setState({ color: e.target.value })}
+              onChange={this.handleInputChange}
               className="form-control"
             >
               <option value="#B56FEA">Light Purple</option>
@@ -225,21 +198,9 @@ export class SingleJewishPage extends React.Component<any, any> {
               />
             </div>
 
-            <div
-              style={{
-                display: 'flex',
-                flex: 1,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <button className="btn btn-primary" onClick={this.handleUpdate}>
-                Update
-              </button>
-              <button className="btn btn-danger" onClick={this.handleDelete}>
-                Delete All
-              </button>
-            </div>
+            <button className="btn btn-primary" type="submit">
+              Create
+            </button>
           </form>
         </div>
       </div>

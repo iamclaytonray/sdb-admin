@@ -6,7 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import { Error } from '../../components/Error';
 import { API_URL } from '../../constants';
 
-export class NewEventPage extends React.Component<any, any> {
+export class CreateEventPage extends React.Component<any, any> {
   public state = {
     title: '',
     slug: '',

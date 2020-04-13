@@ -6,20 +6,22 @@ import { connect } from 'react-redux';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
 import { Error } from '../../components/Error';
+import { Loading } from '../../components/Loading';
 import { API_URL } from '../../constants';
 
-export class NewService extends React.Component<any, any> {
+export class SingleResource extends React.Component<any, any> {
   public state = {
     title: '',
     slug: '',
-    category: '',
-    description: '',
     featuredImage: '',
+    category: '',
+    link: '',
     content: '',
     color: '#B56FEA',
 
     categories: [],
 
+    loading: true,
     error: null,
   };
 
@@ -63,46 +65,55 @@ export class NewService extends React.Component<any, any> {
 
   public fetch = async () => {
     try {
-      const res = await Axios.get(`${API_URL}/tabs/?pageType=Teachings`);
-      this.setState({ categories: res.data.data });
+      const res = await Axios.get(
+        `${API_URL}/articles/${this.props.match.params.slug}`,
+      );
+
+      const categoryRes = await Axios.get(
+        `${API_URL}/tabs/?pageType=Discoveries`,
+      );
+
+      this.setState({
+        loading: false,
+
+        title: res.data.data.title,
+        slug: res.data.data.slug,
+        featuredImage: res.data.data.featuredImage,
+        category: res.data.data.category,
+        link: res.data.data.link,
+        content: res.data.data.content || '',
+        color: res.data.data.color,
+
+        categories: categoryRes.data.data,
+      });
     } catch (error) {
-      this.setState({ error });
+      this.setState({ loading: false, error: error.response.data.message });
     }
   }
 
-  public handleInputChange = (event: any) => {
-    const { target } = event;
-    const { name } = target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-
-    this.setState({
-      [name]: value,
-    });
-  }
-
-  public handleSubmit = async (e: any) => {
+  public handleUpdate = async (e: any) => {
     e.preventDefault();
+    // this.toast();
     const {
       title,
       slug,
-      category,
-      description,
       featuredImage,
-      color,
+      category,
+      link,
       content,
+      color,
     } = this.state;
-
     try {
-      await Axios.post(
-        `${API_URL}/services`,
+      await Axios.put(
+        `${API_URL}/articles/${this.props.match.params.slug}`,
         {
           title,
           slug,
-          category,
-          description,
           featuredImage,
-          color,
+          category,
+          link,
           content,
+          color,
         },
         {
           headers: {
@@ -110,31 +121,59 @@ export class NewService extends React.Component<any, any> {
           },
         },
       );
-
-      this.props.history.push(`/dashboard/services`);
+      this.props.history.push('/dashboard/articles');
     } catch (error) {
-      this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
+      this.setState({ error: error.response.data.message });
     }
   }
 
+  public handleDelete = async (e: any) => {
+    e.preventDefault();
+    const confirm = window.confirm('Are you sure?');
+    if (confirm) {
+      try {
+        await Axios.delete(
+          `${API_URL}/articles/${this.props.match.params.slug}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem('token'),
+            },
+          },
+        );
+        this.props.history.push(`/dashboard/articles`);
+      } catch (error) {
+        // console.log(error);
+        this.setState({ error: error.response.data.message });
+      }
+      return;
+    }
+    return alert('Item not deleted');
+  }
+
   public render() {
+    if (this.state.loading) {
+      return <Loading />;
+    }
+    if (this.state.error) {
+      return (
+        <div className="card">
+          <div className="card-body">{JSON.stringify(this.state.error)}</div>
+        </div>
+      );
+    }
     return (
       <div className="card">
         <div className="card-body">
-          <h5 className="card-title">New Teaching</h5>
           {this.state.error && <Error error={this.state.error} />}
-
-          <form onSubmit={(e) => this.handleSubmit(e)}>
+          <form>
             <div className="form-group">
               <label>Title</label>
               <input
                 type="text"
-                name="title"
-                placeholder="Title"
                 value={this.state.title}
+                onChange={(e) => this.setState({ title: e.target.value })}
                 className="form-control"
-                onChange={this.handleInputChange}
               />
             </div>
 
@@ -142,35 +181,23 @@ export class NewService extends React.Component<any, any> {
               <label>Slug</label>
               <input
                 type="text"
-                name="slug"
-                placeholder="Slug"
                 value={this.state.slug}
+                onChange={(e) => this.setState({ slug: e.target.value })}
                 className="form-control"
-                onChange={this.handleInputChange}
               />
             </div>
 
             <div className="form-group">
               <label>Featured Image</label>
               <input
-                type="text"
                 name="featuredImage"
                 placeholder="Featured Image"
-                value={this.state.featuredImage}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Description</label>
-              <input
                 type="text"
-                name="description"
-                placeholder="Description"
-                value={this.state.description}
+                value={this.state.featuredImage}
+                onChange={(e) =>
+                  this.setState({ featuredImage: e.target.value })
+                }
                 className="form-control"
-                onChange={this.handleInputChange}
               />
             </div>
 
@@ -178,7 +205,7 @@ export class NewService extends React.Component<any, any> {
             <select
               name="category"
               value={this.state.category}
-              onChange={this.handleInputChange}
+              onChange={(e: any) => this.setState({ category: e.target.value })}
               className="form-control"
             >
               {this.state.categories.length > 0 ? (
@@ -188,13 +215,24 @@ export class NewService extends React.Component<any, any> {
                   </option>
                 ))
               ) : (
-                <React.Fragment>
+                <div>
                   Something went wrong trying to fetch the categories. If you
                   see this message, please refresh or try again later. Also, let
                   Clayton know.
-                </React.Fragment>
+                </div>
               )}
             </select>
+
+            <div className="form-group">
+              <label>Link</label>
+              <input
+                name="link"
+                type="text"
+                value={this.state.link}
+                onChange={(e) => this.setState({ link: e.target.value })}
+                className="form-control"
+              />
+            </div>
 
             <ColorSwatch color={this.state.color} />
 
@@ -202,7 +240,7 @@ export class NewService extends React.Component<any, any> {
             <select
               name="color"
               value={this.state.color}
-              onChange={this.handleInputChange}
+              onChange={(e: any) => this.setState({ color: e.target.value })}
               className="form-control"
             >
               <option value="#B56FEA">Light Purple</option>
@@ -224,9 +262,21 @@ export class NewService extends React.Component<any, any> {
               />
             </div>
 
-            <button type="submit" className="btn btn-primary">
-              Create
-            </button>
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <button className="btn btn-primary" onClick={this.handleUpdate}>
+                Update
+              </button>
+              <button className="btn btn-danger" onClick={this.handleDelete}>
+                Delete All
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -238,4 +288,4 @@ const mapStateToProps = (state: any) => ({
   formState: state.form,
 });
 
-export const NewServicePage = connect(mapStateToProps)(NewService);
+export const SingleResourcePage = connect(mapStateToProps)(SingleResource);

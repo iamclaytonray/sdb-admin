@@ -4,34 +4,30 @@ import { Redirect, Route, Switch } from 'react-router';
 import { Layout } from './components/Layout';
 import { PrivateRoute } from './containers/PrivateRoute';
 import { All } from './pages/All';
+import { CreateEventPage } from './pages/CreateEvent';
+import { CreateResourcePage } from './pages/CreateResource';
+import { CreateSermonPage } from './pages/CreateSermon';
 import { Dashboard } from './pages/Dashboard';
-import { LoginPage } from './pages/LoginPage';
-import { NewArticlePage } from './pages/NewArticlePage';
-import { NewEventPage } from './pages/NewEventPage';
-import { NewJewishPage } from './pages/NewJewishPage';
-import { NewServicePage } from './pages/NewServicePage';
-import { NewTabPage } from './pages/NewTabPage';
-import { NotFoundPage } from './pages/NotFoundPage';
-import { SingleArticlePage } from './pages/SingleArticlePage';
-import { SingleEventPage } from './pages/SingleEventPage';
-import { SingleJewishPage } from './pages/SingleJewishPage';
-import { SingleServicePage } from './pages/SingleServicePage';
-import { SingleTabPage } from './pages/SingleTabPage';
+import { LoginPage } from './pages/Login';
+import { NotFoundPage } from './pages/NotFound';
+import { SingleEventPage } from './pages/SingleEvent';
+import { SingleResourcePage } from './pages/SingleResource';
+import { SingleSermonPage } from './pages/SingleSermon';
 
 export const Root = () => (
   <Switch>
     <Route exact path="/" component={LoginPage} />
     <PrivateRoute exact path="/dashboard" component={Dashboard} />
 
-    {/* Articles */}
+    {/* Resources */}
     <Route
       exact
-      path="/dashboard/articles"
+      path="/dashboard/resources"
       render={(props: any) =>
         localStorage.getItem('token') !== null ? (
-          <Layout title="Articles">
+          <Layout title="Resources">
             <All
-              resource="articles"
+              resource="resources"
               title="Discoveries"
               buttonText="Discovery"
               {...props}
@@ -49,48 +45,13 @@ export const Root = () => (
     />
     <PrivateRoute
       exact
-      path="/dashboard/articles/new"
-      component={NewArticlePage}
+      path="/dashboard/resources/new"
+      component={CreateResourcePage}
     />
     <PrivateRoute
       exact
-      path="/dashboard/articles/:slug"
-      component={SingleArticlePage}
-    />
-
-    {/* Jewish */}
-    <Route
-      exact
-      path="/dashboard/jewish"
-      render={(props: any) =>
-        localStorage.getItem('token') !== null ? (
-          <Layout title="Jewish">
-            <All
-              resource="jewish"
-              title="Jewish"
-              buttonText="Jewish"
-              {...props}
-            />
-          </Layout>
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/',
-              state: { from: props.location },
-            }}
-          />
-        )
-      }
-    />
-    <PrivateRoute
-      exact
-      path="/dashboard/jewish/new"
-      component={NewJewishPage}
-    />
-    <PrivateRoute
-      exact
-      path="/dashboard/jewish/:slug"
-      component={SingleJewishPage}
+      path="/dashboard/resources/:slug"
+      component={SingleResourcePage}
     />
 
     {/* Events */}
@@ -117,53 +78,26 @@ export const Root = () => (
         )
       }
     />
-    <PrivateRoute exact path="/dashboard/events/new" component={NewEventPage} />
+    <PrivateRoute
+      exact
+      path="/dashboard/events/new"
+      component={CreateEventPage}
+    />
     <PrivateRoute
       exact
       path="/dashboard/events/:slug"
       component={SingleEventPage}
     />
 
-    {/* Tabs */}
+    {/* Sermons */}
     <Route
       exact
-      path="/dashboard/tabs"
-      render={(props: any) =>
-        localStorage.getItem('token') !== null ? (
-          <Layout title="Menu Items">
-            <All
-              resource="tabs"
-              title="Menu Items"
-              buttonText="Menu Item"
-              {...props}
-            />
-          </Layout>
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/',
-              state: { from: props.location },
-            }}
-          />
-        )
-      }
-    />
-    <PrivateRoute exact path="/dashboard/tabs/new" component={NewTabPage} />
-    <PrivateRoute
-      exact
-      path="/dashboard/tabs/:slug"
-      component={SingleTabPage}
-    />
-
-    {/* Services */}
-    <Route
-      exact
-      path="/dashboard/services"
+      path="/dashboard/sermons"
       render={(props: any) =>
         localStorage.getItem('token') !== null ? (
           <Layout title="Sermons">
             <All
-              resource="services"
+              resource="sermons"
               title="Teachings"
               buttonText="Teaching"
               {...props}
@@ -181,13 +115,13 @@ export const Root = () => (
     />
     <PrivateRoute
       exact
-      path="/dashboard/services/new"
-      component={NewServicePage}
+      path="/dashboard/sermons/new"
+      component={CreateSermonPage}
     />
     <PrivateRoute
       exact
-      path="/dashboard/services/:slug"
-      component={SingleServicePage}
+      path="/dashboard/sermons/:slug"
+      component={SingleSermonPage}
     />
 
     <Route component={NotFoundPage} />
