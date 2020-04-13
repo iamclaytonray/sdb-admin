@@ -2,17 +2,24 @@ import Axios from 'axios';
 import * as React from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { connect } from 'react-redux';
 
+import { ColorSwatch } from '../../components/ColorSwatch';
 import { Error } from '../../components/Error';
 import { Loading } from '../../components/Loading';
 import { API_URL } from '../../constants';
 
-export class SingleEventPage extends React.Component<any, any> {
+export class SingleResource extends React.Component<any, any> {
   public state = {
     title: '',
     slug: '',
     featuredImage: '',
+    category: '',
+    link: '',
     content: '',
+    color: '#B56FEA',
+
+    categories: [],
 
     loading: true,
     error: null,
@@ -59,41 +66,54 @@ export class SingleEventPage extends React.Component<any, any> {
   public fetch = async () => {
     try {
       const res = await Axios.get(
-        `${API_URL}/events/${this.props.match.params.slug}`,
+        `${API_URL}/articles/${this.props.match.params.slug}`,
       );
+
+      const categoryRes = await Axios.get(
+        `${API_URL}/tabs/?pageType=Discoveries`,
+      );
+
       this.setState({
         loading: false,
+
         title: res.data.data.title,
         slug: res.data.data.slug,
         featuredImage: res.data.data.featuredImage,
+        category: res.data.data.category,
+        link: res.data.data.link,
         content: res.data.data.content || '',
+        color: res.data.data.color,
+
+        categories: categoryRes.data.data,
       });
     } catch (error) {
       this.setState({ loading: false, error: error.response.data.message });
     }
   }
 
-  public handleInputChange = (event) => {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value,
-    });
-  }
-
-  public handleUpdate = (e: any) => {
+  public handleUpdate = async (e: any) => {
     e.preventDefault();
-    const { title, slug, featuredImage, content } = this.state;
+    // this.toast();
+    const {
+      title,
+      slug,
+      featuredImage,
+      category,
+      link,
+      content,
+      color,
+    } = this.state;
     try {
-      Axios.put(
-        `${API_URL}/events/${this.props.match.params.slug}`,
+      await Axios.put(
+        `${API_URL}/articles/${this.props.match.params.slug}`,
         {
           title,
           slug,
           featuredImage,
+          category,
+          link,
           content,
+          color,
         },
         {
           headers: {
@@ -101,10 +121,10 @@ export class SingleEventPage extends React.Component<any, any> {
           },
         },
       );
-      this.props.history.push('/dashboard/events');
+      this.props.history.push('/dashboard/articles');
     } catch (error) {
-      this.setState({ error: error.response.data.message });
       window.scroll(0, 0);
+      this.setState({ error: error.response.data.message });
     }
   }
 
@@ -114,27 +134,27 @@ export class SingleEventPage extends React.Component<any, any> {
     if (confirm) {
       try {
         await Axios.delete(
-          `${API_URL}/events/${this.props.match.params.slug}`,
+          `${API_URL}/articles/${this.props.match.params.slug}`,
           {
             headers: {
               Authorization: localStorage.getItem('token'),
             },
           },
         );
-        this.props.history.push(`/dashboard/events`);
+        this.props.history.push(`/dashboard/articles`);
       } catch (error) {
+        // console.log(error);
         this.setState({ error: error.response.data.message });
-        window.scroll(0, 0);
       }
       return;
     }
+    return alert('Item not deleted');
   }
 
   public render() {
     if (this.state.loading) {
       return <Loading />;
     }
-
     if (this.state.error) {
       return (
         <div className="card">
@@ -145,20 +165,15 @@ export class SingleEventPage extends React.Component<any, any> {
     return (
       <div className="card">
         <div className="card-body">
-          <h5 className="card-title">Update Event</h5>
-          {this.state.error && (
-            <Error error={JSON.stringify(this.state.error)} />
-          )}
+          {this.state.error && <Error error={this.state.error} />}
           <form>
             <div className="form-group">
               <label>Title</label>
               <input
                 type="text"
-                name="title"
-                placeholder="Title"
-                className="form-control"
                 value={this.state.title}
-                onChange={this.handleInputChange}
+                onChange={(e) => this.setState({ title: e.target.value })}
+                className="form-control"
               />
             </div>
 
@@ -166,11 +181,9 @@ export class SingleEventPage extends React.Component<any, any> {
               <label>Slug</label>
               <input
                 type="text"
-                name="slug"
-                placeholder="Slug"
-                className="form-control"
                 value={this.state.slug}
-                onChange={this.handleInputChange}
+                onChange={(e) => this.setState({ slug: e.target.value })}
+                className="form-control"
               />
             </div>
 
@@ -178,13 +191,65 @@ export class SingleEventPage extends React.Component<any, any> {
               <label>Featured Image</label>
               <input
                 name="featuredImage"
-                type="text"
                 placeholder="Featured Image"
-                className="form-control"
+                type="text"
                 value={this.state.featuredImage}
-                onChange={this.handleInputChange}
+                onChange={(e) =>
+                  this.setState({ featuredImage: e.target.value })
+                }
+                className="form-control"
               />
             </div>
+
+            <label>Category</label>
+            <select
+              name="category"
+              value={this.state.category}
+              onChange={(e: any) => this.setState({ category: e.target.value })}
+              className="form-control"
+            >
+              {this.state.categories.length > 0 ? (
+                this.state.categories.map((category: any, i: number) => (
+                  <option key={i} value={category.slug}>
+                    {category.label}
+                  </option>
+                ))
+              ) : (
+                <div>
+                  Something went wrong trying to fetch the categories. If you
+                  see this message, please refresh or try again later. Also, let
+                  Clayton know.
+                </div>
+              )}
+            </select>
+
+            <div className="form-group">
+              <label>Link</label>
+              <input
+                name="link"
+                type="text"
+                value={this.state.link}
+                onChange={(e) => this.setState({ link: e.target.value })}
+                className="form-control"
+              />
+            </div>
+
+            <ColorSwatch color={this.state.color} />
+
+            <label>Color</label>
+            <select
+              name="color"
+              value={this.state.color}
+              onChange={(e: any) => this.setState({ color: e.target.value })}
+              className="form-control"
+            >
+              <option value="#B56FEA">Light Purple</option>
+              <option value="#5A17C7">Purple</option>
+              <option value="#031AF7">Dark Blue</option>
+              <option value="#08D316">Green</option>
+              <option value="#00ADFF">Light Blue</option>
+              <option value="#FF4600">Orange</option>
+            </select>
 
             <div className="form-group">
               <label>Content</label>
@@ -218,3 +283,9 @@ export class SingleEventPage extends React.Component<any, any> {
     );
   }
 }
+
+const mapStateToProps = (state: any) => ({
+  formState: state.form,
+});
+
+export const ResourceDetailsPage = connect(mapStateToProps)(SingleResource);

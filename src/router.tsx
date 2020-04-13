@@ -8,11 +8,11 @@ import { CreateEventPage } from './pages/CreateEvent';
 import { CreateResourcePage } from './pages/CreateResource';
 import { CreateSermonPage } from './pages/CreateSermon';
 import { Dashboard } from './pages/Dashboard';
+import { EventDetailsPage } from './pages/EventDetails';
 import { LoginPage } from './pages/Login';
 import { NotFoundPage } from './pages/NotFound';
-import { SingleEventPage } from './pages/SingleEvent';
-import { SingleResourcePage } from './pages/SingleResource';
-import { SingleSermonPage } from './pages/SingleSermon';
+import { ResourceDetailsPage } from './pages/ResourceDetails';
+import { SermonDetailsPage } from './pages/SermonDetails';
 
 export const Root = () => (
   <Switch>
@@ -51,7 +51,7 @@ export const Root = () => (
     <PrivateRoute
       exact
       path="/dashboard/resources/:slug"
-      component={SingleResourcePage}
+      component={ResourceDetailsPage}
     />
 
     {/* Events */}
@@ -86,7 +86,7 @@ export const Root = () => (
     <PrivateRoute
       exact
       path="/dashboard/events/:slug"
-      component={SingleEventPage}
+      component={EventDetailsPage}
     />
 
     {/* Sermons */}
@@ -121,7 +121,7 @@ export const Root = () => (
     <PrivateRoute
       exact
       path="/dashboard/sermons/:slug"
-      component={SingleSermonPage}
+      component={SermonDetailsPage}
     />
 
     <Route component={NotFoundPage} />

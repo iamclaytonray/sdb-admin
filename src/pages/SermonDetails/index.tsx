@@ -16,7 +16,7 @@ import { Loading } from '../../components/Loading';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 
-export const SingleSermonPage = () => {
+export const SermonDetailsPage = () => {
   const history = useHistory();
   const { slug } = useParams();
   const { selectedSermonId } = useSelector((s: any) => s.sermons);
