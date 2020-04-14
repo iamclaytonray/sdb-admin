@@ -1,10 +1,11 @@
+import { Button, Card } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { Col, Container, Row } from 'react-grid-system';
 
 import { Error } from '../../components/Error';
 import { Loading } from '../../components/Loading';
+import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 
 export class EventDetailsPage extends React.Component<any, any> {
@@ -17,40 +18,6 @@ export class EventDetailsPage extends React.Component<any, any> {
     loading: true,
     error: null,
   };
-
-  public modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [
-        { list: 'ordered' },
-        { list: 'bullet' },
-        { indent: '-1' },
-        { indent: '+1' },
-      ],
-      ['link', 'image', 'video'],
-      ['clean'],
-    ],
-  };
-
-  public formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'indent',
-    'link',
-    'image',
-    'video',
-  ];
-
-  public handleQuillChange = (value: string) => {
-    this.setState({ content: value });
-  }
 
   public componentDidMount() {
     this.fetch();
@@ -143,78 +110,64 @@ export class EventDetailsPage extends React.Component<any, any> {
       );
     }
     return (
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">Update Event</h5>
-          {this.state.error && (
-            <Error error={JSON.stringify(this.state.error)} />
-          )}
-          <form>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                name="title"
-                placeholder="Title"
-                className="form-control"
-                value={this.state.title}
-                onChange={this.handleInputChange}
-              />
-            </div>
+      <Container fluid>
+        <Row align="center" justify="center">
+          <Col lg={8}>
+            <Card style={{ padding: 24 }}>
+              {this.state.error && (
+                <Error error={JSON.stringify(this.state.error)} />
+              )}
+              <form>
+                <SharedInput
+                  type="text"
+                  name="title"
+                  label="Title"
+                  value={this.state.title}
+                  onChange={this.handleInputChange}
+                />
+                <SharedInput
+                  type="text"
+                  name="slug"
+                  label="Slug"
+                  value={this.state.slug}
+                  onChange={this.handleInputChange}
+                />
+                <SharedInput
+                  type="text"
+                  name="featuredImage"
+                  label="Featured Image (thumbnail)"
+                  value={this.state.featuredImage}
+                  onChange={this.handleInputChange}
+                />
 
-            <div className="form-group">
-              <label>Slug</label>
-              <input
-                type="text"
-                name="slug"
-                placeholder="Slug"
-                className="form-control"
-                value={this.state.slug}
-                onChange={this.handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Featured Image</label>
-              <input
-                name="featuredImage"
-                type="text"
-                placeholder="Featured Image"
-                className="form-control"
-                value={this.state.featuredImage}
-                onChange={this.handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Content</label>
-              <ReactQuill
-                modules={this.modules}
-                formats={this.formats}
-                value={this.state.content}
-                onChange={this.handleQuillChange}
-                style={{ height: 500, marginBottom: 100 }}
-              />
-            </div>
-
-            <div
-              style={{
-                display: 'flex',
-                flex: 1,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <button className="btn btn-primary" onClick={this.handleUpdate}>
-                Update
-              </button>
-              <button className="btn btn-danger" onClick={this.handleDelete}>
-                Delete All
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    flex: 1,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={this.handleUpdate}
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={this.handleDelete}
+                  >
+                    Delete All
+                  </Button>
+                </div>
+              </form>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

@@ -1,7 +1,6 @@
+import { Button } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { connect } from 'react-redux';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
@@ -24,72 +23,6 @@ export class SingleResource extends React.Component<any, any> {
     loading: true,
     error: null,
   };
-
-  public modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [
-        { list: 'ordered' },
-        { list: 'bullet' },
-        { indent: '-1' },
-        { indent: '+1' },
-      ],
-      ['link', 'image', 'video'],
-      ['clean'],
-    ],
-  };
-
-  public formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'indent',
-    'link',
-    'image',
-    'video',
-  ];
-
-  public handleQuillChange = (value: string) => {
-    this.setState({ content: value });
-  }
-
-  public componentDidMount() {
-    this.fetch();
-  }
-
-  public fetch = async () => {
-    try {
-      const res = await Axios.get(
-        `${API_URL}/articles/${this.props.match.params.slug}`,
-      );
-
-      const categoryRes = await Axios.get(
-        `${API_URL}/tabs/?pageType=Discoveries`,
-      );
-
-      this.setState({
-        loading: false,
-
-        title: res.data.data.title,
-        slug: res.data.data.slug,
-        featuredImage: res.data.data.featuredImage,
-        category: res.data.data.category,
-        link: res.data.data.link,
-        content: res.data.data.content || '',
-        color: res.data.data.color,
-
-        categories: categoryRes.data.data,
-      });
-    } catch (error) {
-      this.setState({ loading: false, error: error.response.data.message });
-    }
-  }
 
   public handleUpdate = async (e: any) => {
     e.preventDefault();
@@ -155,6 +88,7 @@ export class SingleResource extends React.Component<any, any> {
     if (this.state.loading) {
       return <Loading />;
     }
+
     if (this.state.error) {
       return (
         <div className="card">
@@ -162,6 +96,7 @@ export class SingleResource extends React.Component<any, any> {
         </div>
       );
     }
+
     return (
       <div className="card">
         <div className="card-body">
@@ -251,17 +186,6 @@ export class SingleResource extends React.Component<any, any> {
               <option value="#FF4600">Orange</option>
             </select>
 
-            <div className="form-group">
-              <label>Content</label>
-              <ReactQuill
-                modules={this.modules}
-                formats={this.formats}
-                value={this.state.content}
-                onChange={this.handleQuillChange}
-                style={{ height: 500, marginBottom: 100 }}
-              />
-            </div>
-
             <div
               style={{
                 display: 'flex',
@@ -270,12 +194,20 @@ export class SingleResource extends React.Component<any, any> {
                 alignItems: 'center',
               }}
             >
-              <button className="btn btn-primary" onClick={this.handleUpdate}>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={this.handleUpdate}
+              >
                 Update
-              </button>
-              <button className="btn btn-danger" onClick={this.handleDelete}>
+              </Button>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={this.handleDelete}
+              >
                 Delete All
-              </button>
+              </Button>
             </div>
           </form>
         </div>

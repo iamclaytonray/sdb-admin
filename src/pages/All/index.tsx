@@ -10,22 +10,6 @@ import { API_URL } from '../../constants';
 import { loadSermons } from '../../store/actions/sermons';
 import { OrderItems } from '../OrderItems';
 
-const TabPanel = (props: any) => {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      {...other}
-    >
-      {value === index && <Box p={3}>{children}</Box>}
-    </Typography>
-  );
-};
-
 export const All = (props: any) => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -45,11 +29,20 @@ export const All = (props: any) => {
   React.useEffect(() => {
     setState({ ...state, view: 'table', loading: true });
     fetch();
-  },              [location.pathname]);
+
+    return () =>
+      setState({
+        view: 'table',
+
+        loading: true,
+        error: null,
+        data: null as any,
+      });
+  },              [location]);
 
   const fetch = async () => {
     try {
-      const res = await Axios.get(`${API_URL}/${props.resource}/unfiltered`, {
+      const res = await Axios.get(`${API_URL}/${props.resource}`, {
         headers: {
           Authorization: localStorage.getItem('token'),
         } as any,
@@ -78,7 +71,7 @@ export const All = (props: any) => {
 
   return (
     <div>
-      <Paper square>
+      <Paper square style={{ marginBottom: 24 }}>
         <Tabs
           value={tab}
           indicatorColor="primary"
@@ -89,19 +82,16 @@ export const All = (props: any) => {
           <Tab label="Order" />
         </Tabs>
       </Paper>
-      <TabPanel value={tab} index={0}>
+      {tab === 0 && (
         <SharedTable
           data={state.data || []}
           title={props.title}
           newLink={`${props.resource}/new`}
           otherLocation={props.resource}
-          children={`New ${props.buttonText}`}
           {...props}
         />
-      </TabPanel>
-      <TabPanel value={tab} index={1}>
-        <OrderItems resource={props.resource} />;
-      </TabPanel>
+      )}
+      {tab === 1 && <OrderItems resource={props.resource} />}
     </div>
   );
 };

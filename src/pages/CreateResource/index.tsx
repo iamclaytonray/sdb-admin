@@ -1,10 +1,10 @@
+import { Button } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
 import { Error } from '../../components/Error';
+import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 
 export class CreateResourcePage extends React.Component<any, any> {
@@ -20,41 +20,7 @@ export class CreateResourcePage extends React.Component<any, any> {
     error: null,
   };
 
-  public modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [
-        { list: 'ordered' },
-        { list: 'bullet' },
-        { indent: '-1' },
-        { indent: '+1' },
-      ],
-      ['link', 'image', 'video'],
-      ['clean'],
-    ],
-  };
-
-  public formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'indent',
-    'link',
-    'image',
-    'video',
-  ];
-
-  public handleQuillChange = (value: string) => {
-    this.setState({ content: value });
-  }
-
-  public handleInputChange = (event) => {
+  public handleInputChange = (event: any) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
@@ -103,106 +69,66 @@ export class CreateResourcePage extends React.Component<any, any> {
   }
   public render() {
     return (
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">New Jewish</h5>
-          {this.state.error && (
-            <Error error={JSON.stringify(this.state.error)} />
-          )}
+      <div>
+        {this.state.error && <Error error={JSON.stringify(this.state.error)} />}
 
-          <form onSubmit={(e) => this.handleSubmit(e)}>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                name="title"
-                placeholder="Title"
-                value={this.state.title}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
+        <form onSubmit={this.handleSubmit}>
+          <SharedInput
+            type="text"
+            name="title"
+            label="Title"
+            value={this.state.title}
+            onChange={this.handleInputChange}
+          />
+          <SharedInput
+            type="text"
+            name="slug"
+            label="Slug"
+            value={this.state.slug}
+            onChange={this.handleInputChange}
+          />
+          <SharedInput
+            type="text"
+            name="description"
+            label="Description"
+            value={this.state.description}
+            onChange={this.handleInputChange}
+          />
+          <SharedInput
+            type="text"
+            name="featuredImage"
+            label="Featured Image (thumbnail)"
+            value={this.state.featuredImage}
+            onChange={this.handleInputChange}
+          />
+          <SharedInput
+            type="text"
+            name="link"
+            label="External Link"
+            value={this.state.link}
+            onChange={this.handleInputChange}
+          />
 
-            <div className="form-group">
-              <label>Slug</label>
-              <input
-                type="text"
-                name="slug"
-                placeholder="Slug"
-                value={this.state.slug}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
+          <ColorSwatch color={this.state.color} />
+          <label>Color</label>
+          <select
+            name="color"
+            value={this.state.color}
+            onChange={this.handleInputChange}
+            className="form-control"
+          >
+            <option value="#B56FEA">Light Purple</option>
+            <option value="#5A17C7">Purple</option>
+            <option value="#031AF7">Dark Blue</option>
+            <option value="#08D316">Green</option>
+            <option value="#00ADFF">Light Blue</option>
+            <option value="#FF4600">Orange</option>
+          </select>
 
-            <div className="form-group">
-              <label>Description</label>
-              <input
-                type="text"
-                name="description"
-                placeholder="Description"
-                value={this.state.description}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Featured Image</label>
-              <input
-                type="text"
-                name="featuredImage"
-                placeholder="Featured Image"
-                value={this.state.featuredImage}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Link</label>
-              <input
-                type="text"
-                name="link"
-                placeholder="Link"
-                value={this.state.link}
-                className="form-control"
-                onChange={this.handleInputChange}
-              />
-            </div>
-
-            <ColorSwatch color={this.state.color} />
-            <label>Color</label>
-            <select
-              name="color"
-              value={this.state.color}
-              onChange={this.handleInputChange}
-              className="form-control"
-            >
-              <option value="#B56FEA">Light Purple</option>
-              <option value="#5A17C7">Purple</option>
-              <option value="#031AF7">Dark Blue</option>
-              <option value="#08D316">Green</option>
-              <option value="#00ADFF">Light Blue</option>
-              <option value="#FF4600">Orange</option>
-            </select>
-
-            <div className="form-group">
-              <label>Content</label>
-              <ReactQuill
-                modules={this.modules}
-                formats={this.formats}
-                value={this.state.content}
-                onChange={this.handleQuillChange}
-                style={{ height: 500, marginBottom: 100 }}
-              />
-            </div>
-
-            <button className="btn btn-primary" type="submit">
-              Create
-            </button>
-          </form>
-        </div>
+          <Button color="primary" variant="contained" type="submit">
+            Create
+          </Button>
+        </form>
       </div>
     );
   }

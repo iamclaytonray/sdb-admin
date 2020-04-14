@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Button,
   CssBaseline,
   Divider,
   Drawer,
@@ -14,7 +15,7 @@ import {
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Menu as MenuIcon } from '@material-ui/icons';
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -55,6 +56,7 @@ export const Layout = (props: any) => {
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -63,14 +65,35 @@ export const Layout = (props: any) => {
 
   const drawer = (
     <div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Button
+          color="secondary"
+          href="https://shoreshdavidbrandon.org"
+          target="_blank"
+          style={{ marginTop: 16 }}
+        >
+          Go to website
+        </Button>
+      </div>
       <div className={classes.toolbar} />
-      <Divider />
-      <List>
+      {/* <Divider /> */}
+      <List style={{ paddingTop: 0, marginTop: -24 }}>
         {['Resources', 'Events', 'Sermons'].map((text, index) => (
           <ListItem
             button
             key={text}
             onClick={() => history.push(`/dashboard/${text.toLowerCase()}`)}
+            style={{
+              backgroundColor: location.pathname.includes(text.toLowerCase())
+                ? '#eee'
+                : '#fff',
+            }}
           >
             <ListItemText primary={text} />
           </ListItem>

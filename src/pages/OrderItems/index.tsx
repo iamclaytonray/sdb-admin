@@ -1,3 +1,4 @@
+import { Button } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
 import {
@@ -12,7 +13,6 @@ import { Loading } from '../../components/Loading';
 import { API_URL } from '../../constants';
 
 export const OrderItems = (props: any) => {
-  const [items, setItems] = React.useState([1, 2, 3, 4]);
   const [state, setState] = React.useState({
     items: [] as any,
     loading: true,
@@ -34,20 +34,20 @@ export const OrderItems = (props: any) => {
     targetIndex: number,
     _targetId: string,
   ) => {
-    const nextState = swap(items, sourceIndex, targetIndex);
-    setItems(nextState);
+    const nextState = swap(state.items, sourceIndex, targetIndex);
+    // TODO:
+    // get current index for each item and update each items `order` property
+
+    setState({ ...state, items: nextState });
   };
 
   const fetch = async () => {
     try {
-      const res = await Axios.get(
-        `${API_URL}/${props.resource}/unfiltered?page=1&size=200`,
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
+      const res = await Axios.get(`${API_URL}/${props.resource}`, {
+        headers: {
+          Authorization: localStorage.getItem('token'),
         },
-      );
+      });
       setState({
         ...state,
         loading: false,
@@ -63,23 +63,7 @@ export const OrderItems = (props: any) => {
   };
 
   const handleSave = async () => {
-    state.items.map(async (item, i) => {
-      try {
-        await Axios.put(
-          `${API_URL}/${props.resource}/${item.slug}`,
-          {
-            order: i + 1,
-          },
-          {
-            headers: {
-              Authorization: localStorage.getItem('token'),
-            } as any,
-          },
-        );
-      } catch (error) {
-        return;
-      }
-    });
+    console.log('woo');
   };
 
   if (state.loading) {
@@ -91,34 +75,43 @@ export const OrderItems = (props: any) => {
   }
 
   return (
-    <React.Fragment>
+    <div style={{ width: '100%' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          marginBottom: 16,
+        }}
+      >
+        <Button color="primary" variant="contained" onClick={handleSave}>
+          Save
+        </Button>
+      </div>
       <GridContextProvider onChange={onChange}>
-        <GridDropZone id="items" boxesPerRow={4} rowHeight={60}>
-          {items.map((item) => (
+        <GridDropZone
+          id="items"
+          boxesPerRow={4}
+          rowHeight={100}
+          style={{ height: '400px' }}
+        >
+          {state.items.map((item: any) => (
             <GridItem
-              key={item._id}
+              key={item.id}
               style={{
-                margin: 8,
                 padding: 8,
                 boxShadow: '0 0 2px #eee',
                 backgroundColor: '#fff',
+                width: 220,
+                marginBottom: 24,
+                paddingBottom: 24,
               }}
             >
-              <div
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              >
-                {item.title}
-              </div>
+              <div>{item.title}</div>
             </GridItem>
           ))}
         </GridDropZone>
       </GridContextProvider>
-      <button onClick={handleSave} className="btn btn-primary">
-        Save
-      </button>
-    </React.Fragment>
+    </div>
   );
 };
