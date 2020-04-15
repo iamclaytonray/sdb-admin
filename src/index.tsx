@@ -11,8 +11,6 @@ import { ToastProvider } from './context/ToastContext';
 import { Root } from './router';
 import { persistor, store } from './store/store';
 
-// persistor.purge();
-
 render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
