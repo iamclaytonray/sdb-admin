@@ -14,7 +14,6 @@ export const theme = createMuiTheme({
     },
     MuiButton: {
       root: {
-        padding: 12,
         textTransform: 'none',
       },
     },

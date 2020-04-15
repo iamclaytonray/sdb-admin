@@ -6,3 +6,10 @@ form {
   display: flex;
   flex-direction: column;
 }
+
+.dnd-item {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}

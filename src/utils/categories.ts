@@ -55,7 +55,7 @@ export const sermonCategories = [
     value: 'special-speakers',
   },
   {
-    label: `Increase Your Increase`,
+    label: `Increase Your Income`,
     value: 'increase-your-income',
   },
 ];
