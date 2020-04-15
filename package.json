@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npx parcel src/index.html",
+    "build": "npx parcel build src/index.html",
     "prettier:tsx": "npx prettier --write 'src/**/*.tsx'",
     "prettier:scss": "npx prettier --write 'src/**/*.scss'",
     "tslint-check": "tslint-config-prettier-check ./tslint.json"
