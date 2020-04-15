@@ -1,14 +1,23 @@
-import { Button } from '@material-ui/core';
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
 import { Error } from '../../components/Error';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
+import { resourceCategories } from '../../utils/categories';
 
-export class CreateResourcePage extends React.Component<any, any> {
-  public state = {
+export const CreateResourcePage = () => {
+  const history = useHistory();
+  const [state, setState] = React.useState({
     title: '',
     slug: '',
     description: '',
@@ -16,21 +25,25 @@ export class CreateResourcePage extends React.Component<any, any> {
     link: '',
     color: '#B56FEA',
     content: '',
+    category: '',
 
     error: null,
-  };
+  });
 
-  public handleInputChange = (event: any) => {
+  const handleInputChange = (event: any) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    this.setState({
+    console.log(value);
+
+    setState({
+      ...state,
       [name]: value,
     });
-  }
+  };
 
-  public handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     const {
       title,
@@ -40,7 +53,7 @@ export class CreateResourcePage extends React.Component<any, any> {
       link,
       color,
       content,
-    } = this.state;
+    } = state;
 
     try {
       await Axios.post(
@@ -61,75 +74,95 @@ export class CreateResourcePage extends React.Component<any, any> {
         },
       );
 
-      this.props.history.push(`/dashboard/jewish`);
+      history.push(`/dashboard/jewish`);
     } catch (error) {
-      this.setState({ error: error.response.data.message });
+      setState({ ...state, error: error.response.data.message });
       window.scroll(0, 0);
     }
-  }
-  public render() {
-    return (
-      <div>
-        {this.state.error && <Error error={JSON.stringify(this.state.error)} />}
+  };
 
-        <form onSubmit={this.handleSubmit}>
-          <SharedInput
-            type="text"
-            name="title"
-            label="Title"
-            value={this.state.title}
-            onChange={this.handleInputChange}
-          />
-          <SharedInput
-            type="text"
-            name="slug"
-            label="Slug"
-            value={this.state.slug}
-            onChange={this.handleInputChange}
-          />
-          <SharedInput
-            type="text"
-            name="description"
-            label="Description"
-            value={this.state.description}
-            onChange={this.handleInputChange}
-          />
-          <SharedInput
-            type="text"
-            name="featuredImage"
-            label="Featured Image (thumbnail)"
-            value={this.state.featuredImage}
-            onChange={this.handleInputChange}
-          />
-          <SharedInput
-            type="text"
-            name="link"
-            label="External Link"
-            value={this.state.link}
-            onChange={this.handleInputChange}
-          />
+  return (
+    <div>
+      {state.error && <Error error={JSON.stringify(state.error)} />}
 
-          <ColorSwatch color={this.state.color} />
-          <label>Color</label>
-          <select
-            name="color"
-            value={this.state.color}
-            onChange={this.handleInputChange}
-            className="form-control"
+      <form onSubmit={handleSubmit}>
+        <SharedInput
+          type="text"
+          name="title"
+          label="Title"
+          value={state.title}
+          onChange={handleInputChange}
+        />
+        <SharedInput
+          type="text"
+          name="slug"
+          label="Slug"
+          value={state.slug}
+          onChange={handleInputChange}
+        />
+        <SharedInput
+          type="text"
+          name="description"
+          label="Description"
+          value={state.description}
+          onChange={handleInputChange}
+        />
+        <SharedInput
+          type="text"
+          name="featuredImage"
+          label="Featured Image (thumbnail)"
+          value={state.featuredImage}
+          onChange={handleInputChange}
+        />
+        <SharedInput
+          type="text"
+          name="link"
+          label="External Link"
+          value={state.link}
+          onChange={handleInputChange}
+        />
+
+        <FormControl variant="outlined" margin="normal">
+          <InputLabel id="demo-simple-select-outlined-label">
+            Category
+          </InputLabel>
+          <Select
+            labelId="category-label"
+            id="category-input"
+            label="Category"
+            value={state.category}
+            onChange={handleInputChange}
           >
-            <option value="#B56FEA">Light Purple</option>
-            <option value="#5A17C7">Purple</option>
-            <option value="#031AF7">Dark Blue</option>
-            <option value="#08D316">Green</option>
-            <option value="#00ADFF">Light Blue</option>
-            <option value="#FF4600">Orange</option>
-          </select>
+            {resourceCategories.map((category) => (
+              <MenuItem value={category.value}>{category.label}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-          <Button color="primary" variant="contained" type="submit">
-            Create
-          </Button>
-        </form>
-      </div>
-    );
-  }
-}
+        <FormControl variant="outlined" margin="normal">
+          <InputLabel id="demo-simple-select-outlined-label">Color</InputLabel>
+          <Select
+            labelId="color-label"
+            id="color-input"
+            label="Color"
+            value={state.color}
+            onChange={handleInputChange}
+          >
+            <MenuItem value="#B56FEA">Light Purple</MenuItem>
+            <MenuItem value="#5A17C7">Purple</MenuItem>
+            <MenuItem value="#031AF7">Dark Blue</MenuItem>
+            <MenuItem value="#08D316">Green</MenuItem>
+            <MenuItem value="#00ADFF">Light Blue</MenuItem>
+            <MenuItem value="#FF4600">Orange</MenuItem>
+          </Select>
+        </FormControl>
+
+        <ColorSwatch color={state.color} />
+
+        <Button color="primary" variant="contained" type="submit">
+          Create
+        </Button>
+      </form>
+    </div>
+  );
+};

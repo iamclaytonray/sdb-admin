@@ -7,8 +7,11 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import './assets/application.css';
 import { ErrorBoundary } from './containers/ErrorBoundary';
+import { ToastProvider } from './context/ToastContext';
 import { Root } from './router';
 import { persistor, store } from './store/store';
+
+// persistor.purge();
 
 render(
   <Provider store={store}>
@@ -16,7 +19,9 @@ render(
       <CssBaseline />
       <BrowserRouter>
         <ErrorBoundary>
-          <Root />
+          <ToastProvider>
+            <Root />
+          </ToastProvider>
         </ErrorBoundary>
       </BrowserRouter>
     </PersistGate>

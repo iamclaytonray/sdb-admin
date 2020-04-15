@@ -12,17 +12,18 @@ import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
-import { Loading } from '../../components/Loading';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
+import { ToastContext } from '../../context/ToastContext';
+import { sermonCategories } from '../../utils/categories';
 
 export const SermonDetailsPage = () => {
   const history = useHistory();
-  const { slug } = useParams();
-  const { selectedSermonId } = useSelector((s: any) => s.sermons);
+  const { id } = useParams();
   const selectedSermon = useSelector(
-    (s: any) => s.sermons.allSermons[selectedSermonId],
+    (s: any) => s.sermons.allSermons[id as string],
   );
+  const toast: any = React.useContext(ToastContext);
   const [state, setState] = React.useState({
     title: '',
     slug: '',
@@ -40,7 +41,7 @@ export const SermonDetailsPage = () => {
 
   React.useEffect(() => {
     initData();
-  },              [selectedSermonId]);
+  },              [id]);
 
   const initData = () => {
     setState({
@@ -49,7 +50,7 @@ export const SermonDetailsPage = () => {
     });
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: any) => {
     const { target } = event;
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -67,14 +68,14 @@ export const SermonDetailsPage = () => {
       title,
       featuredImage,
       description,
-      // slug,
+      slug,
       category,
       color,
       content,
     } = state;
     try {
       await Axios.put(
-        `${API_URL}/services/${slug}`,
+        `${API_URL}/sermons/${id}`,
         {
           title,
           featuredImage,
@@ -90,9 +91,12 @@ export const SermonDetailsPage = () => {
           },
         },
       );
-      history.push('/dashboard/services');
+      toast.handleOpen('Success');
+      history.push('/dashboard/sermons');
     } catch (error) {
-      setState({ ...state, error: error.response.data.message });
+      const errorMessage = error?.response?.data?.message;
+      toast.handleOpen(JSON.stringify(errorMessage) as string);
+      setState({ ...state, error: errorMessage });
     }
   };
 
@@ -101,12 +105,12 @@ export const SermonDetailsPage = () => {
     const confirm = window.confirm('Are you sure?');
     if (confirm) {
       try {
-        await Axios.delete(`${API_URL}/services/${slug}`, {
+        await Axios.delete(`${API_URL}/sermons/${id}`, {
           headers: {
             Authorization: localStorage.getItem('token'),
           },
         });
-        history.push(`/dashboard/services`);
+        history.push(`/dashboard/sermons`);
       } catch (error) {
         setState({ ...state, error: error.response.data.message });
       }
@@ -114,10 +118,6 @@ export const SermonDetailsPage = () => {
     }
     return alert('Item not deleted');
   };
-
-  if (state.loading) {
-    return <Loading />;
-  }
 
   if (state.error) {
     return (
@@ -164,7 +164,7 @@ export const SermonDetailsPage = () => {
               onChange={handleInputChange}
             />
 
-            {/* <FormControl variant="outlined" margin="normal">
+            <FormControl variant="outlined" margin="normal">
               <InputLabel id="demo-simple-select-outlined-label">
                 Category
               </InputLabel>
@@ -172,14 +172,17 @@ export const SermonDetailsPage = () => {
                 labelId="category-label"
                 id="category-input"
                 label="Category"
+                name="category"
                 value={state.category}
-                // onChange={handleChange}
+                onChange={handleInputChange}
               >
-                {state.categories.map((category: any) => (
-                  <MenuItem value={category._id}>{category.label}</MenuItem>
+                {sermonCategories.map((category) => (
+                  <MenuItem key={category.value} value={category.value}>
+                    {category.label}
+                  </MenuItem>
                 ))}
               </Select>
-            </FormControl> */}
+            </FormControl>
 
             <ColorSwatch color={state.color} />
 
@@ -191,8 +194,9 @@ export const SermonDetailsPage = () => {
                 labelId="color-label"
                 id="color-input"
                 label="Color"
+                name="color"
                 value={state.color}
-                // onChange={handleChange}
+                onChange={handleInputChange}
               >
                 <MenuItem value="#B56FEA">Light Purple</MenuItem>
                 <MenuItem value="#5A17C7">Purple</MenuItem>

@@ -9,7 +9,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
     render={(props) => {
       // TODO(clayton): fixme
       const title =
-        props.match.params && props.location.pathname.includes('services')
+        props.match.params && props.location.pathname.includes('sermons')
           ? 'Single Sermon'
           : 'Unknown';
       return localStorage.getItem('token') !== null ? (

@@ -4,6 +4,10 @@ export const columns = {
   events: {
     columns: [
       {
+        name: 'id',
+        label: 'ID',
+      },
+      {
         name: 'title',
         label: 'Title',
       },
@@ -25,6 +29,10 @@ export const columns = {
   },
   resources: {
     columns: [
+      {
+        name: 'id',
+        label: 'ID',
+      },
       {
         name: 'title',
         label: 'Title',
@@ -52,12 +60,12 @@ export const columns = {
   sermons: {
     columns: [
       {
-        name: 'title',
-        label: 'Title',
+        name: 'id',
+        label: 'ID',
       },
       {
-        name: 'slug',
-        label: 'Slug',
+        name: 'title',
+        label: 'Title',
       },
       {
         name: 'category',

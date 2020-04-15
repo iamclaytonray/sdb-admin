@@ -1,5 +1,4 @@
 import { Button } from '@material-ui/core';
-import Axios from 'axios';
 import * as React from 'react';
 import {
   GridContextProvider,
@@ -8,24 +7,12 @@ import {
   swap,
 } from 'react-grid-dnd';
 
-import { Error } from '../../components/Error';
-import { Loading } from '../../components/Loading';
-import { API_URL } from '../../constants';
-
 export const OrderItems = (props: any) => {
-  const [state, setState] = React.useState({
-    items: [] as any,
-    loading: true,
-    error: null,
-  });
+  const [items, setItems] = React.useState([]);
 
   React.useEffect(() => {
-    fetch();
-  },              []);
-
-  React.useEffect(() => {
-    fetch();
-  },              [props.resource]);
+    setItems(props.data);
+  },              [props.data]);
 
   // target id will only be set if dragging from one dropzone to another.
   const onChange = (
@@ -34,45 +21,16 @@ export const OrderItems = (props: any) => {
     targetIndex: number,
     _targetId: string,
   ) => {
-    const nextState = swap(state.items, sourceIndex, targetIndex);
+    const nextState = swap(items, sourceIndex, targetIndex);
     // TODO:
     // get current index for each item and update each items `order` property
 
-    setState({ ...state, items: nextState });
-  };
-
-  const fetch = async () => {
-    try {
-      const res = await Axios.get(`${API_URL}/${props.resource}`, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      });
-      setState({
-        ...state,
-        loading: false,
-        items: res.data.data,
-      });
-    } catch (error) {
-      setState({
-        ...state,
-        loading: false,
-        error: error.response.data.message,
-      });
-    }
+    setItems(nextState);
   };
 
   const handleSave = async () => {
     console.log('woo');
   };
-
-  if (state.loading) {
-    return <Loading />;
-  }
-
-  if (state.error) {
-    return <Error error={state.error} />;
-  }
 
   return (
     <div style={{ width: '100%' }}>
@@ -95,7 +53,7 @@ export const OrderItems = (props: any) => {
           rowHeight={100}
           style={{ height: '400px' }}
         >
-          {state.items.map((item: any) => (
+          {items.map((item: any) => (
             <GridItem
               key={item.id}
               style={{

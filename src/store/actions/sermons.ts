@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 
 import * as types from '../types';
 
-const sermon = new schema.Entity('sermons', undefined, { idAttribute: '_id' });
+const sermon = new schema.Entity('sermons');
 const arrayOfSermons = new schema.Array(sermon);
 
 export const loadSermons = (sermons: any[]) => async (dispatch: Dispatch) => {
@@ -13,7 +13,7 @@ export const loadSermons = (sermons: any[]) => async (dispatch: Dispatch) => {
   });
 };
 
-export const selectSermon = (id: string) => async (dispatch) => {
+export const selectSermon = (id: string) => async (dispatch: Dispatch) => {
   dispatch({
     type: types.SELECT_SERMON,
     payload: id,

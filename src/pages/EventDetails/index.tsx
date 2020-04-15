@@ -2,60 +2,57 @@ import { Button, Card } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
+import { useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { Error } from '../../components/Error';
-import { Loading } from '../../components/Loading';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 
-export class EventDetailsPage extends React.Component<any, any> {
-  public state = {
+export const EventDetailsPage = () => {
+  const history = useHistory();
+  const { id } = useParams();
+  const selectedEvent = useSelector(
+    (s: any) => s.events.allEvents[id as string],
+  );
+
+  const [state, setState] = React.useState({
     title: '',
     slug: '',
     featuredImage: '',
     content: '',
 
-    loading: true,
     error: null,
+  });
+
+  React.useEffect(() => {
+    initData();
+  },              [id]);
+
+  const initData = () => {
+    setState({
+      ...state,
+      ...selectedEvent,
+    });
   };
 
-  public componentDidMount() {
-    this.fetch();
-  }
-
-  public fetch = async () => {
-    try {
-      const res = await Axios.get(
-        `${API_URL}/events/${this.props.match.params.slug}`,
-      );
-      this.setState({
-        loading: false,
-        title: res.data.data.title,
-        slug: res.data.data.slug,
-        featuredImage: res.data.data.featuredImage,
-        content: res.data.data.content || '',
-      });
-    } catch (error) {
-      this.setState({ loading: false, error: error.response.data.message });
-    }
-  }
-
-  public handleInputChange = (event) => {
+  const handleInputChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    this.setState({
+    setState({
+      ...state,
       [name]: value,
     });
-  }
+  };
 
-  public handleUpdate = (e: any) => {
+  const handleUpdate = (e: any) => {
     e.preventDefault();
-    const { title, slug, featuredImage, content } = this.state;
+    const { title, slug, featuredImage, content } = state;
     try {
       Axios.put(
-        `${API_URL}/events/${this.props.match.params.slug}`,
+        `${API_URL}/events/${id}`,
         {
           title,
           slug,
@@ -68,106 +65,96 @@ export class EventDetailsPage extends React.Component<any, any> {
           },
         },
       );
-      this.props.history.push('/dashboard/events');
+      history.push('/dashboard/events');
     } catch (error) {
-      this.setState({ error: error.response.data.message });
+      setState({ ...state, error: error.response.data.message });
       window.scroll(0, 0);
     }
-  }
+  };
 
-  public handleDelete = async (e: any) => {
+  const handleDelete = async (e: any) => {
     e.preventDefault();
     const confirm = window.confirm('Are you sure?');
     if (confirm) {
       try {
-        await Axios.delete(
-          `${API_URL}/events/${this.props.match.params.slug}`,
-          {
-            headers: {
-              Authorization: localStorage.getItem('token'),
-            },
+        await Axios.delete(`${API_URL}/events/${id}`, {
+          headers: {
+            Authorization: localStorage.getItem('token'),
           },
-        );
-        this.props.history.push(`/dashboard/events`);
+        });
+        history.push(`/dashboard/events`);
       } catch (error) {
-        this.setState({ error: error.response.data.message });
+        setState({ ...state, error: error.response.data.message });
         window.scroll(0, 0);
       }
       return;
     }
-  }
+  };
 
-  public render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-
-    if (this.state.error) {
-      return (
-        <div className="card">
-          <div className="card-body">{JSON.stringify(this.state.error)}</div>
-        </div>
-      );
-    }
+  if (state.error) {
     return (
-      <Container fluid>
-        <Row align="center" justify="center">
-          <Col lg={8}>
-            <Card style={{ padding: 24 }}>
-              {this.state.error && (
-                <Error error={JSON.stringify(this.state.error)} />
-              )}
-              <form>
-                <SharedInput
-                  type="text"
-                  name="title"
-                  label="Title"
-                  value={this.state.title}
-                  onChange={this.handleInputChange}
-                />
-                <SharedInput
-                  type="text"
-                  name="slug"
-                  label="Slug"
-                  value={this.state.slug}
-                  onChange={this.handleInputChange}
-                />
-                <SharedInput
-                  type="text"
-                  name="featuredImage"
-                  label="Featured Image (thumbnail)"
-                  value={this.state.featuredImage}
-                  onChange={this.handleInputChange}
-                />
-
-                <div
-                  style={{
-                    display: 'flex',
-                    flex: 1,
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={this.handleUpdate}
-                  >
-                    Update
-                  </Button>
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    onClick={this.handleDelete}
-                  >
-                    Delete All
-                  </Button>
-                </div>
-              </form>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+      <div className="card">
+        <div className="card-body">{JSON.stringify(state.error)}</div>
+      </div>
     );
   }
-}
+
+  return (
+    <Container fluid>
+      <Row align="center" justify="center">
+        <Col lg={8}>
+          <Card style={{ padding: 24 }}>
+            {state.error && <Error error={JSON.stringify(state.error)} />}
+            <form>
+              <SharedInput
+                type="text"
+                name="title"
+                label="Title"
+                value={state.title}
+                onChange={handleInputChange}
+              />
+              <SharedInput
+                type="text"
+                name="slug"
+                label="Slug"
+                value={state.slug}
+                onChange={handleInputChange}
+              />
+              <SharedInput
+                type="text"
+                name="featuredImage"
+                label="Featured Image (thumbnail)"
+                value={state.featuredImage}
+                onChange={handleInputChange}
+              />
+
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={handleUpdate}
+                >
+                  Update
+                </Button>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={handleDelete}
+                >
+                  Delete All
+                </Button>
+              </div>
+            </form>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
+  );
+};

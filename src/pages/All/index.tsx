@@ -1,43 +1,48 @@
-import { Box, Paper, Tab, Tabs, Typography } from '@material-ui/core';
+import { Paper, Tab, Tabs } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
-import { Error } from '../../components/Error';
 import { SharedTable } from '../../components/SharedTable';
 import { API_URL } from '../../constants';
+import { loadEvents } from '../../store/actions/events';
+import { loadResources } from '../../store/actions/resources';
 import { loadSermons } from '../../store/actions/sermons';
 import { OrderItems } from '../OrderItems';
 
 export const All = (props: any) => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const [state, setState] = React.useState({
-    view: 'table',
-
-    loading: true,
-    error: null,
-    data: null as any,
-  });
+  const events = useSelector((s: any) => s.events.allEvents);
+  const resources = useSelector((s: any) => s.resources.allResources);
+  const sermons = useSelector((s: any) => s.sermons.allSermons);
   const [tab, setTab] = React.useState(0);
+  const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
     fetch();
   },              []);
 
   React.useEffect(() => {
-    setState({ ...state, view: 'table', loading: true });
+    if (props.resource === 'events') {
+      setData(Object.values(events || {}));
+    }
+    if (props.resource === 'resources') {
+      console.log(resources);
+      setData(Object.values(resources || {}));
+    }
+    if (props.resource === 'sermons') {
+      console.log(sermons);
+      setData(Object.values(sermons || {}));
+    }
+  },              [events, resources, sermons, props.resource]);
+
+  React.useEffect(() => {
+    setTab(0);
     fetch();
 
-    return () =>
-      setState({
-        view: 'table',
-
-        loading: true,
-        error: null,
-        data: null as any,
-      });
+    return () => setTab(0);
   },              [location]);
 
   const fetch = async () => {
@@ -47,16 +52,17 @@ export const All = (props: any) => {
           Authorization: localStorage.getItem('token'),
         } as any,
       });
-      if (props.resource === 'services') {
+      if (props.resource === 'events') {
+        dispatch(loadEvents(res.data.data));
+      }
+      if (props.resource === 'resources') {
+        dispatch(loadResources(res.data.data));
+      }
+      if (props.resource === 'sermons') {
         dispatch(loadSermons(res.data.data));
       }
-      setState({ ...state, loading: false, data: res.data.data });
     } catch (error) {
-      setState({
-        ...state,
-        loading: false,
-        error: error.response.data.message,
-      });
+      console.log(error);
     }
   };
 
@@ -65,8 +71,9 @@ export const All = (props: any) => {
     setTab(newTab);
   };
 
-  if (state.error) {
-    return <Error error={state.error} />;
+  console.log(data);
+  if (!data) {
+    return 'loading';
   }
 
   return (
@@ -84,14 +91,13 @@ export const All = (props: any) => {
       </Paper>
       {tab === 0 && (
         <SharedTable
-          data={state.data || []}
+          data={data}
           title={props.title}
-          newLink={`${props.resource}/new`}
-          otherLocation={props.resource}
+          resource={props.resource}
           {...props}
         />
       )}
-      {tab === 1 && <OrderItems resource={props.resource} />}
+      {tab === 1 && <OrderItems resource={props.resource} data={data} />}
     </div>
   );
 };
