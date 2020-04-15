@@ -14,11 +14,13 @@ import { ColorSwatch } from '../../components/ColorSwatch';
 import { Error } from '../../components/Error';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
+import { ToastContext } from '../../context/ToastContext';
 import { resourceCategories } from '../../utils/categories';
 
 export const ResourceDetailsPage = () => {
   const history = useHistory();
   const { id } = useParams();
+  const toast = React.useContext(ToastContext);
   const selectedResource = useSelector(
     (s: any) => s.resources.allResources[id as string],
   );
@@ -78,10 +80,13 @@ export const ResourceDetailsPage = () => {
           },
         },
       );
+      toast.handleOpen('Success');
       history.push('/dashboard/articles');
     } catch (error) {
+      const errorMessage = error?.response?.data?.message;
+      toast.handleOpen(JSON.stringify(errorMessage) as string);
+      setState({ ...state, error: errorMessage });
       window.scroll(0, 0);
-      setState({ ...state, error: error.response.data.message });
     }
   };
 
@@ -96,9 +101,11 @@ export const ResourceDetailsPage = () => {
           },
         });
         history.push(`/dashboard/articles`);
+        toast.handleOpen('Success');
       } catch (error) {
-        // console.log(error);
-        setState({ ...state, error: error.response.data.message });
+        const errorMessage = error?.response?.data?.message;
+        toast.handleOpen(JSON.stringify(errorMessage) as string);
+        setState({ ...state, error: errorMessage });
       }
       return;
     }
@@ -115,14 +122,6 @@ export const ResourceDetailsPage = () => {
       [name]: value,
     });
   };
-
-  if (state.error) {
-    return (
-      <div className="card">
-        <div className="card-body">{JSON.stringify(state.error)}</div>
-      </div>
-    );
-  }
 
   return (
     <div className="card">

@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
+import { PartsForm } from '../../components/PartsForm';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 import { ToastContext } from '../../context/ToastContext';
@@ -110,27 +111,22 @@ export const SermonDetailsPage = () => {
             Authorization: localStorage.getItem('token'),
           },
         });
+        toast.handleOpen('Success');
         history.push(`/dashboard/sermons`);
       } catch (error) {
-        setState({ ...state, error: error.response.data.message });
+        const errorMessage = error?.response?.data?.message;
+        toast.handleOpen(JSON.stringify(errorMessage) as string);
+        setState({ ...state, error: errorMessage });
       }
       return;
     }
     return alert('Item not deleted');
   };
 
-  if (state.error) {
-    return (
-      <div className="card">
-        <div className="card-body">{JSON.stringify(state.error)}</div>
-      </div>
-    );
-  }
-
   return (
     <Container fluid>
-      <Row align="center" justify="center">
-        <Col xs={12} sm={12} md={8} lg={8}>
+      <Row align="start" justify="start">
+        <Col xs={12} sm={12} md={8} lg={6}>
           <form style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
             <SharedInput
               type="text"
@@ -184,28 +180,42 @@ export const SermonDetailsPage = () => {
               </Select>
             </FormControl>
 
-            <ColorSwatch color={state.color} />
-
-            <FormControl variant="outlined" margin="normal">
-              <InputLabel id="demo-simple-select-outlined-label">
-                Color
-              </InputLabel>
-              <Select
-                labelId="color-label"
-                id="color-input"
-                label="Color"
-                name="color"
-                value={state.color}
-                onChange={handleInputChange}
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <FormControl
+                variant="outlined"
+                margin="normal"
+                fullWidth={false}
+                style={{ width: '80%' }}
               >
-                <MenuItem value="#B56FEA">Light Purple</MenuItem>
-                <MenuItem value="#5A17C7">Purple</MenuItem>
-                <MenuItem value="#031AF7">Dark Blue</MenuItem>
-                <MenuItem value="#08D316">Green</MenuItem>
-                <MenuItem value="#00ADFF">Light Blue</MenuItem>
-                <MenuItem value="#FF4600">Orange</MenuItem>
-              </Select>
-            </FormControl>
+                <InputLabel id="demo-simple-select-outlined-label">
+                  Color
+                </InputLabel>
+                <Select
+                  labelId="color-label"
+                  id="color-input"
+                  label="Color"
+                  name="color"
+                  value={state.color}
+                  onChange={handleInputChange}
+                >
+                  <MenuItem value="#B56FEA">Light Purple</MenuItem>
+                  <MenuItem value="#5A17C7">Purple</MenuItem>
+                  <MenuItem value="#031AF7">Dark Blue</MenuItem>
+                  <MenuItem value="#08D316">Green</MenuItem>
+                  <MenuItem value="#00ADFF">Light Blue</MenuItem>
+                  <MenuItem value="#FF4600">Orange</MenuItem>
+                </Select>
+              </FormControl>
+
+              <ColorSwatch color={state.color} />
+            </div>
 
             <div
               style={{
@@ -231,6 +241,9 @@ export const SermonDetailsPage = () => {
               </Button>
             </div>
           </form>
+        </Col>
+        <Col xs={12} sm={12} md={8} lg={6} style={{ marginTop: 16 }}>
+          <PartsForm />
         </Col>
       </Row>
     </Container>

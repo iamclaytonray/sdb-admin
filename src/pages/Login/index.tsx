@@ -7,25 +7,30 @@ import { useHistory } from 'react-router-dom';
 import logo from '../../assets/img/logo.png';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
+import { ToastContext } from '../../context/ToastContext';
 
 export const LoginPage = () => {
   const history = useHistory();
+  const toast = React.useContext(ToastContext);
   const [state, setState] = React.useState({
     email: '',
     password: '',
     error: null,
   });
 
-  const handleSubmit = async (e): Promise<any> => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     const { email, password } = state;
     try {
       const res = await Axios.post(`${API_URL}/auth`, { email, password });
 
       localStorage.setItem('token', res.data.token);
+      toast.handleOpen('Success');
       history.push(`/dashboard`);
     } catch (error) {
-      setState({ ...state, error: error.response.data.message });
+      const errorMessage = error?.response?.data?.message;
+      toast.handleOpen(JSON.stringify(errorMessage));
+      setState({ ...state, error: errorMessage });
     }
   };
 

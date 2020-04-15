@@ -12,7 +12,7 @@ interface IToastContext {
   clear: () => void;
 }
 
-export const ToastContext = React.createContext<Partial<IToastContext>>({});
+export const ToastContext = React.createContext<IToastContext>({} as any);
 export const UserConsumer = ToastContext.Consumer;
 
 export const ToastProvider = ({ children }: Props) => {

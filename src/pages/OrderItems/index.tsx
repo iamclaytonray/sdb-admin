@@ -7,7 +7,10 @@ import {
   swap,
 } from 'react-grid-dnd';
 
+import { ToastContext } from '../../context/ToastContext';
+
 export const OrderItems = (props: any) => {
+  const toast = React.useContext(ToastContext);
   const [items, setItems] = React.useState([]);
 
   React.useEffect(() => {
@@ -30,6 +33,13 @@ export const OrderItems = (props: any) => {
 
   const handleSave = async () => {
     console.log('woo');
+    try {
+      toast.handleOpen('Success');
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message;
+      toast.handleOpen(JSON.stringify(errorMessage) as string);
+      // setState({ ...state, error: errorMessage });
+    }
   };
 
   return (
@@ -51,18 +61,15 @@ export const OrderItems = (props: any) => {
           id="items"
           boxesPerRow={4}
           rowHeight={100}
-          style={{ height: '400px' }}
+          style={{ padding: 10 }}
         >
           {items.map((item: any) => (
             <GridItem
               key={item.id}
               style={{
-                padding: 8,
+                padding: 20,
                 boxShadow: '0 0 2px #eee',
                 backgroundColor: '#fff',
-                width: 220,
-                marginBottom: 24,
-                paddingBottom: 24,
               }}
             >
               <div>{item.title}</div>

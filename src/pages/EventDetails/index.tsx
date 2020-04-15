@@ -8,10 +8,12 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Error } from '../../components/Error';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
+import { ToastContext } from '../../context/ToastContext';
 
 export const EventDetailsPage = () => {
   const history = useHistory();
   const { id } = useParams();
+  const toast = React.useContext(ToastContext);
   const selectedEvent = useSelector(
     (s: any) => s.events.allEvents[id as string],
   );
@@ -65,9 +67,12 @@ export const EventDetailsPage = () => {
           },
         },
       );
+      toast.handleOpen('Success');
       history.push('/dashboard/events');
     } catch (error) {
-      setState({ ...state, error: error.response.data.message });
+      const errorMessage = error?.response?.data?.message;
+      toast.handleOpen(JSON.stringify(errorMessage));
+      setState({ ...state, error: errorMessage });
       window.scroll(0, 0);
     }
   };
@@ -83,21 +88,17 @@ export const EventDetailsPage = () => {
           },
         });
         history.push(`/dashboard/events`);
+
+        toast.handleOpen('Success');
       } catch (error) {
-        setState({ ...state, error: error.response.data.message });
+        const errorMessage = error?.response?.data?.message;
+        toast.handleOpen(JSON.stringify(errorMessage));
+        setState({ ...state, error: errorMessage });
         window.scroll(0, 0);
       }
       return;
     }
   };
-
-  if (state.error) {
-    return (
-      <div className="card">
-        <div className="card-body">{JSON.stringify(state.error)}</div>
-      </div>
-    );
-  }
 
   return (
     <Container fluid>
