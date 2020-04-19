@@ -13,7 +13,7 @@ const persistConfig = {
   key: 'SDB:',
   blacklist: [],
   whitelist: ['sermons', 'events', 'resources', 'user'],
-  keyPrefix: 'SDB:',
+  keyPrefix: '',
   storage,
 };
 

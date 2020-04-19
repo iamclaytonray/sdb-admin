@@ -66,7 +66,6 @@ export const OrderItems = (props: any) => {
   };
 
   // const handleSave = async () => {
-  //   console.log('woo');
   //   try {
   //     toast.handleOpen('Success');
   //   } catch (error) {

@@ -5,18 +5,19 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import Axios from 'axios';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
+import { MarkdownTextField } from '../../components/MarkdownTextField';
 import { PartsForm } from '../../components/PartsForm';
 import { SharedInput } from '../../components/SharedInput';
-import { API_URL } from '../../constants';
 import { ToastContext } from '../../context/ToastContext';
 import { resourceCategories } from '../../utils/categories';
+import { handleApiDelete } from '../../utils/handleApiDelete';
+import { handleApiUpdate } from '../../utils/handleApiUpdate';
 import { resourceTypes } from '../../utils/resourceTypes';
 
 export const ResourceDetailsPage = () => {
@@ -36,10 +37,10 @@ export const ResourceDetailsPage = () => {
     content: '',
     color: '#B56FEA',
     resourceType: '',
-
     categories: [],
+    parts: [],
+    video: '',
 
-    loading: true,
     error: null,
   });
 
@@ -48,9 +49,30 @@ export const ResourceDetailsPage = () => {
   },              [id]);
 
   const initData = () => {
+    const {
+      title,
+      slug,
+      featuredImage,
+      category,
+      externalLink,
+      content,
+      color,
+      resourceType,
+      parts,
+      video,
+    } = selectedResource;
     setState({
       ...state,
-      ...selectedResource,
+      title,
+      slug,
+      featuredImage,
+      category,
+      externalLink,
+      content,
+      color,
+      resourceType,
+      parts,
+      video,
     });
   };
 
@@ -64,55 +86,49 @@ export const ResourceDetailsPage = () => {
       externalLink,
       content,
       color,
+      parts,
+      video,
     } = state;
-    try {
-      await Axios.put(
-        `${API_URL}/articles/${id}`,
-        {
-          title,
-          slug,
-          featuredImage,
-          category,
-          externalLink,
-          content,
-          color,
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
-      );
+    const data = {
+      title,
+      slug,
+      featuredImage,
+      category,
+      externalLink,
+      content,
+      color,
+      parts,
+      video,
+    };
+    console.log(data);
+    const { success, error } = await handleApiUpdate(`/resources/${id}`, data);
+
+    if (success) {
       toast.handleOpen('Success');
-      history.push('/dashboard/articles');
-    } catch (error) {
-      const errorMessage = error?.response?.data?.message;
-      toast.handleOpen(JSON.stringify(errorMessage) as string);
-      setState({ ...state, error: errorMessage });
-      window.scroll(0, 0);
+    }
+
+    if (error) {
+      toast.handleOpen(JSON.stringify(error));
     }
   };
 
   const handleDelete = async (e: any) => {
     e.preventDefault();
-    const confirm = window.confirm('Are you sure?');
+    const confirm = window.confirm(
+      'Are you sure? This action cannot be undone.',
+    );
     if (confirm) {
-      try {
-        await Axios.delete(`${API_URL}/articles/${id}`, {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        });
-        history.push(`/dashboard/articles`);
+      const { success, error } = await handleApiDelete(`/resources/${id}`);
+
+      if (success) {
         toast.handleOpen('Success');
-      } catch (error) {
-        const errorMessage = error?.response?.data?.message;
-        toast.handleOpen(JSON.stringify(errorMessage) as string);
-        setState({ ...state, error: errorMessage });
+        history.push(`/dashboard/resources`);
       }
-      return;
+
+      if (error) {
+        toast.handleOpen(JSON.stringify(error));
+      }
     }
-    return alert('Item not deleted');
   };
 
   const handleInputChange = (event: any) => {
@@ -125,6 +141,8 @@ export const ResourceDetailsPage = () => {
       [name]: value,
     });
   };
+
+  console.log(state);
 
   return (
     <Container fluid>
@@ -150,6 +168,13 @@ export const ResourceDetailsPage = () => {
               label="Featured Image (thumbnail)"
               name="featuredImage"
               value={state.featuredImage}
+              onChange={handleInputChange}
+            />
+            <SharedInput
+              type="text"
+              label="Video"
+              name="video"
+              value={state.video}
               onChange={handleInputChange}
             />
             <SharedInput
@@ -235,6 +260,13 @@ export const ResourceDetailsPage = () => {
               </FormControl>
               <ColorSwatch color={state.color} />
             </div>
+
+            <MarkdownTextField
+              value={state.content}
+              onChange={(value: string) =>
+                setState({ ...state, content: value })
+              }
+            />
 
             <div
               style={{

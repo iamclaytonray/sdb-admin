@@ -19,7 +19,7 @@ import { SermonDetailsPage } from './pages/SermonDetails';
 
 export const Root = () => {
   const toast = React.useContext(ToastContext);
-  console.log(toast);
+
   return (
     <>
       <Switch>

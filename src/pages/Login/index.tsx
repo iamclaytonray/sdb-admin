@@ -38,7 +38,6 @@ export const LoginPage = () => {
     <Container fluid>
       <Row justify="center" align="center">
         <Col lg={4} style={{ marginTop: 24 }}>
-          {state.error && <p>{JSON.stringify(state.error)}</p>}
           <div style={{ textAlign: 'center', marginBottom: 24 }}>
             <img src={logo} alt="" style={{ height: 200 }} />
           </div>

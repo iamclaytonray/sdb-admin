@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Error } from '../../components/Error';
+import { MarkdownTextField } from '../../components/MarkdownTextField';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 
@@ -11,7 +12,6 @@ export const CreateEventPage = () => {
   const history = useHistory();
   const [state, setState] = React.useState({
     title: '',
-    slug: '',
     featuredImage: '',
     content: '',
 
@@ -31,20 +31,13 @@ export const CreateEventPage = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const { title, slug, featuredImage, content } = state;
+    const { title, featuredImage, content } = state;
 
     try {
-      // const { res, error } = await Api.createEvent({
-      //   title,
-      //   slug,
-      //   featuredImage,
-      //   content,
-      // });
       await Axios.post(
         `${API_URL}/events`,
         {
           title,
-          slug,
           featuredImage,
           content,
         },
@@ -76,18 +69,15 @@ export const CreateEventPage = () => {
 
         <SharedInput
           type="text"
-          name="slug"
-          label="Slug"
-          value={state.slug}
-          onChange={handleInputChange}
-        />
-
-        <SharedInput
-          type="text"
           name="featuredImage"
           label="Featured Image (thumbnail)"
           value={state.featuredImage}
           onChange={handleInputChange}
+        />
+
+        <MarkdownTextField
+          value={state.content}
+          onChange={(content: string) => setState({ ...state, content })}
         />
 
         <Button color="primary" variant="contained" type="submit">

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "npx parcel src/index.html",
+    "start": "npx parcel src/index.html --port=8000",
     "build": "npx parcel build src/index.html",
     "prettier:tsx": "npx prettier --write 'src/**/*.tsx'",
     "prettier:scss": "npx prettier --write 'src/**/*.scss'",
@@ -27,13 +27,14 @@
     "react-beautiful-dnd": "9.0.2",
     "react-dom": "16.13.1",
     "react-grid-system": "6.3.0",
-    "react-quill": "1.3.5",
+    "react-mde": "8.2.0",
     "react-redux": "7.2.0",
     "react-router-dom": "5.1.2",
     "redux": "4.0.5",
     "redux-form": "8.3.5",
     "redux-persist": "6.0.0",
-    "redux-thunk": "2.3.0"
+    "redux-thunk": "2.3.0",
+    "showdown": "1.9.1"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",

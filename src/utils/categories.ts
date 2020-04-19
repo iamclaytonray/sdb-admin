@@ -12,8 +12,8 @@ export const resourceCategories = [
     value: 'heaven-and-hell',
   },
   {
-    label: 'Prohpecy',
-    value: 'prohpecy',
+    label: 'Prophecy',
+    value: 'prophecy',
   },
   {
     label: 'Supernatural',
@@ -40,7 +40,7 @@ export const sermonCategories = [
   },
   {
     label: `"Jewish" Holidays`,
-    value: 'jewish-holidays',
+    value: 'holy-days',
   },
   {
     label: `End Times`,

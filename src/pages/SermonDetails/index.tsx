@@ -5,26 +5,33 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import Axios from 'axios';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
+import { MarkdownTextField } from '../../components/MarkdownTextField';
 import { PartsForm } from '../../components/PartsForm';
 import { SharedInput } from '../../components/SharedInput';
-import { API_URL } from '../../constants';
 import { ToastContext } from '../../context/ToastContext';
+import { selectSermon } from '../../store/actions/sermons';
 import { sermonCategories } from '../../utils/categories';
+import { handleApiDelete } from '../../utils/handleApiDelete';
+import { handleApiUpdate } from '../../utils/handleApiUpdate';
 
 export const SermonDetailsPage = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const { id } = useParams();
+  const toast = React.useContext(ToastContext);
+
   const selectedSermon = useSelector(
     (s: any) => s.sermons.allSermons[id as string],
   );
-  const toast: any = React.useContext(ToastContext);
+  const reduxForm = useSelector(
+    (s: any) => s?.form?.partsForm?.values?.parts || [],
+  );
   const [state, setState] = React.useState({
     title: '',
     slug: '',
@@ -33,23 +40,22 @@ export const SermonDetailsPage = () => {
     category: 'rabbi-don',
     color: '#5A17C7',
     content: '',
-
+    video: '',
     categories: [],
+    parts: [],
 
-    loading: false,
     error: null,
   });
 
   React.useEffect(() => {
-    initData();
-  },              [id]);
-
-  const initData = () => {
+    dispatch(selectSermon(id as string));
     setState({
       ...state,
       ...selectedSermon,
+      parts: selectedSermon.parts || reduxForm,
+      content: selectedSermon.content || '',
     });
-  };
+  },              [id]);
 
   const handleInputChange = (event: any) => {
     const { target } = event;
@@ -64,7 +70,6 @@ export const SermonDetailsPage = () => {
 
   const handleUpdate = async (e: any) => {
     e.preventDefault();
-
     const {
       title,
       featuredImage,
@@ -72,55 +77,49 @@ export const SermonDetailsPage = () => {
       slug,
       category,
       color,
+      video,
       content,
     } = state;
-    try {
-      await Axios.put(
-        `${API_URL}/sermons/${id}`,
-        {
-          title,
-          featuredImage,
-          description,
-          slug,
-          category,
-          color,
-          content,
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
-      );
+    const data = {
+      title,
+      featuredImage,
+      description,
+      slug,
+      category,
+      color,
+      content,
+      video,
+      parts: reduxForm,
+    };
+
+    const { success, error } = await handleApiUpdate(`/sermons/${id}`, data);
+
+    if (success) {
       toast.handleOpen('Success');
-      history.push('/dashboard/sermons');
-    } catch (error) {
-      const errorMessage = error?.response?.data?.message;
-      toast.handleOpen(JSON.stringify(errorMessage) as string);
-      setState({ ...state, error: errorMessage });
+    }
+
+    if (error) {
+      toast.handleOpen(JSON.stringify(error));
     }
   };
 
   const handleDelete = async (e: any) => {
     e.preventDefault();
-    const confirm = window.confirm('Are you sure?');
+    const confirm = window.confirm(
+      'Are you sure? This action cannot be undone.',
+    );
     if (confirm) {
-      try {
-        await Axios.delete(`${API_URL}/sermons/${id}`, {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        });
+      const { success, error } = await handleApiDelete(`/sermons/${id}`);
+
+      if (success) {
         toast.handleOpen('Success');
         history.push(`/dashboard/sermons`);
-      } catch (error) {
-        const errorMessage = error?.response?.data?.message;
-        toast.handleOpen(JSON.stringify(errorMessage) as string);
-        setState({ ...state, error: errorMessage });
       }
-      return;
+
+      if (error) {
+        toast.handleOpen(JSON.stringify(error));
+      }
     }
-    return alert('Item not deleted');
   };
 
   return (
@@ -146,9 +145,9 @@ export const SermonDetailsPage = () => {
 
             <SharedInput
               type="text"
-              name="description"
-              label="Description"
-              value={state.description}
+              name="video"
+              label="Video"
+              value={state.video}
               onChange={handleInputChange}
             />
 
@@ -161,12 +160,8 @@ export const SermonDetailsPage = () => {
             />
 
             <FormControl variant="outlined" margin="normal">
-              <InputLabel id="demo-simple-select-outlined-label">
-                Category
-              </InputLabel>
+              <InputLabel>Category</InputLabel>
               <Select
-                labelId="category-label"
-                id="category-input"
                 label="Category"
                 name="category"
                 value={state.category}
@@ -194,12 +189,8 @@ export const SermonDetailsPage = () => {
                 fullWidth={false}
                 style={{ width: '80%' }}
               >
-                <InputLabel id="demo-simple-select-outlined-label">
-                  Color
-                </InputLabel>
+                <InputLabel>Color</InputLabel>
                 <Select
-                  labelId="color-label"
-                  id="color-input"
                   label="Color"
                   name="color"
                   value={state.color}
@@ -216,6 +207,13 @@ export const SermonDetailsPage = () => {
 
               <ColorSwatch color={state.color} />
             </div>
+
+            <MarkdownTextField
+              value={state.content || ''}
+              onChange={(value: string) =>
+                setState({ ...state, content: value })
+              }
+            />
 
             <div
               style={{
@@ -243,7 +241,7 @@ export const SermonDetailsPage = () => {
           </form>
         </Col>
         <Col xs={12} sm={12} md={8} lg={6} style={{ marginTop: 16 }}>
-          <PartsForm />
+          <PartsForm parts={state.parts} />
         </Col>
       </Row>
     </Container>

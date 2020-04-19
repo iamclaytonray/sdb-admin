@@ -29,11 +29,9 @@ export const All = (props: any) => {
       setData(Object.values(events || {}));
     }
     if (props.resource === 'resources') {
-      console.log(resources);
       setData(Object.values(resources || {}));
     }
     if (props.resource === 'sermons') {
-      console.log(sermons);
       setData(Object.values(sermons || {}));
     }
   },              [events, resources, sermons, props.resource]);
@@ -71,7 +69,6 @@ export const All = (props: any) => {
     setTab(newTab);
   };
 
-  console.log(data);
   if (!data) {
     return 'loading';
   }
@@ -91,7 +88,11 @@ export const All = (props: any) => {
       </Paper>
       {tab === 0 && (
         <SharedTable
-          data={data}
+          data={
+            data.length > 0
+              ? data.sort((a: any, b: any) => a.order - b.order)
+              : data
+          }
           title={props.title}
           resource={props.resource}
           {...props}

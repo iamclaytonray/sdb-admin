@@ -4,9 +4,9 @@ import { API_URL } from '../constants';
 
 const token = localStorage.getItem('token');
 
-export const handleDelete = async (resource: string) => {
+export const handleApiDelete = async (resource: string) => {
   try {
-    const res = await Axios.delete(`${API_URL}/${resource}`, {
+    const res = await Axios.delete(`${API_URL}${resource}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
