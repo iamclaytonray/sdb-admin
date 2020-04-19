@@ -28,6 +28,7 @@ export const CreateResourcePage = () => {
     color: '#B56FEA',
     content: '',
     category: '',
+    video: '',
 
     error: null,
   });
@@ -53,6 +54,7 @@ export const CreateResourcePage = () => {
       link,
       color,
       content,
+      video,
     } = state;
 
     try {
@@ -66,6 +68,7 @@ export const CreateResourcePage = () => {
           link,
           content,
           color,
+          video,
         },
         {
           headers: {
@@ -85,7 +88,10 @@ export const CreateResourcePage = () => {
     <Container fluid>
       <Row align="start" justify="start">
         <Col xs={12} sm={12} md={8} lg={6}>
-          <form style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+          <form
+            style={{ display: 'flex', flex: 1, flexDirection: 'column' }}
+            onSubmit={handleSubmit}
+          >
             <SharedInput
               type="text"
               name="title"
