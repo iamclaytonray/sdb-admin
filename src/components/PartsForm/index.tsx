@@ -18,7 +18,6 @@ const renderField = ({ input, label, type, style = [] }) => (
 );
 
 const renderContentField = ({ input }) => {
-  console.log(input);
   return <MarkdownTextField {...input} />;
 };
 
@@ -74,8 +73,6 @@ const renderMembers = ({ fields }) => (
                 type="text"
                 component={renderField}
                 label="Number"
-                defaultValue={index + 1}
-                style={{ display: 'none' }}
               />
               <Field
                 name={`${part}.video`}
