@@ -129,13 +129,10 @@ export const CreateResourcePage = () => {
             />
 
             <FormControl variant="outlined" margin="normal">
-              <InputLabel id="demo-simple-select-outlined-label">
-                Category
-              </InputLabel>
+              <InputLabel>Category</InputLabel>
               <Select
-                labelId="category-label"
-                id="category-input"
                 label="Category"
+                name="category"
                 value={state.category}
                 onChange={handleInputChange}
               >
@@ -161,6 +158,7 @@ export const CreateResourcePage = () => {
               >
                 <InputLabel>Color</InputLabel>
                 <Select
+                  name="color"
                   label="Color"
                   value={state.color}
                   onChange={handleInputChange}

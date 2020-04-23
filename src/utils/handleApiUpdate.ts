@@ -12,6 +12,8 @@ export const handleApiUpdate = async (resource: string, data: any) => {
       },
     });
 
+    history.back();
+
     return { success: res.data.success };
   } catch (error) {
     return { error: error?.response?.data?.message };

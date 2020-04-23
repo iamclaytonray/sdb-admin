@@ -19,3 +19,10 @@ export const selectSermon = (id: string) => async (dispatch: Dispatch) => {
     payload: id,
   });
 };
+
+// export const createSermon = (sermons: any[]) => async (dispatch: Dispatch) => {
+//   dispatch({
+//     type: types.CREATE_SERMON,
+//     payload: normalize(sermon, arrayOfSermons),
+//   });
+// };

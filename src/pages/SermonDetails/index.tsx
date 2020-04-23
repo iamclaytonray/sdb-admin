@@ -1,6 +1,8 @@
 import {
   Button,
+  Checkbox,
   FormControl,
+  FormControlLabel,
   InputLabel,
   MenuItem,
   Select,
@@ -43,6 +45,7 @@ export const SermonDetailsPage = () => {
     video: '',
     categories: [],
     parts: [],
+    showTitle: true,
 
     error: null,
   });
@@ -79,6 +82,7 @@ export const SermonDetailsPage = () => {
       color,
       video,
       content,
+      showTitle,
     } = state;
     const data = {
       title,
@@ -89,6 +93,7 @@ export const SermonDetailsPage = () => {
       color,
       content,
       video,
+      showTitle,
       parts: reduxForm,
     };
 
@@ -207,6 +212,17 @@ export const SermonDetailsPage = () => {
 
               <ColorSwatch color={state.color} />
             </div>
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={state.showTitle}
+                  onChange={handleInputChange}
+                  name="showTitle"
+                />
+              }
+              label="Show title in image?"
+            />
 
             <MarkdownTextField
               value={state.content || ''}

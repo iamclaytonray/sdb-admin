@@ -120,15 +120,12 @@ const CreateSermon = () => {
             />
 
             <FormControl variant="outlined" margin="normal">
-              <InputLabel id="demo-simple-select-outlined-label">
-                Category
-              </InputLabel>
+              <InputLabel>Category</InputLabel>
               <Select
-                labelId="category-label"
-                id="category-input"
                 label="Category"
                 value={state.category}
-                // onChange={handleChange}
+                onChange={handleInputChange}
+                name="category"
               >
                 {sermonCategories.map((category) => (
                   <MenuItem value={category.value}>{category.label}</MenuItem>
@@ -153,6 +150,7 @@ const CreateSermon = () => {
                 <InputLabel>Color</InputLabel>
                 <Select
                   label="Color"
+                  name="color"
                   value={state.color}
                   onChange={handleInputChange}
                 >

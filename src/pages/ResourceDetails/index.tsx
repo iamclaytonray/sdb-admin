@@ -1,6 +1,8 @@
 import {
   Button,
+  Checkbox,
   FormControl,
+  FormControlLabel,
   InputLabel,
   MenuItem,
   Select,
@@ -27,6 +29,9 @@ export const ResourceDetailsPage = () => {
   const selectedResource = useSelector(
     (s: any) => s.resources.allResources[id as string],
   );
+  const reduxForm = useSelector(
+    (s: any) => s?.form?.partsForm?.values?.parts || [],
+  );
 
   const [state, setState] = React.useState({
     title: '',
@@ -40,6 +45,7 @@ export const ResourceDetailsPage = () => {
     categories: [],
     parts: [],
     video: '',
+    showTitle: true,
 
     error: null,
   });
@@ -60,6 +66,7 @@ export const ResourceDetailsPage = () => {
       resourceType,
       parts,
       video,
+      showTitle,
     } = selectedResource;
     setState({
       ...state,
@@ -73,6 +80,7 @@ export const ResourceDetailsPage = () => {
       resourceType,
       parts,
       video,
+      showTitle,
     });
   };
 
@@ -86,8 +94,8 @@ export const ResourceDetailsPage = () => {
       externalLink,
       content,
       color,
-      parts,
       video,
+      showTitle,
     } = state;
     const data = {
       title,
@@ -97,10 +105,10 @@ export const ResourceDetailsPage = () => {
       externalLink,
       content,
       color,
-      parts,
+      parts: reduxForm,
       video,
+      showTitle,
     };
-    console.log(data);
     const { success, error } = await handleApiUpdate(`/resources/${id}`, data);
 
     if (success) {
@@ -186,12 +194,8 @@ export const ResourceDetailsPage = () => {
             />
 
             <FormControl variant="outlined" margin="normal">
-              <InputLabel id="demo-simple-select-outlined-label">
-                Type
-              </InputLabel>
+              <InputLabel>Type</InputLabel>
               <Select
-                labelId="resourceType-label"
-                id="resourceType-input"
                 label="Type"
                 name="resourceType"
                 value={state.resourceType}
@@ -207,12 +211,8 @@ export const ResourceDetailsPage = () => {
 
             {state.resourceType === 'article' && (
               <FormControl variant="outlined" margin="normal">
-                <InputLabel id="demo-simple-select-outlined-label">
-                  Category
-                </InputLabel>
+                <InputLabel>Category</InputLabel>
                 <Select
-                  labelId="category-label"
-                  id="category-input"
                   label="Category"
                   name="category"
                   value={state.category}
@@ -239,15 +239,11 @@ export const ResourceDetailsPage = () => {
                 fullWidth={false}
                 style={{ width: '80%' }}
               >
-                <InputLabel id="demo-simple-select-outlined-label">
-                  Color
-                </InputLabel>
+                <InputLabel>Color</InputLabel>
                 <Select
-                  labelId="color-label"
-                  id="color-input"
                   label="Color"
-                  value={state.color}
                   name="color"
+                  value={state.color}
                   onChange={handleInputChange}
                 >
                   <MenuItem value="#B56FEA">Light Purple</MenuItem>
@@ -261,6 +257,16 @@ export const ResourceDetailsPage = () => {
               <ColorSwatch color={state.color} />
             </div>
 
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={state.showTitle}
+                  onChange={handleInputChange}
+                  name="showTitle"
+                />
+              }
+              label="Show title in image?"
+            />
             <MarkdownTextField
               value={state.content}
               onChange={(value: string) =>
@@ -294,7 +300,7 @@ export const ResourceDetailsPage = () => {
           </form>
         </Col>
         <Col xs={12} sm={12} md={8} lg={6} style={{ marginTop: 16 }}>
-          <PartsForm />
+          <PartsForm parts={state.parts} />
         </Col>
       </Row>
     </Container>

@@ -41,7 +41,9 @@ const getListStyle = () => ({
 export const OrderItems = (props: any) => {
   // const toast = React.useContext(ToastContext);
   const [items, setItems] = React.useState([]);
-  const [activeCategory, setActiveCategory] = React.useState(null);
+  const [activeCategory, setActiveCategory] = React.useState<string | null>(
+    null,
+  );
 
   React.useEffect(() => {
     setItems(props.data);
@@ -137,7 +139,6 @@ export const OrderItems = (props: any) => {
                     >
                       <Typography variant="body1">{item.title}</Typography>
                       <Typography variant="body1">{index + 1}</Typography>
-                      {/* {item.page ? <span>{item.page}</span> : null} */}
                     </div>
                   )}
                 </Draggable>

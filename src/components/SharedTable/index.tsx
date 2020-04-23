@@ -1,3 +1,5 @@
+import { IconButton } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
 import MUIDataTable from 'mui-datatables';
 import * as React from 'react';
 import { Col, Row } from 'react-grid-system';
@@ -22,9 +24,22 @@ export const SharedTable = (props: any) => {
             data={props.data}
             columns={columns[props.resource].columns}
             options={{
+              selectableRows: false,
               print: false,
               download: false,
+              searchOpen: true,
               onRowClick: handleClick,
+              customToolbar: () => {
+                return (
+                  <IconButton
+                    onClick={() =>
+                      history.push(`/dashboard/${props.resource}/new`)
+                    }
+                  >
+                    <Add />
+                  </IconButton>
+                );
+              },
             }}
           />
         </Col>
