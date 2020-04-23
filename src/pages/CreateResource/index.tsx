@@ -8,6 +8,7 @@ import {
 import Axios from 'axios';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
@@ -19,16 +20,21 @@ import { resourceCategories } from '../../utils/categories';
 
 export const CreateResourcePage = () => {
   const history = useHistory();
+  const reduxForm = useSelector(
+    (s: any) => s?.form?.partsForm?.values?.parts || [],
+  );
+  const resourcesLength = useSelector(
+    (s: any) => Object.values(s.resources.allResources || {}).length,
+  );
   const [state, setState] = React.useState({
     title: '',
-    slug: '',
-    description: '',
     featuredImage: '',
     link: '',
     color: '#B56FEA',
     content: '',
     category: '',
     video: '',
+    parts: [],
 
     error: null,
   });
@@ -48,13 +54,12 @@ export const CreateResourcePage = () => {
     e.preventDefault();
     const {
       title,
-      slug,
-      description,
       featuredImage,
       link,
       color,
       content,
       video,
+      category,
     } = state;
 
     try {
@@ -62,13 +67,14 @@ export const CreateResourcePage = () => {
         `${API_URL}/jewish`,
         {
           title,
-          slug,
-          description,
           featuredImage,
           link,
           content,
           color,
           video,
+          category,
+          parts: reduxForm,
+          order: resourcesLength + 1,
         },
         {
           headers: {
@@ -97,20 +103,6 @@ export const CreateResourcePage = () => {
               name="title"
               label="Title"
               value={state.title}
-              onChange={handleInputChange}
-            />
-            <SharedInput
-              type="text"
-              name="slug"
-              label="Slug"
-              value={state.slug}
-              onChange={handleInputChange}
-            />
-            <SharedInput
-              type="text"
-              name="description"
-              label="Description"
-              value={state.description}
               onChange={handleInputChange}
             />
             <SharedInput

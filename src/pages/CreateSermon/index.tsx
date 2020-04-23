@@ -8,7 +8,7 @@ import {
 import Axios from 'axios';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
@@ -20,16 +20,18 @@ import { sermonCategories } from '../../utils/categories';
 
 const CreateSermon = () => {
   const history = useHistory();
-
+  const sermonsLength = useSelector(
+    (s: any) => Object.values(s.sermons.allSermons || {}).length,
+  );
+  const reduxForm = useSelector(
+    (s: any) => s?.form?.partsForm?.values?.parts || [],
+  );
   const [state, setState] = React.useState({
     title: '',
-    slug: '',
     category: '',
-    description: '',
     featuredImage: '',
     content: '',
     color: '#B56FEA',
-    categories: [],
     error: null,
   });
 
@@ -46,27 +48,19 @@ const CreateSermon = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const {
-      title,
-      slug,
-      category,
-      description,
-      featuredImage,
-      color,
-      content,
-    } = state;
+    const { title, category, featuredImage, color, content } = state;
 
     try {
       await Axios.post(
         `${API_URL}/sermons`,
         {
           title,
-          slug,
           category,
-          description,
           featuredImage,
           color,
           content,
+          parts: reduxForm,
+          order: sermonsLength + 1,
         },
         {
           headers: {
@@ -99,23 +93,9 @@ const CreateSermon = () => {
             />
             <SharedInput
               type="text"
-              name="slug"
-              label="Slug"
-              value={state.slug}
-              onChange={handleInputChange}
-            />
-            <SharedInput
-              type="text"
               name="featuredImage"
               label="Featured Image (thumbnail)"
               value={state.featuredImage}
-              onChange={handleInputChange}
-            />
-            <SharedInput
-              type="text"
-              name="description"
-              label="Description"
-              value={state.description}
               onChange={handleInputChange}
             />
 

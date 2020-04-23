@@ -35,7 +35,7 @@ export const ResourceDetailsPage = () => {
 
   const [state, setState] = React.useState({
     title: '',
-    slug: '',
+    // slug: '',
     featuredImage: '',
     category: '',
     externalLink: '',
@@ -57,7 +57,7 @@ export const ResourceDetailsPage = () => {
   const initData = () => {
     const {
       title,
-      slug,
+      // slug,
       featuredImage,
       category,
       externalLink,
@@ -71,7 +71,7 @@ export const ResourceDetailsPage = () => {
     setState({
       ...state,
       title,
-      slug,
+      // slug,
       featuredImage,
       category,
       externalLink,
@@ -88,7 +88,7 @@ export const ResourceDetailsPage = () => {
     e.preventDefault();
     const {
       title,
-      slug,
+      // slug,
       featuredImage,
       category,
       externalLink,
@@ -99,7 +99,7 @@ export const ResourceDetailsPage = () => {
     } = state;
     const data = {
       title,
-      slug,
+      // slug,
       featuredImage,
       category,
       externalLink,
@@ -164,13 +164,13 @@ export const ResourceDetailsPage = () => {
               value={state.title}
               onChange={handleInputChange}
             />
-            <SharedInput
+            {/* <SharedInput
               type="text"
               label="Slug"
               name="slug"
               value={state.slug}
               onChange={handleInputChange}
-            />
+            /> */}
             <SharedInput
               type="text"
               label="Featured Image (thumbnail)"

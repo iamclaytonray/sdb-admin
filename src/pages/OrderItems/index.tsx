@@ -118,7 +118,7 @@ export const OrderItems = (props: any) => {
       </div> */}
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
-          {(provided: any, snapshot: any) => (
+          {(provided: any) => (
             <div ref={provided.innerRef} style={getListStyle()}>
               {filteredData.map((item: any, index: number) => (
                 <Draggable

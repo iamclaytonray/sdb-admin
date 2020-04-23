@@ -36,9 +36,8 @@ export const SermonDetailsPage = () => {
   );
   const [state, setState] = React.useState({
     title: '',
-    slug: '',
+    // slug: '',
     featuredImage: '',
-    description: '',
     category: 'rabbi-don',
     color: '#5A17C7',
     content: '',
@@ -76,8 +75,7 @@ export const SermonDetailsPage = () => {
     const {
       title,
       featuredImage,
-      description,
-      slug,
+      // slug,
       category,
       color,
       video,
@@ -87,8 +85,7 @@ export const SermonDetailsPage = () => {
     const data = {
       title,
       featuredImage,
-      description,
-      slug,
+      // slug,
       category,
       color,
       content,
@@ -140,13 +137,13 @@ export const SermonDetailsPage = () => {
               onChange={handleInputChange}
             />
 
-            <SharedInput
+            {/* <SharedInput
               type="text"
               name="slug"
               label="Slug"
               value={state.slug}
               onChange={handleInputChange}
-            />
+            /> */}
 
             <SharedInput
               type="text"

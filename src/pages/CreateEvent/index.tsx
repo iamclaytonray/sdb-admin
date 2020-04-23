@@ -1,6 +1,7 @@
 import { Button } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { Error } from '../../components/Error';
@@ -10,6 +11,9 @@ import { API_URL } from '../../constants';
 
 export const CreateEventPage = () => {
   const history = useHistory();
+  const eventsLength = useSelector(
+    (s: any) => Object.values(s.events.allEvents || {}).length,
+  );
   const [state, setState] = React.useState({
     title: '',
     featuredImage: '',
@@ -40,6 +44,7 @@ export const CreateEventPage = () => {
           title,
           featuredImage,
           content,
+          order: eventsLength,
         },
         {
           headers: {
