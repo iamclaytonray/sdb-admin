@@ -1,128 +1,104 @@
+import { Paper, Tab, Tabs } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
-import { Error } from 'components/Error';
-import { Loading } from 'components/Loading';
-import { SharedTable } from 'components/SharedTable';
-import { OrderItems } from 'pages/OrderItems';
-
+import { SharedTable } from '../../components/SharedTable';
 import { API_URL } from '../../constants';
+import { loadEvents } from '../../store/actions/events';
+import { loadResources } from '../../store/actions/resources';
+import { loadSermons } from '../../store/actions/sermons';
+import { OrderItems } from '../OrderItems';
 
-export class All extends React.Component<any, any> {
-  public state = {
-    view: 'table',
+export const All = (props: any) => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const events = useSelector((s: any) => s.events.allEvents);
+  const resources = useSelector((s: any) => s.resources.allResources);
+  const sermons = useSelector((s: any) => s.sermons.allSermons);
+  const [tab, setTab] = React.useState(0);
+  const [data, setData] = React.useState([]);
 
-    loading: true,
-    error: null,
-    data: null as any,
+  React.useEffect(() => {
+    fetch();
+  },              []);
 
-    isToastOpen: false,
+  React.useEffect(() => {
+    if (props.resource === 'events') {
+      setData(Object.values(events || {}));
+    }
+    if (props.resource === 'resources') {
+      setData(Object.values(resources || {}));
+    }
+    if (props.resource === 'sermons') {
+      setData(Object.values(sermons || {}));
+    }
+  },              [events, resources, sermons, props.resource]);
+
+  React.useEffect(() => {
+    setTab(0);
+    fetch();
+
+    return () => setTab(0);
+  },              [location]);
+
+  const fetch = async () => {
+    try {
+      const res = await Axios.get(`${API_URL}/${props.resource}`, {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        } as any,
+      });
+      if (props.resource === 'events') {
+        dispatch(loadEvents(res.data.data));
+      }
+      if (props.resource === 'resources') {
+        dispatch(loadResources(res.data.data));
+      }
+      if (props.resource === 'sermons') {
+        dispatch(loadSermons(res.data.data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  public componentDidMount() {
-    this.fetch();
+  const toggle = () => {
+    const newTab = tab === 0 ? 1 : 0;
+    setTab(newTab);
+  };
+
+  if (!data) {
+    return 'loading';
   }
 
-  public componentDidUpdate(prevProps: any) {
-    if (prevProps.location.pathname !== this.props.location.pathname) {
-      this.setState({ view: 'table', loading: true });
-      this.fetch();
-    }
-  }
-  public fetch = async () => {
-    try {
-      const res = await Axios.get(
-        `${API_URL}/${this.props.resource}/unfiltered`,
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          } as any,
-        },
-      );
-      this.setState({ loading: false, data: res.data.data });
-    } catch (error) {
-      this.setState({ loading: false, error: error.response.data.message });
-    }
-  }
-
-  public toggle = (tab: string) => {
-    this.setState({ view: tab });
-  }
-
-  public renderOrderView = () => {
-    return <OrderItems resource={this.props.resource} />;
-  }
-
-  public renderTableView = () => {
-    const { loading, error, data } = this.state;
-    if (loading) {
-      return <Loading />;
-    }
-    if (error) {
-      return <Error error={error} />;
-    }
-    return (
-      <SharedTable
-        data={data}
-        title={this.props.title}
-        newLink={`${this.props.resource}/new`}
-        otherLocation={this.props.resource}
-        children={`New ${this.props.buttonText}`}
-        {...this.props}
-      />
-    );
-  }
-  public render() {
-    if (this.state.error) {
-      return <Error error={this.state.error} />;
-    }
-    return (
-      <div className="card">
-        <div className="card-body">
-          <ul className="nav-pills-primary nav-pills nav nav-tabs">
-            <li className="nav-item">
-              <a
-                onClick={() => {
-                  this.toggle('table');
-                }}
-                className={
-                  this.state.view === 'table' ? 'nav-link active' : 'nav-link'
-                }
-                style={{ border: 'none' }}
-              >
-                Table View
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                onClick={() => this.toggle('order')}
-                className={
-                  this.state.view === 'order' ? 'nav-link active' : 'nav-link'
-                }
-                style={{ border: 'none' }}
-              >
-                Order View
-              </a>
-            </li>
-          </ul>
-          <div className="tab-content">
-            <div
-              className={
-                this.state.view === 'table' ? 'tab-pane active' : 'tab-pane'
-              }
-            >
-              {this.renderTableView()}
-            </div>
-            <div
-              className={
-                this.state.view === 'order' ? 'tab-pane active' : 'tab-pane'
-              }
-            >
-              {this.renderOrderView()}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Paper square style={{ marginBottom: 24 }}>
+        <Tabs
+          value={tab}
+          indicatorColor="primary"
+          textColor="primary"
+          onChange={toggle}
+        >
+          <Tab label="Table" />
+          <Tab label="Order" />
+        </Tabs>
+      </Paper>
+      {tab === 0 && (
+        <SharedTable
+          data={
+            data.length > 0
+              ? data.sort((a: any, b: any) => a.order - b.order)
+              : data
+          }
+          title={props.title}
+          resource={props.resource}
+          {...props}
+        />
+      )}
+      {tab === 1 && <OrderItems resource={props.resource} data={data} />}
+    </div>
+  );
+};

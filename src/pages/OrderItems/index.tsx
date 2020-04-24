@@ -1,13 +1,11 @@
-import Axios from 'axios';
+import { Button, Typography } from '@material-ui/core';
 import * as React from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
-import { Error } from 'components/Error';
-import { Loading } from 'components/Loading';
+// import { ToastContext } from '../../context/ToastContext';
+import { resourceCategories, sermonCategories } from '../../utils/categories';
 
-import { API_URL } from '../../constants';
-
-const reorder = (list, startIndex, endIndex) => {
+const reorder = (list: any, startIndex: number, endIndex: number) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -17,15 +15,15 @@ const reorder = (list, startIndex, endIndex) => {
 
 const grid = 8;
 
-const getItemStyle = (isDragging, draggableStyle) => ({
+const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
   userSelect: 'none',
-  padding: 25,
+  padding: 16,
   margin: `0 0 ${grid}px 0`,
   color: 'white',
   fontWeight: '700',
-  letterSpacing: 1.2,
+  // letterSpacing: 1.2,
 
-  background: isDragging ? 'darkgreen' : 'rgba(0,0,0,.7',
+  background: isDragging ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.6)',
 
   display: 'flex',
   flex: 1,
@@ -35,139 +33,121 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 });
 
-const getListStyle = isDraggingOver => ({
+const getListStyle = () => ({
   padding: grid,
   width: '100%',
 });
 
-export class OrderItems extends React.Component<any, any> {
-  public state = {
-    items: [] as any,
-    loading: true,
-    error: null,
-  };
+export const OrderItems = (props: any) => {
+  // const toast = React.useContext(ToastContext);
+  const [items, setItems] = React.useState([]);
+  const [activeCategory, setActiveCategory] = React.useState<string | null>(
+    null,
+  );
 
-  public componentDidMount() {
-    this.fetch();
-  }
+  React.useEffect(() => {
+    setItems(props.data);
+  },              [props.data]);
 
-  public async componentDidUpdate(prevProps: any) {
-    if (prevProps.resource !== this.props.resource) {
-      this.fetch();
-    }
-  }
-
-  public fetch = async () => {
-    try {
-      const res = await Axios.get(
-        `${API_URL}/${this.props.resource}/unfiltered?page=1&size=200`,
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
-      );
-      this.setState({
-        loading: false,
-        items: res.data.data,
-      });
-    } catch (error) {
-      this.setState({
-        loading: false,
-        error: error.response.data.message,
-      });
-    }
-  }
-
-  public onDragEnd = result => {
-    // dropped outside the list
+  const onDragEnd = (result: any) => {
     if (!result.destination) {
       return;
     }
 
-    const items = reorder(
-      this.state.items,
+    const newItems: any = reorder(
+      items,
       result.source.index,
       result.destination.index,
     );
 
-    this.setState({
-      items,
-    });
+    setItems(newItems);
+  };
+
+  const handleChangeCategory = (value: string) => {
+    setActiveCategory(activeCategory === value ? '' : value);
+  };
+
+  // const handleSave = async () => {
+  //   try {
+  //     toast.handleOpen('Success');
+  //   } catch (error) {
+  //     const errorMessage = error?.response?.data?.message;
+  //     toast.handleOpen(JSON.stringify(errorMessage) as string);
+  //     // setState({ ...state, error: errorMessage });
+  //   }
+  // };
+
+  let filters: any[] = [];
+  if (location.pathname.includes('sermons')) {
+    filters = sermonCategories;
+  }
+  if (location.pathname.includes('resources')) {
+    filters = resourceCategories;
   }
 
-  public handleSave = async () => {
-    this.state.items.map(async (item, i) => {
-      try {
-        const res = await Axios.put(
-          `${API_URL}/${this.props.resource}/${item.slug}`,
-          {
-            order: i + 1,
-          },
-          {
-            headers: {
-              Authorization: localStorage.getItem('token'),
-            } as any,
-          },
-        );
-        console.log('RES: ', res);
-      } catch (error) {
-        console.log('ERR: ', error);
-        return;
-      }
-    });
-    console.log('this.state.items: ', this.state.items);
-  }
+  const filteredData = activeCategory
+    ? items
+        .filter((node: any) => node.category === activeCategory)
+        .sort((a: any, b: any) => a.order - b.order)
+    : items.sort((a: any, b: any) => a.order - b.order);
 
-  public render() {
-    if (this.state.loading) {
-      return <Loading />;
-    }
-    if (this.state.error) {
-      return <Error error={this.state.error} />;
-    }
-    return (
-      <React.Fragment>
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
-              <div
-                ref={provided.innerRef}
-                style={getListStyle(snapshot.isDraggingOver)}
-              >
-                {this.state.items.map((item, index) => (
-                  <Draggable key={index} draggableId={index} index={index}>
-                    {/* tslint:disable-next-line */}
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style,
-                        )}
-                      >
-                        {this.props.resource === 'tabs'
-                          ? item.label
-                          : this.props.resource === 'products'
-                          ? item.name
-                          : item.title}
-                        {item.category ? <span>{item.category}</span> : null}
-                        {item.page ? <span>{item.page}</span> : null}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-        <button onClick={this.handleSave} className="btn btn-primary">
+  return (
+    <div style={{ width: '100%' }}>
+      {filters.map((filter: any) => (
+        <Button
+          key={filter.value}
+          color="primary"
+          variant={activeCategory === filter.value ? 'contained' : 'outlined'}
+          style={{ margin: 8 }}
+          onClick={() => handleChangeCategory(filter.value)}
+        >
+          {filter.label}
+        </Button>
+      ))}
+      {/* <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          marginBottom: 16,
+        }}
+      >
+        <Button color="primary" variant="contained" onClick={handleSave}>
           Save
-        </button>
-      </React.Fragment>
-    );
-  }
-}
+        </Button>
+      </div> */}
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided: any) => (
+            <div ref={provided.innerRef} style={getListStyle()}>
+              {filteredData.map((item: any, index: number) => (
+                <Draggable
+                  // key={index}
+                  draggableId={String(index)}
+                  index={index}
+                >
+                  {/* tslint:disable-next-line */}
+                  {(provided: any, snapshot: any) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={getItemStyle(
+                        snapshot.isDragging,
+                        provided.draggableProps.style,
+                      )}
+                    >
+                      <Typography variant="body1">{item.title}</Typography>
+                      <Typography variant="body1">{index + 1}</Typography>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </div>
+  );
+};

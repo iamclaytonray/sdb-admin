@@ -1,35 +1,32 @@
+import { CssBaseline, MuiThemeProvider } from '@material-ui/core';
 import * as React from 'react';
-
 import { render } from 'react-dom';
+import 'react-mde/lib/styles/css/react-mde-all.css';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { combineReducers, createStore } from 'redux';
-import { reducer as reduxFormReducer } from 'redux-form';
+import { PersistGate } from 'redux-persist/integration/react';
 
-// containers
-import { ErrorBoundary } from 'containers/ErrorBoundary';
-import { Root } from 'containers/Root';
-
-import 'bootstrap/dist/css/bootstrap.css';
-import './assets/scss/dashboard.scss';
-
-const reducer = combineReducers({
-  form: reduxFormReducer,
-});
-
-const w: any = window;
-const store = createStore(
-  reducer,
-  w.__REDUX_DEVTOOLS_EXTENSION__ && w.__REDUX_DEVTOOLS_EXTENSION__(),
-);
+import './assets/application.scss';
+import { ErrorBoundary } from './containers/ErrorBoundary';
+import { ToastProvider } from './context/ToastContext';
+import { Root } from './router';
+import { persistor, store } from './store/store';
+import { theme } from './utils/theme';
 
 render(
   <Provider store={store}>
-    <BrowserRouter>
-      <ErrorBoundary>
-        <Root />
-      </ErrorBoundary>
-    </BrowserRouter>
+    <PersistGate persistor={persistor}>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <BrowserRouter>
+          <ErrorBoundary>
+            <ToastProvider>
+              <Root />
+            </ToastProvider>
+          </ErrorBoundary>
+        </BrowserRouter>
+      </MuiThemeProvider>
+    </PersistGate>
   </Provider>,
   document.getElementById('root'),
 );

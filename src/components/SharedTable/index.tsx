@@ -1,83 +1,49 @@
-import { NewButton } from 'components/NewButton';
-import * as moment from 'moment';
+import { IconButton } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
+import MUIDataTable from 'mui-datatables';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import ReactTable from 'react-table';
+import { Col, Row } from 'react-grid-system';
+import { useHistory } from 'react-router-dom';
 
-export class SharedTable extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      data: props.data.map((prop: any) => {
-        return {
-          // id: key,
-          label: (
-            <Link
-              to={`/dashboard/${props.otherLocation}/${
-                prop.slug ? prop.slug : prop._id
-              }`}
-            >
-              {prop.title
-                ? prop.title
-                : prop.label
-                ? prop.label
-                : prop.name
-                ? prop.name
-                : 'Undefined prop'}
-            </Link>
-          ),
-          slug: prop.slug ? prop.slug : prop._id,
-          // fix
-          category: prop.category,
-          createdAt: moment(prop.createdAt).format('MM-DD-YYYY'),
-        };
-      }),
-    };
-  }
-  public render() {
-    return (
-      <div>
-        <div className="row">
-          <div className="col-xs-12 col-md-12 col-lg-12">
-            <div className="card-header">
-              <h5 className="card-title" style={{ textAlign: 'right' }}>
-                {this.props.title}
-              </h5>
-              <NewButton location={this.props.newLink}>
-                {this.props.children}
-              </NewButton>
-            </div>
-            <div className="card-body">
-              <ReactTable
-                data={this.state.data}
-                filterable
-                columns={[
-                  {
-                    Header: 'Label',
-                    accessor: 'label',
-                  },
-                  {
-                    Header: 'Slug',
-                    accessor: 'slug',
-                  },
-                  {
-                    Header: 'Category',
-                    accessor: 'category',
-                  },
-                  {
-                    Header: 'Created At',
-                    accessor: 'createdAt',
-                  },
-                ]}
-                defaultPageSize={20}
-                showPaginationTop={false}
-                showPaginationBottom={true}
-                className="-striped -highlight"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
+import { columns } from './columns';
+
+export const SharedTable = (props: any) => {
+  const history = useHistory();
+
+  const handleClick = (row: any) => {
+    const [id] = row;
+    history.push(`/dashboard/${props.resource}/${id}`);
+  };
+
+  return (
+    <div>
+      <Row>
+        <Col lg={12}>
+          <MUIDataTable
+            title="Data"
+            data={props.data}
+            columns={columns[props.resource].columns}
+            options={{
+              selectableRows: false,
+              print: false,
+              download: false,
+              searchOpen: true,
+              onRowClick: handleClick,
+              customToolbar: () => {
+                return (
+                  <IconButton
+                    onClick={() =>
+                      history.push(`/dashboard/${props.resource}/new`)
+                    }
+                  >
+                    <Add />
+                  </IconButton>
+                );
+              },
+            }}
+          />
+        </Col>
+      </Row>
+    </div>
+  );
+};

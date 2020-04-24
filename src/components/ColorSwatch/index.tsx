@@ -8,10 +8,11 @@ export const ColorSwatch = ({ color }: Props) => (
   <div
     style={{
       backgroundColor: color,
-      width: 50,
-      height: 50,
-      marginTop: 20,
-      marginBottom: 20,
+      width: 54,
+      height: 54,
+      marginTop: 16,
+      marginBottom: 16,
+      borderRadius: 4,
     }}
   />
 );
