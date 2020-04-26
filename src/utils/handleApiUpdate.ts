@@ -2,15 +2,11 @@ import Axios from 'axios';
 
 import { API_URL } from '../constants';
 
-const token = localStorage.getItem('token');
+import { authHeader } from './authHeader';
 
 export const handleApiUpdate = async (resource: string, data: any) => {
   try {
-    const res = await Axios.put(`${API_URL}${resource}`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await Axios.put(`${API_URL}${resource}`, data, authHeader);
 
     history.back();
 

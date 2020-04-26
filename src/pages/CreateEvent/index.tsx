@@ -8,6 +8,7 @@ import { Error } from '../../components/Error';
 import { MarkdownTextField } from '../../components/MarkdownTextField';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
+import { authHeader } from '../../utils/authHeader';
 
 export const CreateEventPage = () => {
   const history = useHistory();
@@ -46,11 +47,7 @@ export const CreateEventPage = () => {
           content,
           order: eventsLength,
         },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
+        authHeader,
       );
 
       history.push(`/dashboard/events`);

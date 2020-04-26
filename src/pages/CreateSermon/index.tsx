@@ -16,6 +16,7 @@ import { MarkdownTextField } from '../../components/MarkdownTextField';
 import { PartsForm } from '../../components/PartsForm';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
+import { authHeader } from '../../utils/authHeader';
 import { sermonCategories } from '../../utils/categories';
 
 const CreateSermon = () => {
@@ -62,11 +63,7 @@ const CreateSermon = () => {
           parts: reduxForm,
           order: sermonsLength + 1,
         },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
+        authHeader,
       );
 
       history.push(`/dashboard/sermons`);

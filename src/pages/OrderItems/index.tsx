@@ -1,9 +1,13 @@
 import { Button, Typography } from '@material-ui/core';
+import Axios from 'axios';
 import * as React from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
-// import { ToastContext } from '../../context/ToastContext';
-import { resourceCategories, sermonCategories } from '../../utils/categories';
+import { API_URL } from '../../constants';
+import { ToastContext } from '../../context/ToastContext';
+import { authHeader } from '../../utils/authHeader';
+// tslint:disable-next-line:max-line-length
+// import { resourceCategories, sermonCategories } from '../../utils/categories';
 
 const reorder = (list: any, startIndex: number, endIndex: number) => {
   const result = Array.from(list);
@@ -39,11 +43,11 @@ const getListStyle = () => ({
 });
 
 export const OrderItems = (props: any) => {
-  // const toast = React.useContext(ToastContext);
+  const toast = React.useContext(ToastContext);
   const [items, setItems] = React.useState([]);
-  const [activeCategory, setActiveCategory] = React.useState<string | null>(
-    null,
-  );
+  // const [activeCategory, setActiveCategory] = React.useState<string | null>(
+  //   null,
+  // );
 
   React.useEffect(() => {
     setItems(props.data);
@@ -63,37 +67,68 @@ export const OrderItems = (props: any) => {
     setItems(newItems);
   };
 
-  const handleChangeCategory = (value: string) => {
-    setActiveCategory(activeCategory === value ? '' : value);
-  };
-
-  // const handleSave = async () => {
-  //   try {
-  //     toast.handleOpen('Success');
-  //   } catch (error) {
-  //     const errorMessage = error?.response?.data?.message;
-  //     toast.handleOpen(JSON.stringify(errorMessage) as string);
-  //     // setState({ ...state, error: errorMessage });
-  //   }
+  // const handleChangeCategory = (value: string) => {
+  //   setActiveCategory(activeCategory === value ? '' : value);
   // };
 
-  let filters: any[] = [];
-  if (location.pathname.includes('sermons')) {
-    filters = sermonCategories;
-  }
-  if (location.pathname.includes('resources')) {
-    filters = resourceCategories;
-  }
+  const handleSave = async () => {
+    try {
+      const itemsToSave: any[] = [];
+      for (let index = 0; index < items.length; index++) {
+        const node: any = items[index];
+        itemsToSave.push({ id: node.id, order: index });
+      }
 
-  const filteredData = activeCategory
-    ? items
-        .filter((node: any) => node.category === activeCategory)
-        .sort((a: any, b: any) => a.order - b.order)
-    : items.sort((a: any, b: any) => a.order - b.order);
+      if (props.resource === 'events') {
+        await Axios.put(
+          `${API_URL}/events`,
+          { events: itemsToSave },
+          authHeader,
+        );
+      }
+
+      if (props.resource === 'sermons') {
+        await Axios.put(
+          `${API_URL}/sermons`,
+          { sermons: itemsToSave },
+          authHeader,
+        );
+      }
+
+      if (props.resource === 'resources') {
+        await Axios.put(
+          `${API_URL}/resources`,
+          { resources: itemsToSave },
+          authHeader,
+        );
+      }
+
+      console.log(itemsToSave);
+      toast.handleOpen('Success');
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message;
+      toast.handleOpen(JSON.stringify(errorMessage) as string);
+      // setState({ ...state, error: errorMessage });
+    }
+  };
+
+  // let filters: any[] = [];
+  // if (location.pathname.includes('sermons')) {
+  //   filters = sermonCategories;
+  // }
+  // if (location.pathname.includes('resources')) {
+  //   filters = resourceCategories;
+  // }
+
+  // const filteredData = activeCategory
+  //   ? items.filter((node: any) => node.category === activeCategory)
+  //   : items;
+
+  // console.log(items);
 
   return (
     <div style={{ width: '100%' }}>
-      {filters.map((filter: any) => (
+      {/* {filters.map((filter: any) => (
         <Button
           key={filter.value}
           color="primary"
@@ -103,8 +138,8 @@ export const OrderItems = (props: any) => {
         >
           {filter.label}
         </Button>
-      ))}
-      {/* <div
+      ))} */}
+      <div
         style={{
           display: 'flex',
           flexDirection: 'row',
@@ -115,14 +150,14 @@ export const OrderItems = (props: any) => {
         <Button color="primary" variant="contained" onClick={handleSave}>
           Save
         </Button>
-      </div> */}
+      </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided: any) => (
             <div ref={provided.innerRef} style={getListStyle()}>
-              {filteredData.map((item: any, index: number) => (
+              {items.map((item: any, index: number) => (
                 <Draggable
-                  // key={index}
+                  key={index}
                   draggableId={String(index)}
                   index={index}
                 >

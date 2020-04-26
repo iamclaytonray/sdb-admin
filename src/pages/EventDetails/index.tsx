@@ -10,6 +10,7 @@ import { MarkdownTextField } from '../../components/MarkdownTextField';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 import { ToastContext } from '../../context/ToastContext';
+import { authHeader } from '../../utils/authHeader';
 import { handleApiDelete } from '../../utils/handleApiDelete';
 
 export const EventDetailsPage = () => {
@@ -61,11 +62,7 @@ export const EventDetailsPage = () => {
           featuredImage,
           content,
         },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
+        authHeader,
       );
       toast.handleOpen('Success');
       history.push('/dashboard/events');

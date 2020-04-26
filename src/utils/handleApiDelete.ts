@@ -1,17 +1,12 @@
 import Axios from 'axios';
-import { Dispatch } from 'redux';
 
 import { API_URL } from '../constants';
 
-const token = localStorage.getItem('token');
+import { authHeader } from './authHeader';
 
 export const handleApiDelete = async (resource: string) => {
   try {
-    const res = await Axios.delete(`${API_URL}${resource}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await Axios.delete(`${API_URL}${resource}`, authHeader);
 
     history.back();
 

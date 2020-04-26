@@ -16,6 +16,7 @@ import { MarkdownTextField } from '../../components/MarkdownTextField';
 import { PartsForm } from '../../components/PartsForm';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
+import { authHeader } from '../../utils/authHeader';
 import { resourceCategories } from '../../utils/categories';
 
 export const CreateResourcePage = () => {
@@ -76,11 +77,7 @@ export const CreateResourcePage = () => {
           parts: reduxForm,
           order: resourcesLength + 1,
         },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
+        authHeader,
       );
 
       history.push(`/dashboard/jewish`);
