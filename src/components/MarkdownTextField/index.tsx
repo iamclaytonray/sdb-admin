@@ -9,11 +9,11 @@ const converter = new Showdown.Converter({
   tasklists: true,
 });
 
-// tslint:disable-next-line:no-empty-interface
 interface Props {
   value: string;
   onChange: (value: string) => void;
 }
+
 type ITab = 'write' | 'preview' | undefined;
 
 export const MarkdownTextField = ({ value, onChange }: Props) => {
