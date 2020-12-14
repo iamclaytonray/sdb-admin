@@ -4,7 +4,7 @@ interface Props {
   color: string;
 }
 
-export const ColorSwatch = ({ color }: Props) => (
+export const ColorSwatch: React.FC<Props> = ({ color }) => (
   <div
     style={{
       backgroundColor: color,

@@ -2,7 +2,6 @@ import {
   AppBar,
   Button,
   CssBaseline,
-  Divider,
   Drawer,
   Hidden,
   IconButton,

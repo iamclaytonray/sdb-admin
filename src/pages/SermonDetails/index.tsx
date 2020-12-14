@@ -9,55 +9,60 @@ import {
 } from '@material-ui/core';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
+import { Layout } from '../../components/Layout';
 import { MarkdownTextField } from '../../components/MarkdownTextField';
 import { PartsForm } from '../../components/PartsForm';
 import { SharedInput } from '../../components/SharedInput';
 import { ToastContext } from '../../context/ToastContext';
-import { selectSermon } from '../../store/actions/sermons';
+import { Api } from '../../utils/Api';
 import { sermonCategories } from '../../utils/categories';
 import { handleApiDelete } from '../../utils/handleApiDelete';
 import { handleApiUpdate } from '../../utils/handleApiUpdate';
 
 export const SermonDetailsPage = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
   const { id } = useParams();
   const toast = React.useContext(ToastContext);
 
-  const selectedSermon = useSelector(
-    (s: any) => s.sermons.allSermons[id as string],
-  );
   const reduxForm = useSelector(
     (s: any) => s?.form?.partsForm?.values?.parts || [],
   );
+  
   const [state, setState] = React.useState({
     title: '',
-    // slug: '',
     featuredImage: '',
-    category: 'rabbi-don',
-    color: '#5A17C7',
+    category: '',
+    color: '',
     content: '',
     video: '',
     categories: [],
     parts: [],
     showTitle: true,
 
-    error: null,
   });
 
   React.useEffect(() => {
-    dispatch(selectSermon(id as string));
+    init();
+  }, [id]);
+
+  const init = async () => {
+    const { error, data } = await Api.getSermonById(id);
+
+    if (error) {
+      return;
+    }
+
     setState({
       ...state,
-      ...selectedSermon,
-      parts: selectedSermon.parts || reduxForm,
-      content: selectedSermon.content || '',
+      ...data,
+      // parts: selectedSermon.parts || reduxForm,
+      // content: selectedSermon.content || '',
     });
-  },              [id]);
+  };
 
   const handleInputChange = (event: any) => {
     const { target } = event;
@@ -75,7 +80,6 @@ export const SermonDetailsPage = () => {
     const {
       title,
       featuredImage,
-      // slug,
       category,
       color,
       video,
@@ -85,7 +89,6 @@ export const SermonDetailsPage = () => {
     const data = {
       title,
       featuredImage,
-      // slug,
       category,
       color,
       content,
@@ -125,6 +128,7 @@ export const SermonDetailsPage = () => {
   };
 
   return (
+    <Layout title="Sermon">
     <Container fluid>
       <Row align="start" justify="start">
         <Col xs={12} sm={12} md={8} lg={6}>
@@ -136,14 +140,6 @@ export const SermonDetailsPage = () => {
               value={state.title}
               onChange={handleInputChange}
             />
-
-            {/* <SharedInput
-              type="text"
-              name="slug"
-              label="Slug"
-              value={state.slug}
-              onChange={handleInputChange}
-            /> */}
 
             <SharedInput
               type="text"
@@ -258,5 +254,6 @@ export const SermonDetailsPage = () => {
         </Col>
       </Row>
     </Container>
+    </Layout>
   );
 };

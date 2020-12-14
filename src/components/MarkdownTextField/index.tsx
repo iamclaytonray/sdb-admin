@@ -14,10 +14,10 @@ interface Props {
   onChange: (value: string) => void;
 }
 
-type ITab = 'write' | 'preview' | undefined;
+type Tab = 'write' | 'preview' | undefined;
 
 export const MarkdownTextField = ({ value, onChange }: Props) => {
-  const [selectedTab, setSelectedTab] = React.useState<ITab>('write');
+  const [selectedTab, setSelectedTab] = React.useState<Tab>('write');
   return (
     <ReactMde
       value={value}

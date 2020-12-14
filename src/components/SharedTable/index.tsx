@@ -24,7 +24,7 @@ export const SharedTable = (props: any) => {
             data={props.data}
             columns={columns[props.resource].columns}
             options={{
-              selectableRows: false,
+              selectableRows: 'none',
               print: false,
               download: false,
               searchOpen: true,

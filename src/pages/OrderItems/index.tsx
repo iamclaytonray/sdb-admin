@@ -6,8 +6,6 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { API_URL } from '../../constants';
 import { ToastContext } from '../../context/ToastContext';
 import { authHeader } from '../../utils/authHeader';
-// tslint:disable-next-line:max-line-length
-// import { resourceCategories, sermonCategories } from '../../utils/categories';
 
 const reorder = (list: any, startIndex: number, endIndex: number) => {
   const result = Array.from(list);
@@ -25,15 +23,11 @@ const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
   margin: `0 0 ${grid}px 0`,
   color: 'white',
   fontWeight: '700',
-  // letterSpacing: 1.2,
-
   background: isDragging ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.6)',
-
   display: 'flex',
   flex: 1,
   justifyContent: 'space-between',
   alignItems: 'center',
-
   ...draggableStyle,
 });
 
@@ -45,9 +39,6 @@ const getListStyle = () => ({
 export const OrderItems = (props: any) => {
   const toast = React.useContext(ToastContext);
   const [items, setItems] = React.useState([]);
-  // const [activeCategory, setActiveCategory] = React.useState<string | null>(
-  //   null,
-  // );
 
   React.useEffect(() => {
     setItems(props.data);
@@ -66,10 +57,6 @@ export const OrderItems = (props: any) => {
 
     setItems(newItems);
   };
-
-  // const handleChangeCategory = (value: string) => {
-  //   setActiveCategory(activeCategory === value ? '' : value);
-  // };
 
   const handleSave = async () => {
     try {
@@ -112,33 +99,8 @@ export const OrderItems = (props: any) => {
     }
   };
 
-  // let filters: any[] = [];
-  // if (location.pathname.includes('sermons')) {
-  //   filters = sermonCategories;
-  // }
-  // if (location.pathname.includes('resources')) {
-  //   filters = resourceCategories;
-  // }
-
-  // const filteredData = activeCategory
-  //   ? items.filter((node: any) => node.category === activeCategory)
-  //   : items;
-
-  // console.log(items);
-
   return (
     <div style={{ width: '100%' }}>
-      {/* {filters.map((filter: any) => (
-        <Button
-          key={filter.value}
-          color="primary"
-          variant={activeCategory === filter.value ? 'contained' : 'outlined'}
-          style={{ margin: 8 }}
-          onClick={() => handleChangeCategory(filter.value)}
-        >
-          {filter.label}
-        </Button>
-      ))} */}
       <div
         style={{
           display: 'flex',

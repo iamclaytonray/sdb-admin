@@ -2,14 +2,14 @@ import { Button } from '@material-ui/core';
 import Axios from 'axios';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
-import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { Error } from '../../components/Error';
+import { Layout } from '../../components/Layout';
 import { MarkdownTextField } from '../../components/MarkdownTextField';
 import { SharedInput } from '../../components/SharedInput';
 import { API_URL } from '../../constants';
 import { ToastContext } from '../../context/ToastContext';
+import { Api } from '../../utils/Api';
 import { authHeader } from '../../utils/authHeader';
 import { handleApiDelete } from '../../utils/handleApiDelete';
 
@@ -17,9 +17,6 @@ export const EventDetailsPage = () => {
   const history = useHistory();
   const { id } = useParams();
   const toast = React.useContext(ToastContext);
-  const selectedEvent = useSelector(
-    (s: any) => s.events.allEvents[id as string],
-  );
 
   const [state, setState] = React.useState({
     title: '',
@@ -30,13 +27,18 @@ export const EventDetailsPage = () => {
   });
 
   React.useEffect(() => {
-    initData();
-  },              [id]);
+    init();
+  }, [id]);
 
-  const initData = () => {
+  const init = async () => {
+    const { error, data } = await Api.getEventById(id);
+    if (error) {
+      return;
+    }
+
     setState({
       ...state,
-      ...selectedEvent,
+      ...data,
     });
   };
 
@@ -94,55 +96,57 @@ export const EventDetailsPage = () => {
   };
 
   return (
-    <Container fluid>
-      <Row align="center" justify="center">
-        <Col lg={8}>
-          <form>
-            <SharedInput
-              type="text"
-              name="title"
-              label="Title"
-              value={state.title}
-              onChange={handleInputChange}
-            />
-            <SharedInput
-              type="text"
-              name="featuredImage"
-              label="Featured Image (thumbnail)"
-              value={state.featuredImage}
-              onChange={handleInputChange}
-            />
+    <Layout title="Event">
+      <Container fluid>
+        <Row align="center" justify="center">
+          <Col lg={8}>
+            <form>
+              <SharedInput
+                type="text"
+                name="title"
+                label="Title"
+                value={state.title}
+                onChange={handleInputChange}
+              />
+              <SharedInput
+                type="text"
+                name="featuredImage"
+                label="Featured Image (thumbnail)"
+                value={state.featuredImage}
+                onChange={handleInputChange}
+              />
 
-            <MarkdownTextField
-              value={state.content}
-              onChange={(content: string) => setState({ ...state, content })}
-            />
-            <div
-              style={{
-                display: 'flex',
-                flex: 1,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={handleUpdate}
+              <MarkdownTextField
+                value={state.content}
+                onChange={(content: string) => setState({ ...state, content })}
+              />
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
               >
-                Update
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={handleUpdate}
+                >
+                  Update
               </Button>
-              <Button
-                color="secondary"
-                variant="contained"
-                onClick={handleDelete}
-              >
-                Delete All
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={handleDelete}
+                >
+                  Delete All
               </Button>
-            </div>
-          </form>
-        </Col>
-      </Row>
-    </Container>
+              </div>
+            </form>
+          </Col>
+        </Row>
+      </Container>
+    </Layout>
   );
 };

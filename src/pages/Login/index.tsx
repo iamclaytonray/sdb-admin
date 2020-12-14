@@ -1,13 +1,12 @@
 import { Button } from '@material-ui/core';
-import Axios from 'axios';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
 import { useHistory } from 'react-router-dom';
 
 import logo from '../../assets/img/logo.png';
 import { SharedInput } from '../../components/SharedInput';
-import { API_URL } from '../../constants';
 import { ToastContext } from '../../context/ToastContext';
+import { Api } from '../../utils/Api';
 
 export const LoginPage = () => {
   const history = useHistory();
@@ -15,23 +14,19 @@ export const LoginPage = () => {
   const [state, setState] = React.useState({
     email: '',
     password: '',
-    error: null,
   });
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const { email, password } = state;
-    try {
-      const res = await Axios.post(`${API_URL}/auth`, { email, password });
+    const { error, data } = await Api.login(state.email, state.password);
 
-      localStorage.setItem('token', res.data.token);
-      toast.handleOpen('Success');
-      history.push(`/dashboard`);
-    } catch (error) {
-      const errorMessage = error?.response?.data?.message;
-      toast.handleOpen(JSON.stringify(errorMessage));
-      setState({ ...state, error: errorMessage });
+    if (error) {
+      return;
     }
+
+    localStorage.setItem('token', data.token);
+    toast.handleOpen('Success');
+    history.push(`/dashboard`);
   };
 
   return (

@@ -2,7 +2,7 @@
   "extends": ["tslint:recommended", "tslint-config-prettier"],
   "defaultSeverity": "warning",
   "rules": {
-    "align": [true, "parameters", "arguments", "statements"],
+    "align": false,
     "arrow-parens": false,
     "ban": false,
     "ban-types": false,

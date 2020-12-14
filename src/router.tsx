@@ -1,12 +1,10 @@
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import * as React from 'react';
-import { Redirect, Route, Switch } from 'react-router';
+import {  Redirect, Route, Switch } from 'react-router';
 
-import { Layout } from './components/Layout';
-import { PrivateRoute } from './containers/PrivateRoute';
 import { ToastContext } from './context/ToastContext';
-import { All } from './pages/All';
+import * as Pages from './pages';
 import { CreateEventPage } from './pages/CreateEvent';
 import { CreateResourcePage } from './pages/CreateResource';
 import { CreateSermonPage } from './pages/CreateSermon';
@@ -16,6 +14,25 @@ import { LoginPage } from './pages/Login';
 import { NotFoundPage } from './pages/NotFound';
 import { ResourceDetailsPage } from './pages/ResourceDetails';
 import { SermonDetailsPage } from './pages/SermonDetails';
+
+export const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) => {
+   
+      return localStorage.getItem('token') !== null ? (
+          <Component {...props} />
+      ) : (
+        <Redirect
+          to={{
+            pathname: '/',
+            state: { from: props.location },
+          }}
+        />
+      );
+    }}
+  />
+);
 
 export const Root = () => {
   const toast = React.useContext(ToastContext);
@@ -30,25 +47,7 @@ export const Root = () => {
         <Route
           exact
           path="/dashboard/resources"
-          render={(props: any) =>
-            localStorage.getItem('token') !== null ? (
-              <Layout title="Resources">
-                <All
-                  resource="resources"
-                  title="Discoveries"
-                  buttonText="Discovery"
-                  {...props}
-                />
-              </Layout>
-            ) : (
-              <Redirect
-                to={{
-                  pathname: '/',
-                  state: { from: props.location },
-                }}
-              />
-            )
-          }
+          component={Pages.Resources}
         />
         <PrivateRoute
           exact
@@ -65,25 +64,7 @@ export const Root = () => {
         <Route
           exact
           path="/dashboard/events"
-          render={(props: any) =>
-            localStorage.getItem('token') !== null ? (
-              <Layout title="Events">
-                <All
-                  resource="events"
-                  title="Events"
-                  buttonText="Event"
-                  {...props}
-                />
-              </Layout>
-            ) : (
-              <Redirect
-                to={{
-                  pathname: '/',
-                  state: { from: props.location },
-                }}
-              />
-            )
-          }
+          component={Pages.Events}
         />
         <PrivateRoute
           exact
@@ -100,25 +81,7 @@ export const Root = () => {
         <Route
           exact
           path="/dashboard/sermons"
-          render={(props: any) =>
-            localStorage.getItem('token') !== null ? (
-              <Layout title="Sermons">
-                <All
-                  resource="sermons"
-                  title="Teachings"
-                  buttonText="Teaching"
-                  {...props}
-                />
-              </Layout>
-            ) : (
-              <Redirect
-                to={{
-                  pathname: '/',
-                  state: { from: props.location },
-                }}
-              />
-            )
-          }
+          component={Pages.Sermons}
         />
         <PrivateRoute
           exact
