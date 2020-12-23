@@ -16,6 +16,8 @@ import { Menu as MenuIcon } from '@material-ui/icons';
 import * as React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
+import { ModalContext } from '../../context/ModalContext';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -56,11 +58,7 @@ export const Layout = (props: any) => {
   const theme = useTheme();
   const history = useHistory();
   const location = useLocation();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const modal = React.useContext(ModalContext);
 
   const drawer = (
     <div>
@@ -106,18 +104,20 @@ export const Layout = (props: any) => {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              justifyContent: 'space-between',
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            {props.title}
-          </Typography>
+            <Typography variant="h6" noWrap>
+              {props.title}
+            </Typography>
+            <Button color="inherit" onClick={modal.open}>
+              Help
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
@@ -126,8 +126,7 @@ export const Layout = (props: any) => {
             container={props.container}
             variant="temporary"
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
+            open={false}
             classes={{
               paper: classes.drawerPaper,
             }}

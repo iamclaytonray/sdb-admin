@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { Error } from '../../components/Error';
-
 export class ErrorBoundary extends React.Component<any, any> {
   public state = { hasError: false };
 
@@ -12,8 +10,9 @@ export class ErrorBoundary extends React.Component<any, any> {
 
   public render() {
     if (this.state.hasError) {
-      return <Error error="Something went wrong" />;
+      return <p>Something went wrong</p>;
     }
+
     return this.props.children;
   }
 }

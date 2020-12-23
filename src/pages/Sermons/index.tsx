@@ -4,19 +4,17 @@ import { Add } from '@material-ui/icons';
 import MUIDataTable from 'mui-datatables';
 import * as React from 'react';
 import { Col, Row } from 'react-grid-system';
-import { useHistory, } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { Layout } from '../../components/Layout';
-import { Loading } from '../../components/Loading';
-import { columns } from '../../components/SharedTable/columns';
 import { Api } from '../../utils/Api';
+import { columns } from '../../utils/columns';
 import { OrderItems } from '../OrderItems';
 
 export const Sermons = () => {
   const history = useHistory();
 
   const [sermons, setSermons] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
   const [tab, setTab] = React.useState(0);
 
   React.useEffect(() => {
@@ -27,12 +25,10 @@ export const Sermons = () => {
     const { error, data } = await Api.getSermons();
 
     if (error) {
-      setIsLoading(false);
       return;
     }
 
     setSermons(data);
-    setIsLoading(false);
   };
 
   const toggle = () => {
@@ -44,10 +40,6 @@ export const Sermons = () => {
     const [id] = row;
     history.push(`/dashboard/sermons/${id}`);
   };
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <Layout title="Sermons">
@@ -70,7 +62,7 @@ export const Sermons = () => {
                 <MUIDataTable
                   title="Data"
                   data={sermons}
-                  columns={columns.sermons.columns}
+                  columns={columns.sermons.columns as any}
                   options={{
                     selectableRows: 'none',
                     print: false,
@@ -80,9 +72,7 @@ export const Sermons = () => {
                     customToolbar: () => {
                       return (
                         <IconButton
-                          onClick={() =>
-                            history.push(`/dashboard/sermons/new`)
-                          }
+                          onClick={() => history.push(`/dashboard/sermons/new`)}
                         >
                           <Add />
                         </IconButton>

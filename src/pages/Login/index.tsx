@@ -1,4 +1,5 @@
 import { Button } from '@material-ui/core';
+import { useFormik } from 'formik';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
 import { useHistory } from 'react-router-dom';
@@ -8,25 +9,33 @@ import { SharedInput } from '../../components/SharedInput';
 import { ToastContext } from '../../context/ToastContext';
 import { Api } from '../../utils/Api';
 
-export const LoginPage = () => {
+export const Login = () => {
   const history = useHistory();
   const toast = React.useContext(ToastContext);
-  const [state, setState] = React.useState({
-    email: '',
-    password: '',
+
+  const form = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    // tslint:disable-next-line:no-empty
+    onSubmit: () => {},
   });
+
+  const { email, password } = form.values;
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const { error, data } = await Api.login(state.email, state.password);
+    const { error, data } = await Api.login(email, password);
 
     if (error) {
+      toast.open({ message: error });
       return;
     }
 
     localStorage.setItem('token', data.token);
-    toast.handleOpen('Success');
-    history.push(`/dashboard`);
+    toast.open({ message: 'Success' });
+    history.push(`/dashboard/sermons`);
   };
 
   return (
@@ -46,16 +55,16 @@ export const LoginPage = () => {
               type="email"
               required
               autoComplete="email"
-              value={state.email}
-              onChange={(e) => setState({ ...state, email: e.target.value })}
+              value={email}
+              onChange={form.handleChange}
             />
             <SharedInput
               label="Password"
               name="password"
               placeholder="Password"
-              value={state.password}
+              value={password}
               type="password"
-              onChange={(e) => setState({ ...state, password: e.target.value })}
+              onChange={form.handleChange}
             />
             <Button color="primary" variant="contained" type="submit">
               Login

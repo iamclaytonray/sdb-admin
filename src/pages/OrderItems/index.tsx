@@ -1,11 +1,9 @@
 import { Button, Typography } from '@material-ui/core';
-import Axios from 'axios';
 import * as React from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
-import { API_URL } from '../../constants';
 import { ToastContext } from '../../context/ToastContext';
-import { authHeader } from '../../utils/authHeader';
+import { Api } from '../../utils/Api';
 
 const reorder = (list: any, startIndex: number, endIndex: number) => {
   const result = Array.from(list);
@@ -42,7 +40,7 @@ export const OrderItems = (props: any) => {
 
   React.useEffect(() => {
     setItems(props.data);
-  },              [props.data]);
+  }, [props.data]);
 
   const onDragEnd = (result: any) => {
     if (!result.destination) {
@@ -67,35 +65,35 @@ export const OrderItems = (props: any) => {
       }
 
       if (props.resource === 'events') {
-        await Axios.put(
-          `${API_URL}/events`,
-          { events: itemsToSave },
-          authHeader,
-        );
+        const { error } = await Api.updateEvents({ events: itemsToSave });
+
+        if (error) {
+          toast.open({ message: error });
+          return;
+        }
       }
 
       if (props.resource === 'sermons') {
-        await Axios.put(
-          `${API_URL}/sermons`,
-          { sermons: itemsToSave },
-          authHeader,
-        );
+        const { error } = await Api.updateSermons({ sermons: itemsToSave });
+
+        if (error) {
+          toast.open({ message: error });
+          return;
+        }
       }
 
       if (props.resource === 'resources') {
-        await Axios.put(
-          `${API_URL}/resources`,
-          { resources: itemsToSave },
-          authHeader,
-        );
+        const { error } = await Api.updateResources({ resources: itemsToSave });
+
+        if (error) {
+          toast.open({ message: error });
+          return;
+        }
       }
 
-      console.log(itemsToSave);
-      toast.handleOpen('Success');
+      toast.open({ message: 'Success' });
     } catch (error) {
-      const errorMessage = error?.response?.data?.message;
-      toast.handleOpen(JSON.stringify(errorMessage) as string);
-      // setState({ ...state, error: errorMessage });
+      toast.open({ message: error.message });
     }
   };
 

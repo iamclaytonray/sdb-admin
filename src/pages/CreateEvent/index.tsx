@@ -1,91 +1,80 @@
 import { Button } from '@material-ui/core';
-import Axios from 'axios';
+import { useFormik } from 'formik';
 import * as React from 'react';
+import { Col, Container, Row } from 'react-grid-system';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import { Error } from '../../components/Error';
+import { Layout } from '../../components/Layout';
 import { MarkdownTextField } from '../../components/MarkdownTextField';
 import { SharedInput } from '../../components/SharedInput';
-import { API_URL } from '../../constants';
-import { authHeader } from '../../utils/authHeader';
+import { Api } from '../../utils/Api';
 
-export const CreateEventPage = () => {
+export const CreateEvent = () => {
   const history = useHistory();
   const eventsLength = useSelector(
     (s: any) => Object.values(s.events.allEvents || {}).length,
   );
-  const [state, setState] = React.useState({
-    title: '',
-    featuredImage: '',
-    content: '',
 
-    error: null,
+  const form = useFormik({
+    initialValues: {
+      title: '',
+      featuredImage: '',
+      content: '',
+    },
+    // tslint:disable-next-line:no-empty
+    onSubmit: () => {},
   });
 
-  const handleInputChange = (event: any) => {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-
-    setState({
-      ...state,
-      [name]: value,
-    });
-  };
+  const { title, featuredImage, content } = form.values;
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const { title, featuredImage, content } = state;
 
-    try {
-      await Axios.post(
-        `${API_URL}/events`,
-        {
-          title,
-          featuredImage,
-          content,
-          order: eventsLength,
-        },
-        authHeader,
-      );
+    await Api.createEvent({
+      title,
+      featuredImage,
+      content,
+      order: eventsLength,
+    });
 
-      history.push(`/dashboard/events`);
-    } catch (error) {
-      setState({ ...state, error: error.response.data.message });
-      window.scroll(0, 0);
-    }
+    history.push(`/dashboard/events`);
   };
 
   return (
-    <div>
-      {state.error && <Error error={JSON.stringify(state.error)} />}
-      <form onSubmit={handleSubmit}>
-        <SharedInput
-          type="text"
-          name="title"
-          label="Title"
-          value={state.title}
-          onChange={handleInputChange}
-        />
+    <Layout title="Create Event">
+      <Container fluid>
+        <Row align="center" justify="center">
+          <Col lg={8}>
+            <form onSubmit={handleSubmit}>
+              <SharedInput
+                type="text"
+                name="title"
+                label="Title"
+                value={title}
+                onChange={form.handleChange}
+              />
 
-        <SharedInput
-          type="text"
-          name="featuredImage"
-          label="Featured Image (thumbnail)"
-          value={state.featuredImage}
-          onChange={handleInputChange}
-        />
+              <SharedInput
+                type="text"
+                name="featuredImage"
+                label="Featured Image (thumbnail)"
+                value={featuredImage}
+                onChange={form.handleChange}
+              />
 
-        <MarkdownTextField
-          value={state.content}
-          onChange={(content: string) => setState({ ...state, content })}
-        />
+              <MarkdownTextField
+                value={content}
+                onChange={(text: string) => form.setFieldValue('content', text)}
+              />
 
-        <Button color="primary" variant="contained" type="submit">
-          Create
-        </Button>
-      </form>
-    </div>
+              <Button color="primary" variant="contained" type="submit">
+                Create
+              </Button>
+            </form>
+          </Col>
+        </Row>
+      </Container>
+    </Layout>
   );
 };

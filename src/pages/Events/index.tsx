@@ -4,19 +4,17 @@ import { Add } from '@material-ui/icons';
 import MUIDataTable from 'mui-datatables';
 import * as React from 'react';
 import { Col, Row } from 'react-grid-system';
-import { useHistory, } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { Layout } from '../../components/Layout';
-import { Loading } from '../../components/Loading';
-import { columns } from '../../components/SharedTable/columns';
 import { Api } from '../../utils/Api';
+import { columns } from '../../utils/columns';
 import { OrderItems } from '../OrderItems';
 
 export const Events = () => {
   const history = useHistory();
 
   const [events, setEvents] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
   const [tab, setTab] = React.useState(0);
 
   React.useEffect(() => {
@@ -27,12 +25,10 @@ export const Events = () => {
     const { error, data } = await Api.getEvents();
 
     if (error) {
-      setIsLoading(false);
       return;
     }
 
     setEvents(data);
-    setIsLoading(false);
   };
 
   const toggle = () => {
@@ -44,10 +40,6 @@ export const Events = () => {
     const [id] = row;
     history.push(`/dashboard/events/${id}`);
   };
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <Layout title="Events">
@@ -80,9 +72,7 @@ export const Events = () => {
                     customToolbar: () => {
                       return (
                         <IconButton
-                          onClick={() =>
-                            history.push(`/dashboard/events/new`)
-                          }
+                          onClick={() => history.push(`/dashboard/events/new`)}
                         >
                           <Add />
                         </IconButton>

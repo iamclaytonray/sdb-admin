@@ -27,6 +27,10 @@ export const resourceCategories = [
 
 export const sermonCategories = [
   {
+    label: `Exhortations`,
+    value: 'exhortations',
+  },
+  {
     label: `Rabbi Don's Teachings & Others`,
     value: 'rabbi-don',
   },
