@@ -12,7 +12,29 @@ import { ModalProvider } from './context/ModalContext';
 import { ToastProvider } from './context/ToastContext';
 import { Root } from './router';
 import { persistor, store } from './store/store';
+import { Api } from './utils/Api';
 import { theme } from './utils/theme';
+
+const AppSetup = () => {
+  const [isInitialized, setInitialized] = React.useState(false);
+
+  const token = localStorage.getItem('token');
+
+  React.useEffect(() => {
+    init();
+  }, [token]);
+
+  const init = async () => {
+    Api.setToken(token);
+    setInitialized(true);
+  };
+
+  if (isInitialized) {
+    return <Root />;
+  }
+
+  return null;
+};
 
 render(
   <Provider store={store}>
@@ -23,7 +45,7 @@ render(
           <ErrorBoundary>
             <ModalProvider>
               <ToastProvider>
-                <Root />
+                <AppSetup />
               </ToastProvider>
             </ModalProvider>
           </ErrorBoundary>

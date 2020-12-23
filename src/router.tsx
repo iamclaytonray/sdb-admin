@@ -3,23 +3,15 @@ import { Redirect, Route, Switch } from 'react-router';
 
 import * as Pages from './pages';
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) => {
-      return localStorage.getItem('token') !== null ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/',
-            state: { from: props.location },
-          }}
-        />
-      );
-    }}
-  />
-);
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    return <Redirect to={{ pathname: '/' }} />;
+  }
+
+  return <Route {...rest} render={(props) => <Component {...props} />} />;
+};
 
 export const Root = () => {
   return (
@@ -28,7 +20,11 @@ export const Root = () => {
         <Route exact path="/" component={Pages.Login} />
 
         {/* Resources */}
-        <Route exact path="/dashboard/resources" component={Pages.Resources} />
+        <PrivateRoute
+          exact
+          path="/dashboard/resources"
+          component={Pages.Resources}
+        />
         <PrivateRoute
           exact
           path="/dashboard/resources/new"
@@ -41,7 +37,7 @@ export const Root = () => {
         />
 
         {/* Events */}
-        <Route exact path="/dashboard/events" component={Pages.Events} />
+        <PrivateRoute exact path="/dashboard/events" component={Pages.Events} />
         <PrivateRoute
           exact
           path="/dashboard/events/new"
@@ -54,7 +50,11 @@ export const Root = () => {
         />
 
         {/* Sermons */}
-        <Route exact path="/dashboard/sermons" component={Pages.Sermons} />
+        <PrivateRoute
+          exact
+          path="/dashboard/sermons"
+          component={Pages.Sermons}
+        />
         <PrivateRoute
           exact
           path="/dashboard/sermons/new"

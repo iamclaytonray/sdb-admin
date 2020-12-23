@@ -1,23 +1,32 @@
 import Axios from 'axios';
 
-export const API_URLS = {
+const API_URLS = {
   local: 'http://localhost:3000/v2',
   prod: 'https://api.shoreshdavidbrandon.org/v2',
 };
 
 export type Env = 'local' | 'prod';
 
-const token = localStorage.getItem('token');
+let token: string | null = null;
 
 const api = Axios.create({
   baseURL: API_URLS.prod,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
   },
 });
 
 class API {
+  // Setup
+
+  public setToken(incomingToken: string) {
+    token = incomingToken;
+    api.defaults.headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+  }
+
   //
   // ======= Auth
   //
@@ -69,7 +78,7 @@ class API {
 
   public async updateResource(resourceId: string, data: any) {
     try {
-      const res = await api.post(`/resources/${resourceId}`, data);
+      const res = await api.put(`/resources/${resourceId}`, data);
 
       return { data: res.data };
     } catch (error) {
@@ -81,7 +90,7 @@ class API {
 
   public async updateResources(data: any) {
     try {
-      const res = await api.post('/resources', data);
+      const res = await api.put('/resources', data);
 
       return { data: res.data };
     } catch (error) {
@@ -140,7 +149,7 @@ class API {
 
   public async updateEvent(eventId: string, data: any) {
     try {
-      const res = await api.post(`/events/${eventId}`, data);
+      const res = await api.put(`/events/${eventId}`, data);
 
       return { data: res.data };
     } catch (error) {
@@ -152,7 +161,7 @@ class API {
 
   public async updateEvents(data: any) {
     try {
-      const res = await api.post(`/events`, data);
+      const res = await api.put(`/events`, data);
 
       return { data: res.data };
     } catch (error) {
@@ -211,7 +220,7 @@ class API {
 
   public async updateSermon(sermonId: string, data: any) {
     try {
-      const res = await api.post(`/sermons/${sermonId}`, data);
+      const res = await api.put(`/sermons/${sermonId}`, data);
 
       return { data: res.data };
     } catch (error) {
@@ -223,7 +232,7 @@ class API {
 
   public async updateSermons(data: any) {
     try {
-      const res = await api.post(`/sermons`, data);
+      const res = await api.put(`/sermons`, data);
 
       return { data: res.data };
     } catch (error) {

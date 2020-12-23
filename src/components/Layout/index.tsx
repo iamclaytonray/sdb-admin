@@ -83,8 +83,8 @@ export const Layout = (props: any) => {
       <List style={{ paddingTop: 0, marginTop: -24 }}>
         {['Resources', 'Events', 'Sermons'].map((text, index) => (
           <ListItem
-            button
             key={text}
+            button
             onClick={() => history.push(`/dashboard/${text.toLowerCase()}`)}
             style={{
               backgroundColor: location.pathname.includes(text.toLowerCase())

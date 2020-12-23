@@ -36,9 +36,7 @@ export const SermonForm: React.FC<Props> = ({
     color,
     content,
     video,
-    // categories,
     parts,
-    // showTitle,
   } = form.values;
 
   return (
@@ -80,7 +78,9 @@ export const SermonForm: React.FC<Props> = ({
                 name="category"
               >
                 {sermonCategories.map((cat) => (
-                  <MenuItem value={cat.value}>{cat.label}</MenuItem>
+                  <MenuItem key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>

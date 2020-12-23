@@ -50,7 +50,7 @@ export const PartsForm: React.FC<Props> = ({
   return (
     <div>
       {parts.map((_part: any, index: number) => (
-        <ExpansionPanel style={{ marginBottom: 16 }}>
+        <ExpansionPanel key={index} style={{ marginBottom: 16 }}>
           <ExpansionPanelSummary expandIcon={<ExpandMore />}>
             <Typography>Part {index + 1}</Typography>
           </ExpansionPanelSummary>

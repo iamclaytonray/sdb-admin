@@ -90,7 +90,9 @@ export const ResourceForm: React.FC<Props> = ({
                 name="resourceType"
               >
                 {resourceTypes.map((type) => (
-                  <MenuItem value={type.value}>{type.label}</MenuItem>
+                  <MenuItem key={type.value} value={type.value}>
+                    {type.label}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
