@@ -29,6 +29,7 @@ const CreateSermon = () => {
   const [state, setState] = React.useState({
     title: '',
     category: '',
+    video: '',
     featuredImage: '',
     content: '',
     color: '#B56FEA',
@@ -48,7 +49,7 @@ const CreateSermon = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const { title, category, featuredImage, color, content } = state;
+    const { title, category, video, featuredImage, color, content } = state;
 
     try {
       await Axios.post(
@@ -56,6 +57,7 @@ const CreateSermon = () => {
         {
           title,
           category,
+          video,
           featuredImage,
           color,
           content,
@@ -96,6 +98,13 @@ const CreateSermon = () => {
               name="featuredImage"
               label="Featured Image (thumbnail)"
               value={state.featuredImage}
+              onChange={handleInputChange}
+            />
+            <SharedInput
+              type="text"
+              name="video"
+              label="Video"
+              value={state.video}
               onChange={handleInputChange}
             />
 

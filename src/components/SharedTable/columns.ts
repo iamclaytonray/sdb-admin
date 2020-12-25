@@ -6,6 +6,9 @@ export const columns = {
       {
         name: 'id',
         label: 'ID',
+        options: {
+          display: false,
+        },
       },
       {
         name: 'title',
@@ -15,14 +18,15 @@ export const columns = {
         name: 'createdAt',
         label: 'Created At',
         options: {
-          customBodyRender: (v: string) => moment(v).format('LLLL'),
+          sortDirection: 'desc',
+          customBodyRender: (v: string) => moment(v).fromNow(),
         },
       },
       {
         name: 'updatedAt',
         label: 'Updated At',
         options: {
-          customBodyRender: (v: string) => moment(v).format('LLLL'),
+          customBodyRender: (v: string) => moment(v).fromNow(),
         },
       },
     ],
@@ -32,6 +36,9 @@ export const columns = {
       {
         name: 'id',
         label: 'ID',
+        options: {
+          display: false,
+        },
       },
       {
         name: 'title',
@@ -45,14 +52,15 @@ export const columns = {
         name: 'createdAt',
         label: 'Created At',
         options: {
-          customBodyRender: (v: string) => moment(v).format('LLLL'),
+          sortDirection: 'desc',
+          customBodyRender: (v: string) => moment(v).fromNow(),
         },
       },
       {
         name: 'updatedAt',
         label: 'Updated At',
         options: {
-          customBodyRender: (v: string) => moment(v).format('LLLL'),
+          customBodyRender: (v: string) => moment(v).fromNow(),
         },
       },
     ],
@@ -62,6 +70,9 @@ export const columns = {
       {
         name: 'id',
         label: 'ID',
+        options: {
+          display: false,
+        },
       },
       {
         name: 'title',
@@ -75,14 +86,15 @@ export const columns = {
         name: 'createdAt',
         label: 'Created At',
         options: {
-          customBodyRender: (v: string) => moment(v).format('LLLL'),
+          sortDirection: 'desc',
+          customBodyRender: (v: string) => moment(v).fromNow(),
         },
       },
       {
         name: 'updatedAt',
         label: 'Updated At',
         options: {
-          customBodyRender: (v: string) => moment(v).format('LLLL'),
+          customBodyRender: (v: string) => moment(v).fromNow(),
         },
       },
     ],

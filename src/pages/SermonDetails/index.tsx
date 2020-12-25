@@ -10,7 +10,7 @@ import {
 import * as React from 'react';
 import { Col, Container, Row } from 'react-grid-system';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { ColorSwatch } from '../../components/ColorSwatch';
 import { MarkdownTextField } from '../../components/MarkdownTextField';
@@ -22,11 +22,12 @@ import { sermonCategories } from '../../utils/categories';
 import { handleApiDelete } from '../../utils/handleApiDelete';
 import { handleApiUpdate } from '../../utils/handleApiUpdate';
 
-export const SermonDetailsPage = () => {
+export const SermonDetailsPage = ({ match }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { id } = useParams();
   const toast = React.useContext(ToastContext);
+
+  const id = match.params.id;
 
   const selectedSermon = useSelector(
     (s: any) => s.sermons.allSermons[id as string],
@@ -75,7 +76,6 @@ export const SermonDetailsPage = () => {
     const {
       title,
       featuredImage,
-      // slug,
       category,
       color,
       video,
@@ -85,7 +85,6 @@ export const SermonDetailsPage = () => {
     const data = {
       title,
       featuredImage,
-      // slug,
       category,
       color,
       content,

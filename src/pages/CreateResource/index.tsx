@@ -114,6 +114,13 @@ export const CreateResourcePage = () => {
             />
             <SharedInput
               type="text"
+              name="video"
+              label="Video"
+              value={state.video}
+              onChange={handleInputChange}
+            />
+            <SharedInput
+              type="text"
               name="link"
               label="External Link"
               value={state.link}
